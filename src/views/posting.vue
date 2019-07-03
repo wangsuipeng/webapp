@@ -40,36 +40,17 @@
             <mu-flex class="flex-wrapper" justify-content="start">
                 <mu-flex class="flex-demo" justify-content="center"></mu-flex>
             </mu-flex>
-            <mu-flex class="flex-wrapper" justify-content="start">
-                <mu-flex class="jurisdiction" justify-content="center">
-                    <h4 class="text-prompts">谁可以看</h4>
-                    <mu-select
-                        style="border-bottom: 0"
-                        underline-color="#ccc"
-                        v-model="normal.value1"
-                        full-width
-                        class="choice"
-                        popover-class="bottom"
-                        :solo="lineBool"
-                    >
-                        <mu-option
-                            v-for="(option,index) in options"
-                            :key="index"
-                            :label="option"
-                            :value="option"
-                        ></mu-option>
-                    </mu-select>
-                </mu-flex>
-            </mu-flex>
+            <van-cell-group>
+                <van-switch-cell active-color="#ff5242" v-model="checked" title="仅本小区可见" />
+            </van-cell-group>
         </div>
     </div>
 </template>
 <script>
-import Qs from "qs";
-// import axios from 'axios';
 export default {
     data() {
         return {
+            checked: true,
             size: "46",
             labelPosition: "top",
             form: {
@@ -82,28 +63,13 @@ export default {
                 slider: 30,
                 textarea: ""
             },
-            normal: {
-                value1: "公开",
-                value2: "",
-                value3: "",
-                value4: "Option 1",
-                value5: "Option 2"
-            },
             height: "",
-            options: ["公开", "仅自己可见", "游客不可见", "好友可见"],
             labelPosition: "top",
             postForm: {
-                // title: "",
-                // content: "",
-                // userId: sessionStorage.getItem("userId"),
-                // category: "",
-                // authorId: ""
-                
-                title:"ffffff",
-                content:"ffff",
-                authorId:22,
-                category:"fffff"
-
+                title: "",
+                content: "",
+                category: "",
+                authorId: sessionStorage.getItem("userId")
             },
             lineBool: false
         };
@@ -123,12 +89,16 @@ export default {
                 url: "admin/mobile/article/publishMsg",
                 method: "post",
                 headers: {
-                    "Authorization": "6d4bd7a8-e389-4cd8-83df-db707137d3a5"
+                    Authorization: sessionStorage.getItem("token")
                 },
                 data: this.postForm
             })
                 .then(result => {
-                    console.log(result);
+                    console.log(result.data);
+                    if (result.data.respCode == 1000) {
+                        this.$router.push("/familyD");
+                    } else {
+                    }
                 })
                 .catch(err => {
                     console.log(err);
@@ -138,6 +108,9 @@ export default {
 };
 </script>
 <style scoped>
+.van-switch-cell {
+    background-color: rgba(204, 204, 204, 0.452);
+}
 .flex-demo {
     width: 100%;
     height: 16px;
@@ -147,7 +120,6 @@ export default {
     background-color: #2196f3;
 }
 .content {
-    /* padding-left: 10px; */
     height: calc(100vh - 56px);
 }
 .container-main {

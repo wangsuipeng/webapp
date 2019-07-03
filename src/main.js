@@ -12,6 +12,8 @@ import Toast from 'muse-ui-toast';
 import Message from 'muse-ui-message';
 import 'muse-ui-message/dist/muse-ui-message.css';
 import store from './store'
+import { SwitchCell } from 'vant';
+Vue.use(SwitchCell);
 
 Vue.prototype.$axios = axios
 

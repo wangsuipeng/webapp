@@ -8,84 +8,53 @@
                 <!-- <mu-icon size="30" value="control_point"></mu-icon> -->
             </mu-button>
         </mu-appbar>
-        <mu-list>
-            <mu-sub-header>
-                <div>
-                    <mu-container class="demo-container is-stripe">
-                        <mu-row>
-                            <mu-col span="9">
-                                <div class="grid-cell">
-                                    <input type="text" placeholder="搜索" class="search-value">
-                                    <mu-icon
-                                        :size="samll"
-                                        value="search"
-                                        color="rgb(244, 67, 54)"
-                                        class="magnifier"
-                                    ></mu-icon>
-                                </div>
-                            </mu-col>
-                            <mu-col span="3">
-                                <div class="grid-cell">
-                                    <select name id class="select-list">
-                                        <option value="1">点击最多</option>
-                                        <option value="2">最新回复</option>
-                                        <option value="3">最新发帖</option>
-                                        <option value="3">最多回复</option>
-                                    </select>
-                                </div>
-                            </mu-col>
-                        </mu-row>
-                    </mu-container>
-                </div>
-            </mu-sub-header>
-            <mu-list-item avatar button :ripple="true" class="word-list" v-ripple>
-                <mu-list-item-action>
-                    <mu-avatar :size="size">
-                        <img src="../assets/images/1000053.jpg">
-                    </mu-avatar>
-                </mu-list-item-action>
-                <mu-list-item-title>Mike Li</mu-list-item-title>
-            </mu-list-item>
-            <mu-list-item avatar button :ripple="true" class="word-list" v-ripple>
-                <mu-list-item-action>
-                    <mu-avatar :size="size">
-                        <img src="../assets/images/325543.jpg">
-                    </mu-avatar>
-                </mu-list-item-action>
-                <mu-list-item-title>Maco Mai</mu-list-item-title>
-            </mu-list-item>
-            <mu-list-item avatar button :ripple="true" class="word-list" v-ripple>
-                <mu-list-item-action>
-                    <mu-avatar :size="size">
-                        <img src="../assets/images/325571.jpg">
-                    </mu-avatar>
-                </mu-list-item-action>
-                <mu-list-item-title>Alex Qin</mu-list-item-title>
-            </mu-list-item>
-            <mu-list-item avatar button :ripple="true" class="word-list" v-ripple>
-                <mu-list-item-action>
-                    <mu-avatar :size="size">
-                        <img src="../assets/images/325572.jpg">
-                    </mu-avatar>
-                </mu-list-item-action>
-                <mu-list-item-title>Allen Qun</mu-list-item-title>
-            </mu-list-item>
-            <mu-list-item avatar button :ripple="true" class="word-list" v-ripple @click="browsePost">
-                <mu-list-item-action>
-                    <mu-avatar :size="size">
-                        <img src="../assets/images/1000046.jpg">
-                    </mu-avatar>
-                </mu-list-item-action>
-                <mu-list-item-title>Myron Liu</mu-list-item-title>
-            </mu-list-item>
-        </mu-list>
-        <mu-button fab color="#FF5242" class="create-articles" @click="postWord">
-            <mu-icon value="add"></mu-icon>
-        </mu-button>
+        <div class="content-main">
+            <mu-list>
+                <mu-sub-header>
+                    <div>
+                        <mu-container class="demo-container is-stripe">
+                            <mu-row>
+                                <mu-col span="9">
+                                    <div class="grid-cell">
+                                        <input type="text" placeholder="搜索" class="search-value" />
+                                        <mu-icon
+                                            :size="samll"
+                                            value="search"
+                                            color="rgb(244, 67, 54)"
+                                            class="magnifier"
+                                        ></mu-icon>
+                                    </div>
+                                </mu-col>
+                                <mu-col span="3">
+                                    <div class="grid-cell">
+                                        <select name id class="select-list">
+                                            <option value="1">点击最多</option>
+                                            <option value="2">最新回复</option>
+                                            <option value="3">最新发帖</option>
+                                            <option value="3">最多回复</option>
+                                        </select>
+                                    </div>
+                                </mu-col>
+                            </mu-row>
+                        </mu-container>
+                    </div>
+                </mu-sub-header>
+                <mu-list-item avatar class="word-list" v-ripple v-for="item in postContent" @click.native="browsePost">
+                    <mu-list-item-action>
+                        <mu-avatar :size="size">
+                            <img src="../assets/images/1000053.jpg" />
+                        </mu-avatar>
+                    </mu-list-item-action>
+                    <mu-list-item-title>{{item.title}}</mu-list-item-title>
+                </mu-list-item>
+            </mu-list>
+            <mu-button fab color="#FF5242" class="create-articles" @click="postWord">
+                <mu-icon size="30" value="border_color"></mu-icon>
+            </mu-button>
+        </div>
     </div>
 </template>
 <script>
-import Qs from 'qs'
 export default {
     data() {
         return {
@@ -93,11 +62,13 @@ export default {
             size: "36",
             options: ["最多点击", "最多回复", "最新发帖", "最新回复"],
             open: false,
-            selectValue: "最多点击"
+            selectValue: "最多点击",
+            postContent: [],
+            articleTitle: '',// 文章标题
         };
     },
     created() {
-        this.articleQueryAll()
+        this.articleQueryAll();
     },
     mounted() {
         // this.trigger = this.$refs.button.$el;
@@ -117,26 +88,32 @@ export default {
         postWord() {
             this.$router.push("./post");
         },
-        browsePost() {
-            this.$router.push('/browse')
+        browsePost(e) {
+            this.articleTitle = e.target.innerText;
+            this.$store.dispatch('ARTICLE_TITLE',this.articleTitle)
+            this.$router.push("/browse");
         },
         //查询所有新闻或公告
-       articleQueryAll() {
-           this.$axios({
-                url: "admin/article/queryAll",
+        articleQueryAll() {
+            this.$axios({
+                url: "admin/mobile/article/queryAll",
                 method: "post",
-                
-                data: Qs.stringify({})
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: {}
             })
                 .then(result => {
                     if (result.status === 200) {
-                        console.log(result);
+                        if (result.data.respCode == 1000) {
+                            this.postContent = result.data.data;
+                        } 
                     }
                 })
                 .catch(err => {
                     console.log(err);
                 });
-       }
+        },
     }
 };
 </script>
@@ -170,6 +147,11 @@ export default {
 .family-D {
     width: 100%;
     height: 100vh;
+}
+.content-main {
+    width: 100%;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
 }
 .material-icons {
     font-size: 40px;
