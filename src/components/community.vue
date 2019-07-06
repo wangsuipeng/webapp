@@ -589,7 +589,6 @@ export default {
                 })
             })
             .then(result => {
-                console.log(result);
                 this.communData = result.data.data.list;
             })
             .catch(err => {

@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100vh;" class="content">
+    <div class="content">
         <content-main></content-main>  
         <footer-nav></footer-nav>  
     </div>
@@ -22,6 +22,8 @@ export default {
 </script>
 <style scoped>
 .content {
+    width: 100%;
+    height: 100vh;
     overflow: hidden;
 }
 </style>

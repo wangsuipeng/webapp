@@ -60,9 +60,7 @@ export default {
         return {
             samll: "30",
             size: "36",
-            options: ["最多点击", "最多回复", "最新发帖", "最新回复"],
             open: false,
-            selectValue: "最多点击",
             postContent: [],
             articleTitle: '',// 文章标题
         };

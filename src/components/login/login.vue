@@ -90,11 +90,14 @@ export default {
             validateForm: {
                 phone: "",
                 password: "",
-                isAgree: false
+                isAgree: true
             },
             loginMode: true,
             signText: "短信验证码登录"
         };
+    },
+    created () {
+        this.validateForm.phone = this.$store.getters.phoneNumber 
     },
     methods: {
         toast(msg) {
@@ -109,12 +112,11 @@ export default {
                         data: Qs.stringify(this.validateForm)
                     })
                         .then(result => {
-                            console.log(result);
                             if (result.status === 200) {
                                 if (result.data.status == "success") {
-                                    // console.log(result.data.data.sessionId)
                                     sessionStorage.setItem("token",result.data.data.sessionId);
                                     sessionStorage.setItem("userId",result.data.data.userId);
+                                    this.$store.dispatch("REMEMBER_PHONE",this.validateForm.phone)
                                     this.$router.push("/community");
                                 } else {
                                     this.toast(result.data.data);

@@ -28,7 +28,7 @@
             </mu-row>
         </mu-container>-->
         <mu-flex class="flex-wrapper" align-items="center">
-            <mu-flex class="flex-demo reading-volume" justify-content="left" fill>阅读：{{number}}</mu-flex>
+            <mu-flex class="flex-demo reading-volume" justify-content="start" fill>阅读：{{number}}</mu-flex>
             <mu-flex class="flex-demo" justify-content="center" fill>
                 <ul class="share">
                     <li @click="giveThumbs">
@@ -54,7 +54,7 @@ export default {
     data() {
         return {
             number: "9999",
-            size: "30",
+            size: "25",
             articleTitle: "", // 发帖标题
             postContent: "", // 帖子内容
             articleId: ""// 文章id
@@ -82,6 +82,7 @@ export default {
                 .then(result => {
                     if (result.status === 200) {
                         if (result.data.respCode == 1000) {
+                            console.log(result.data.data)
                             let content = result.data.data;
                             for (var i = 0; i < content.length; i++) {
                                 if (content[i].title == this.articleTitle) {

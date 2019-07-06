@@ -1,74 +1,108 @@
 <template>
     <div class="header">
-        <!-- <mu-flex class="flex-wrapper" justify-content="center">
-            <i class="iconfont icon-fanhui ret-btn" @click="outPage"></i>
-            <mu-flex class="flex-demo fast-register" justify-content="center">海尚菊苑</mu-flex>
-        </mu-flex>-->
         <mu-appbar color="#ff5242" style="text-align: center">
             <div>海尚菊苑</div>
         </mu-appbar>
-        <div class="content">
-            <div class="flex-box" v-ripple>
-                <mu-icon size="50" value="build" color="#ff5242"></mu-icon>
-                <div class="text">报修申请</div>
+        <div class="container-main">
+            <div class="content">
+                <mu-carousel transition="fade" style="height: 150px">
+                    <mu-carousel-item>
+                        <img :src="carouselImg1" />
+                    </mu-carousel-item>
+                    <mu-carousel-item>
+                        <img :src="carouselImg2" />
+                    </mu-carousel-item>
+                    <mu-carousel-item>
+                        <img :src="carouselImg3" />
+                    </mu-carousel-item>
+                    <mu-carousel-item>
+                        <img :src="carouselImg4" />
+                    </mu-carousel-item>
+                </mu-carousel>
+                <div class="flex-box" v-ripple>
+                    <mu-icon size="50" value="build" color="#ff5242"></mu-icon>
+                    <div class="text">报修申请</div>
+                </div>
+                <div class="flex-box" v-ripple @click="familyDiscussion">
+                    <mu-icon size="50" value="location_city" color="#ff5242"></mu-icon>
+                    <div class="text">家事讨论</div>
+                </div>
+                <div class="flex-box" v-ripple @click="propertyPay">
+                    <mu-icon size="50" value="account_circle" color="#ff5242"></mu-icon>
+                    <div class="text">物业缴费</div>
+                </div>
             </div>
-            <div class="flex-box" v-ripple @click="familyDiscussion">
-                <mu-icon size="50" value="location_city" color="#ff5242"></mu-icon>
-                <div class="text">家事讨论</div>
+            <div class="content">
+                <div class="flex-box" v-ripple>
+                    <mu-icon size="50" value="local_parking" color="#ff5242"></mu-icon>
+                    <div class="text">车位分享</div>
+                </div>
+                <div class="flex-box" v-ripple>
+                    <mu-icon size="50" value="local_see" color="#ff5242"></mu-icon>
+                    <div class="text">闲置分享</div>
+                </div>
+                <div class="flex-box" v-ripple @click="loveBank">
+                    <mu-icon class="icon-explain" size="50" value="local_shipping" color="#ff5242"></mu-icon>
+                    <div class="text">爱心银行</div>
+                </div>
             </div>
-            <div class="flex-box" v-ripple>
-                <mu-icon size="50" value="account_circle" color="#ff5242"></mu-icon>
-                <div class="text">物业缴费</div>
-            </div>
-        </div>
-        <div class="content">
-            <div class="flex-box" v-ripple>
-                <mu-icon size="50" value="local_parking" color="#ff5242"></mu-icon>
-                <div class="text">车位分享</div>
-            </div>
-            <div class="flex-box" v-ripple>
-                <mu-icon size="50" value="local_see" color="#ff5242"></mu-icon>
-                <div class="text">闲置分享</div>
-            </div>
-            <div class="flex-box" v-ripple>
-                <mu-icon class="icon-explain" size="50" value="local_shipping" color="#ff5242"></mu-icon>
-                <div class="text">爱心银行</div>
-            </div>
-        </div>
-        <div class="partition-line">
-            <mu-flex class="flex-wrapper" justify-content="start">
-                <mu-flex class="flex-demo partition" justify-content="center"></mu-flex>
-            </mu-flex>
-        </div>
-        <div class="hot-tip">
-            <mu-flex class="flex-wrapper" justify-content="start">
-                <mu-flex class="flex-demo hot-more" justify-content="center">
-                    <span class="hotspot">
-                        <i class="vertical-line"></i>近期热点
-                    </span>
-                    <span class="more">更多></span>
+            <div class="partition-line">
+                <mu-flex class="flex-wrapper" justify-content="start">
+                    <mu-flex class="flex-demo partition" justify-content="center"></mu-flex>
                 </mu-flex>
-            </mu-flex>
-        </div>
-        <div class="hot-info">
-            <ul>
-                <li><span>通知：</span><span>今日海尚菊园小区20：30~明日01：30停水检修。</span></li>
-                <li><span>信息：</span><span>今日海尚菊园小区20：30~明日01：30停水检修。</span></li>
-                <li><span>提醒：</span><span>今日海尚菊园小区20：30~明日01：30停水检修。</span></li>
-            </ul>
+            </div>
+            <div class="hot-tip">
+                <mu-flex class="flex-wrapper" justify-content="start">
+                    <mu-flex class="flex-demo hot-more" justify-content="center">
+                        <span class="hotspot">
+                            <i class="vertical-line"></i>近期热点
+                        </span>
+                        <span class="more">更多></span>
+                    </mu-flex>
+                </mu-flex>
+            </div>
+            <div class="hot-info">
+                <ul>
+                    <li>
+                        <span>通知：</span>
+                        <span>今日海尚菊园小区20：30~明日01：30停水检修。</span>
+                    </li>
+                    <li>
+                        <span>信息：</span>
+                        <span>今日海尚菊园小区20：30~明日01：30停水检修。</span>
+                    </li>
+                    <li>
+                        <span>提醒：</span>
+                        <span>今日海尚菊园小区20：30~明日01：30停水检修。</span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </template>
 <script>
+import carouselImg1 from "../../assets/images/325453.jpg";
+import carouselImg2 from "../../assets/images/325543.jpg";
+import carouselImg3 from "../../assets/images/325571.jpg";
+import carouselImg4 from "../../assets/images/325572.jpg";
 export default {
     data() {
         return {
-
-        }
+            carouselImg1,
+            carouselImg2,
+            carouselImg3,
+            carouselImg4
+        };
     },
     methods: {
         familyDiscussion() {
-            this.$router.push('/familyD');
+            this.$router.push("/familyD");
+        },
+        propertyPay() {
+            this.$router.push("/propertyPay");
+        },
+        loveBank() {
+            this.$router.push("/loveBank");
         }
     }
 };
@@ -118,6 +152,11 @@ export default {
 .iconfont {
     font-size: 30px;
     color: #ff5242;
+}
+.container-main {
+    width: 100%;
+    height: calc(100vh - 112px);
+    overflow-y: scroll;
 }
 .content {
     width: 100%;

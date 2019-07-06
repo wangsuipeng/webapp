@@ -90,6 +90,14 @@ export default new Router({
     {
       path: '/changePassword',
       component: () => import('@/views/changePassword.vue')
+    },
+    {
+      path: '/propertyPay',
+      component: () => import('@/views/propertyPay.vue')
+    },
+    {
+      path: '/loveBank',
+      component: () => import('@/views/loveBank.vue')
     }
   ]
 })

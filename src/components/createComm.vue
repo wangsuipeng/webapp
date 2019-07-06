@@ -516,7 +516,6 @@ export default {
                 address: this.form.address
             };
             localStorage.setItem("communityName", this.form.communityName);
-            console.log(commmData);
             this.$axios({
                 url: "admin/mobile/communityMessage/addCommunityCheckInfo",
                 method: "post",
