@@ -39,14 +39,22 @@
                         </mu-container>
                     </div>
                 </mu-sub-header>
-                <mu-list-item avatar class="word-list" v-ripple v-for="item in postContent" @click.native="browsePost">
-                    <mu-list-item-action>
-                        <mu-avatar :size="size">
-                            <img src="../assets/images/1000053.jpg" />
-                        </mu-avatar>
-                    </mu-list-item-action>
-                    <mu-list-item-title>{{item.title}}</mu-list-item-title>
-                </mu-list-item>
+                <div class="list-content">
+                    <mu-list-item
+                        avatar
+                        class="word-list"
+                        v-ripple
+                        v-for="item in postContent"
+                        @click.native="browsePost"
+                    >
+                        <mu-list-item-action>
+                            <mu-avatar :size="size">
+                                <img src="../assets/images/1000053.jpg" />
+                            </mu-avatar>
+                        </mu-list-item-action>
+                        <mu-list-item-title>{{item.title}}</mu-list-item-title>
+                    </mu-list-item>
+                </div>
             </mu-list>
             <mu-button fab color="#FF5242" class="create-articles" @click="postWord">
                 <mu-icon size="30" value="border_color"></mu-icon>
@@ -62,7 +70,7 @@ export default {
             size: "36",
             open: false,
             postContent: [],
-            articleTitle: '',// 文章标题
+            articleTitle: "" // 文章标题
         };
     },
     created() {
@@ -88,7 +96,12 @@ export default {
         },
         browsePost(e) {
             this.articleTitle = e.target.innerText;
-            this.$store.dispatch('ARTICLE_TITLE',this.articleTitle)
+            this.$store.dispatch("ARTICLE_TITLE", this.articleTitle);
+            for (var i = 0;i < this.postContent.length;i++) {
+                if (this.articleTitle == this.postContent[i].title) {
+                    localStorage.setItem("praiseNum",this.postContent[i].praiseNum)
+                }   
+            }
             this.$router.push("/browse");
         },
         //查询所有新闻或公告
@@ -105,13 +118,13 @@ export default {
                     if (result.status === 200) {
                         if (result.data.respCode == 1000) {
                             this.postContent = result.data.data;
-                        } 
+                        }
                     }
                 })
                 .catch(err => {
                     console.log(err);
                 });
-        },
+        }
     }
 };
 </script>
@@ -131,13 +144,6 @@ export default {
 }
 .container {
     padding: 0 !important;
-    // margin-top: 3px;
-}
-.demo-container.is-stripe .col:nth-child(1) .grid-cell {
-    // background: red;
-}
-.demo-container.is-stripe .col:nth-child(2n) .grid-cell {
-    // background: rgba(0, 0, 0, 0.54);
 }
 </style>
 
@@ -150,6 +156,9 @@ export default {
     width: 100%;
     height: calc(100vh - 56px);
     overflow-y: auto;
+}
+.list-content {
+    padding: 0 8px;
 }
 .material-icons {
     font-size: 40px;

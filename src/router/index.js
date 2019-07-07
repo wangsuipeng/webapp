@@ -98,6 +98,10 @@ export default new Router({
     {
       path: '/loveBank',
       component: () => import('@/views/loveBank.vue')
+    },
+    {
+      path: '/editPost',
+      component: () => import('@/views/editPost.vue')
     }
   ]
 })

@@ -1,6 +1,6 @@
 <template>
     <div class="community">
-        <mu-paper :z-depth="1" class="demo-loadmore-wrap">
+        <mu-paper :z-depth="0" class="demo-loadmore-wrap">
             <mu-appbar color="#ff5242" style="width: 100%; text-align: center">
                 <mu-button icon slot="left" @click="openBotttomSheet">
                     <mu-icon value="menu"></mu-icon>
@@ -22,8 +22,8 @@
                 >
                     <mu-list>
                         <template v-for="item in communData">
-                            <mu-list-item>
-                                <mu-list-item-title>{{item.describe}}</mu-list-item-title>
+                            <mu-list-item v-ripple @click.native="myCommunity">
+                                <mu-list-item-title>{{item.name}}</mu-list-item-title>
                             </mu-list-item>
                             <mu-divider/>
                         </template>
@@ -31,7 +31,7 @@
                 </mu-load-more>
             </mu-container>
         </mu-paper>
-        <mu-button large ripple fab color="red" class="add-commun" @click="createProject">
+        <mu-button v-ripple fab color="red" class="add-commun" @click="createProject">
             <mu-icon value="add"></mu-icon>
         </mu-button>
         <mu-flex class="flex-wrapper footer-bottom" justify-content="center">
@@ -524,6 +524,10 @@ export default {
         this.getCommunity();
     },
     methods: {
+        myCommunity(e) {
+            localStorage.setItem("myCommunity",e.target.innerText)
+            this.$router.push("/layout/widgets")
+        },
         addressChange(value, index) {
             switch (index) {
                 case 0:
@@ -626,6 +630,7 @@ export default {
     right: 0;
     top: 0;
     bottom: 0;
+    background-color: #fff;
 }
 .confirm-city {
     min-width: 61px;

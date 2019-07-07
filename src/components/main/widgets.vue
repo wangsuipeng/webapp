@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <mu-appbar color="#ff5242" style="text-align: center">
-            <div>海尚菊苑</div>
+            <div>{{community}}</div>
         </mu-appbar>
         <div class="container-main">
             <div class="content">
@@ -91,7 +91,8 @@ export default {
             carouselImg1,
             carouselImg2,
             carouselImg3,
-            carouselImg4
+            carouselImg4,
+            community: localStorage.getItem("myCommunity")
         };
     },
     methods: {

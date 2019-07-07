@@ -116,6 +116,7 @@ export default {
                                 if (result.data.status == "success") {
                                     sessionStorage.setItem("token",result.data.data.sessionId);
                                     sessionStorage.setItem("userId",result.data.data.userId);
+                                    localStorage.setItem('phone',this.validateForm.phone)
                                     this.$store.dispatch("REMEMBER_PHONE",this.validateForm.phone)
                                     this.$router.push("/community");
                                 } else {

@@ -5,7 +5,7 @@
                 <mu-button icon slot="left">
                     <mu-icon value="menu"></mu-icon>
                 </mu-button>
-                <div>海尚菊苑</div>
+                <div>{{community}}</div>
                 <mu-menu slot="right">
                 <mu-button flat>MENU</mu-button>
                 <mu-list slot="content">
@@ -73,7 +73,8 @@
 export default {
     data() {
         return {
-            size: "36"
+            size: "36",
+            community:localStorage.getItem("myCommunity")
         }
     }
 };

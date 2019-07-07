@@ -5,47 +5,71 @@
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>浏览页面
             <mu-button icon slot="right">
-                <mu-icon size="30" value="more_horiz"></mu-icon>
+                <!-- <mu-icon size="30" value="more_horiz"></mu-icon> -->
+                <mu-menu>
+                    <mu-icon size="30" value="more_horiz"></mu-icon>
+                    <mu-list slot="content">
+                        <mu-list-item button @click="editPost">
+                            <mu-list-item-title>编辑</mu-list-item-title>
+                        </mu-list-item>
+                        <mu-list-item button @click="deleteArticle">
+                            <mu-list-item-title>删除</mu-list-item-title>
+                        </mu-list-item>
+                        <mu-list-item button>
+                            <mu-list-item-title>投诉</mu-list-item-title>
+                        </mu-list-item>
+                    </mu-list>
+                </mu-menu>
             </mu-button>
         </mu-appbar>
-        <div class="content-browse">
-            <h1 class="title">{{this.articleTitle}}</h1>
-            <p
-                class="text"
-            >{{postContent}}</p>
-            <div class="images">
-                <img src="../assets/images/1000100.jpg" alt />
+
+        <div class="container-main">
+            <div class="content-browse">
+                <h1 class="title">{{this.articleTitle}}</h1>
+                <textarea
+                    name="text"
+                    id
+                    cols="30"
+                    v-model="postContent"
+                    rows="10"
+                    class="textarea-text"
+                ></textarea>
+                <div class="images">
+                    <img src="../assets/images/1000100.jpg" alt />
+                </div>
             </div>
-        </div>
-        <!-- <mu-container class="demo-container is-stripe">
-            <mu-row>
-                <mu-col span="4">
-                    <div class="grid-cell">55</div>
-                </mu-col>
-                <mu-col span="8">
-                    <div class="grid-cell">66</div>
-                </mu-col>
-            </mu-row>
-        </mu-container>-->
-        <mu-flex class="flex-wrapper" align-items="center">
-            <mu-flex class="flex-demo reading-volume" justify-content="start" fill>阅读：{{number}}</mu-flex>
-            <mu-flex class="flex-demo" justify-content="center" fill>
-                <ul class="share">
-                    <li @click="giveThumbs">
-                        <mu-icon :size="size" value="favorite" color="#ff5242"></mu-icon>
-                        <p>589</p>
-                    </li>
-                    <li>
-                        <mu-icon :size="size" value="textsms" color="#ff5242"></mu-icon>
-                        <p>90</p>
-                    </li>
-                    <li>
-                        <mu-icon :size="size" value="share" color="#ff5242"></mu-icon>
-                        <p>1005</p>
-                    </li>
-                </ul>
+            <mu-flex class="flex-wrapper" align-items="center">
+                <mu-flex class="flex-demo reading-volume" justify-content="start" fill>阅读：{{number}}</mu-flex>
+                <mu-flex class="flex-demo" justify-content="center" fill>
+                    <ul class="share">
+                        <li @click="giveThumbs">
+                            <mu-icon
+                                v-show="loveBool"
+                                :size="size"
+                                value="favorite_border"
+                                color="#ff5242"
+                            ></mu-icon>
+                            <mu-icon
+                                v-show="isloveBool"
+                                :size="size"
+                                value="favorite"
+                                color="#ff5242"
+                            ></mu-icon>
+                            <p>{{praiseNum}}</p>
+                        </li>
+                        <li>
+                            <!-- <mu-icon :size="size" value="textsms" color="#ff5242"></mu-icon> -->
+                            <mu-icon :size="size" value="textsms" color="#ff5242"></mu-icon>
+                            <p>90</p>
+                        </li>
+                        <li>
+                            <mu-icon :size="size" value="share" color="#ff5242"></mu-icon>
+                            <p>105</p>
+                        </li>
+                    </ul>
+                </mu-flex>
             </mu-flex>
-        </mu-flex>
+        </div>
     </div>
 </template>
 <script>
@@ -57,15 +81,25 @@ export default {
             size: "25",
             articleTitle: "", // 发帖标题
             postContent: "", // 帖子内容
-            articleId: ""// 文章id
+            articleId: "", // 文章id
+            loveBool: true,
+            isloveBool: false,
+            open: true,
+            praiseNum: "0"
         };
     },
     created() {
         this.articleTitle = this.$store.getters.articleTitle;
+        this.praiseNum = localStorage.getItem('praiseNum') || 0;
         this.articleQueryAll();
     },
     mounted() {},
     methods: {
+        editPost() {
+            this.$router.push("/editPost");
+            console.log(this.postContent);
+            this.$store.dispatch("ARTICLE_CONTENT", this.postContent);
+        },
         outPage() {
             this.$router.goBack();
         },
@@ -82,12 +116,15 @@ export default {
                 .then(result => {
                     if (result.status === 200) {
                         if (result.data.respCode == 1000) {
-                            console.log(result.data.data)
                             let content = result.data.data;
                             for (var i = 0; i < content.length; i++) {
                                 if (content[i].title == this.articleTitle) {
                                     this.postContent = content[i].content;
                                     this.articleId = content[i].articleId;
+                                    localStorage.setItem(
+                                        "articleId",
+                                        this.articleId
+                                    );
                                 }
                             }
                         }
@@ -99,31 +136,73 @@ export default {
         },
         // 点赞文章
         giveThumbs() {
+            if (!this.isloveBool && this.loveBool) {
+                this.isloveBool = true;
+                this.loveBool = false;
+            } else {
+                this.isloveBool = false;
+                this.loveBool = true;
+            }
+            
             this.$axios({
                 url: "admin/mobile/article/addPraiseNum",
                 method: "post",
                 headers: {
-                    // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                     Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
-                    userId: sessionStorage.getItem('userId'),
+                    userId: sessionStorage.getItem("userId"),
                     articleId: this.articleId
                 })
             })
                 .then(result => {
                     if (result.status === 200) {
-                        console.log(result)
+                        this.praiseNum = result.data.data.praiseNum;
+                        console.log(result);
                     }
                 })
                 .catch(err => {
                     console.log(err);
                 });
+        },
+        // 删除帖子
+        deleteArticle() {
+            this.$confirm("确定要删除吗？", "提示", {
+                type: "warning"
+            }).then(({ result }) => {
+                if (result) {
+                    this.$axios({
+                        url: "admin/mobile/article/deleteArticleByArticleId",
+                        method: "post",
+                        headers: {
+                            Authorization: sessionStorage.getItem("token")
+                        },
+                        data: Qs.stringify({
+                            articleId: this.articleId
+                        })
+                    })
+                        .then(result => {
+                            if (result.status === 200) {
+                                if (result.data.respCode == 1000) {
+                                    this.$router.push("/familyD")
+                                }
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                }
+            });
         }
     }
 };
 </script>
 <style scoped>
+.container-main {
+    width: 100%;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+}
 .flex-wrapper {
     width: 100%;
     height: 56px;
@@ -184,5 +263,12 @@ export default {
 .share li {
     float: left;
     margin-left: 15px;
+}
+.textarea-text {
+    width: 100%;
+    height: 16rem;
+    text-indent: 20px;
+    outline: none;
+    padding: 5px 10px;
 }
 </style>

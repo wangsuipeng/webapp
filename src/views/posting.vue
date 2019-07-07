@@ -33,9 +33,41 @@
                     class="textarea-text"
                     placeholder="说点什么..."
                 ></textarea>
-                <span class="upload-btn">
-                    <img src="../assets/images/add-pload.png" alt />
-                </span>
+                <!-- <div class="content">
+                    <div class="flex-box" v-ripple>
+                        <mu-icon size="50" value="local_parking" color="#ff5242"></mu-icon>
+                        <div class="text">车位分享</div>
+                    </div>
+                    <div class="flex-box" v-ripple>
+                        <mu-icon size="50" value="local_see" color="#ff5242"></mu-icon>
+                        <div class="text">闲置分享</div>
+                    </div>
+                    <div class="flex-box" v-ripple @click="loveBank">
+                        <mu-icon
+                            class="icon-explain"
+                            size="50"
+                            value="local_shipping"
+                            color="#ff5242"
+                        ></mu-icon>
+                        <div class="text">爱心银行</div>
+                    </div>
+                </div> -->
+                <div class="img-content">
+                    <span class="upload-btn" ref="divGenres" @click="choiceImg">
+                        <mu-icon value="add_a_photo" :size="size" color="#ddd"></mu-icon>
+                        <input
+                            type="file"
+                            ref="uploadImage"
+                            @change="onFileChange"
+                            accept="image/*"
+                            capture="camera"
+                            style="display: none;"
+                        />
+                    </span>
+                    <!-- <span>
+                        <img src="../assets/images/325543.jpg" alt srcset />
+                    </span> -->
+                </div>
             </div>
             <mu-flex class="flex-wrapper" justify-content="start">
                 <mu-flex class="flex-demo" justify-content="center"></mu-flex>
@@ -68,10 +100,16 @@ export default {
             postForm: {
                 title: "",
                 content: "",
-                category: "",
+                category: "2",
                 authorId: sessionStorage.getItem("userId")
             },
-            lineBool: false
+            lineBool: false,
+            imgsrc: "", //上传的·图片的地址
+            show: true, //图片放大预览
+            previewImg: "", //预览图片的地址
+            isPreview: false, //是否预览当前图片
+            isPhoto: true,
+            uploadFile: null
         };
     },
     mounted() {
@@ -103,6 +141,171 @@ export default {
                 .catch(err => {
                     console.log(err);
                 });
+        },
+        choiceImg() {
+            let self = this;
+            if (!window.plus) {
+                self.addPic(); //如果不支持plus,就用本地相册上传即可
+                return;
+            }
+            let title = "选择照片";
+            let btns = ["拍照", "相册"];
+
+            var func = function(e) {
+                var index = e.index;
+
+                if (index == 1) self.choiceCamera();
+                if (index == 2) self.choicePic();
+            };
+            if (title && btns && btns.length > 0) {
+                var btnArray = [];
+                for (var i = 0; i < btns.length; i++) {
+                    btnArray.push({ title: btns[i] });
+                }
+                plus.nativeUI.actionSheet(
+                    {
+                        title: title,
+                        cancel: "取消",
+                        buttons: btnArray
+                    },
+                    function(e) {
+                        if (func) func(e);
+                    }
+                );
+            }
+        },
+        choiceCamera() {
+            let self = this;
+            var cmr = plus.camera.getCamera();
+            cmr.captureImage(
+                function(path) {
+                    plus.io.resolveLocalFileSystemURL(
+                        path,
+                        function(entry) {
+                            self.imgsrc = entry.toLocalURL();
+                            self.show = true;
+                        },
+                        function(e) {
+                            plus.nativeUI.toast(
+                                "读取拍照文件错误：" + e.message
+                            );
+                        }
+                    );
+                },
+                function(e) {},
+                { index: 1, filename: "_doc/camera/" }
+            );
+        },
+
+        choicePic() {
+            let self = this;
+            plus.gallery.pick(
+                function(p) {
+                    plus.io.resolveLocalFileSystemURL(
+                        p,
+                        function(entry) {
+                            self.imgsrc = entry.toLocalURL();
+                            self.show = true;
+                        },
+                        function(e) {
+                            plus.nativeUI.toast(
+                                "读取拍照文件错误：" + e.message
+                            );
+                        }
+                    );
+                },
+                function(e) {
+                    plus.nativeUI.toast("读取拍照文件错误：" + e.message);
+                },
+                {
+                    filename: "_doc/camera/",
+                    filter: "image"
+                }
+            );
+        },
+        upload() {
+            var self = this;
+            var wt;
+            if (window.plus) wt = plus.nativeUI.showWaiting();
+            var img = new Image(),
+                width = 512, //image resize   压缩后的宽
+                quality = 0.5, //image quality  压缩质量
+                canvas = document.createElement("canvas"),
+                drawer = canvas.getContext("2d");
+            img.src = self.imgsrc;
+            img.onload = function() {
+                //利用canvas压缩图片
+                canvas.width = width;
+                canvas.height = width * (img.height / img.width);
+                drawer.drawImage(img, 0, 0, canvas.width, canvas.height);
+                var base64 = canvas.toDataURL("image/*", quality);
+                var pic = base64.split(",")[1]; //图片的base64编码内容
+                var f = self.imgsrc;
+                var filename = f.replace(
+                    f.substring(0, f.lastIndexOf("/") + 1),
+                    ""
+                ); //图片名称
+                if (self.uploadFile !== null) {
+                    //addPic方法得到的图片文件
+                    filename = self.uploadFile.name;
+                    let reader = new FileReader();
+                    reader.readAsDataURL(self.uploadFile);
+                    reader.onload = function(e) {
+                        img.src = e.target.result;
+                    };
+                    img.onload = function() {
+                        canvas.width = width;
+                        canvas.height = width * (img.height / img.width);
+                        drawer.drawImage(
+                            img,
+                            0,
+                            0,
+                            canvas.width,
+                            canvas.height
+                        );
+                        base64 = canvas.toDataURL("image/*", quality);
+                        pic = base64.split(",")[1];
+                    };
+                } //此处是将图片上传到服务器的代码，略过
+            };
+        },
+        onFileChange(e) {
+            let self = this;
+            let files = e.target.files || e.dataTransfer.files;
+            if (!files.length) return;
+            let file = files[0]; //File对象
+            self.uploadFile = file;
+            let reader = new FileReader(); //FileReader对象
+            reader.readAsDataURL(file); //该方法会读取指定的 Blob 或 File 对象。读取操作完成的时候，readyStat变成已完成（DONE），并触发 loadend 事件，同时 result 属性将包含一个data:URL格式的字符串（base64编码）以表示所读的内容。
+
+            reader.onload = function(e) {
+                self.imgsrc = e.target.result; //图片内容的base64编码
+                self.show = true;
+            };
+        },
+
+        addPic: function(e) {
+            let els = this.$refs.divGenres.querySelectorAll("input[type=file]");
+            els[0].click();
+            return false;
+        },
+
+        delImage: function() {
+            this.imgsrc = "";
+            this.show = false;
+            this.isPreview = false;
+        },
+
+        previewImage: function(url) {
+            let vm = this;
+            vm.isPreview = true;
+            vm.previewImg = url;
+        },
+
+        closePreview: function() {
+            let vm = this;
+            vm.isPreview = false;
+            vm.previewImg = "";
         }
     }
 };
@@ -127,7 +330,7 @@ export default {
 }
 .content-text {
     width: 100%;
-    height: 22.5rem;
+    min-height: 21.5rem;
     background-color: #fff;
 }
 .textarea-text {
@@ -138,20 +341,15 @@ export default {
 }
 .upload-btn {
     display: inline-block;
-    width: 8rem;
-    height: 8rem;
+    width: 7rem;
+    height: 7rem;
     margin-left: 15px;
     border-radius: 5px;
     text-align: center;
-    line-height: 10.5rem;
-    border: 2px solid #eaeaea;
+    line-height: 9.5rem;
+    border: 2px dashed #eaeaea;
     box-shadow: 0 3px -1px -2px rgba(0, 0, 0, 0.2),
         0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-}
-.upload-btn img {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
 }
 .input-text {
     width: 100%;
@@ -197,5 +395,18 @@ export default {
 }
 .clearfix {
     zoom: 1; /*为IE6，7的兼容性设置*/
+}
+.img-content {
+    width: 100%;
+}
+.img-content span {
+    display: inline-block;
+    width: 7rem;
+    height: 7rem;
+}
+.img-content span img {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
 }
 </style>
