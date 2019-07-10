@@ -99,7 +99,11 @@ export default {
             this.$store.dispatch("ARTICLE_TITLE", this.articleTitle);
             for (var i = 0;i < this.postContent.length;i++) {
                 if (this.articleTitle == this.postContent[i].title) {
-                    localStorage.setItem("praiseNum",this.postContent[i].praiseNum)
+                    if (this.postContent[i].praiseNum) {
+                        localStorage.setItem("praiseNum",this.postContent[i].praiseNum)
+                    } else {
+                        localStorage.setItem("praiseNum",0)
+                    }
                 }   
             }
             this.$router.push("/browse");

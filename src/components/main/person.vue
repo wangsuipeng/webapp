@@ -31,7 +31,7 @@
                         <mu-icon size="36" value="chevron_right"></mu-icon>
                     </mu-list-item-action>
                 </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list">
+                <mu-list-item avatar button :ripple="true" class="word-list" @click.native="authentication">
                     <mu-list-item-action>
                         <img class="picture-img" src="../../assets/images/authentication.png">
                     </mu-list-item-action>
@@ -49,7 +49,7 @@
                         <mu-icon size="36" value="chevron_right"></mu-icon>
                     </mu-list-item-action>
                 </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list">
+                <mu-list-item avatar button :ripple="true" class="word-list" @click="about">
                     <mu-list-item-action>
                         <img class="picture-img" src="../../assets/images/about.png">
                     </mu-list-item-action>
@@ -71,8 +71,13 @@ export default {
     },
     methods: {
         personalCenter() {
-            console.log('qqq')
             this.$router.push('/personalCenter')
+        },
+        about() {
+            this.$router.push('/about')
+        },
+        authentication() {
+            this.$router.push('/authentication')
         }
     }
 };

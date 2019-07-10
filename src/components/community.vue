@@ -526,6 +526,11 @@ export default {
     methods: {
         myCommunity(e) {
             localStorage.setItem("myCommunity",e.target.innerText)
+            for (let i = 0;i < this.communData.length;i++) {
+                if (e.target.innerText == this.communData[i].name) {
+                    localStorage.setItem('communityId',this.communData[i].id)
+                }
+            }
             this.$router.push("/layout/widgets")
         },
         addressChange(value, index) {

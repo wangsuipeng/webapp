@@ -13,6 +13,14 @@ import Message from 'muse-ui-message';
 import 'muse-ui-message/dist/muse-ui-message.css';
 import store from './store'
 import { SwitchCell } from 'vant';
+import 'muse-ui-loading/dist/muse-ui-loading.css'; // load css
+import Loading from 'muse-ui-loading';
+import { Uploader } from 'vant';
+import { Cell, CellGroup } from 'vant';
+
+Vue.use(Cell).use(CellGroup);
+Vue.use(Uploader);
+Vue.use(Loading);
 Vue.use(SwitchCell);
 
 Vue.prototype.$axios = axios

@@ -525,7 +525,6 @@ export default {
                 data: Qs.stringify(commmData)
             })
                 .then(result => {
-                    console.log("8888888888");
                     console.log(result);
                 })
                 .catch(err => {

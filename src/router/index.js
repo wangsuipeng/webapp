@@ -102,6 +102,18 @@ export default new Router({
     {
       path: '/editPost',
       component: () => import('@/views/editPost.vue')
+    },
+    {
+      path: '/about',
+      component: () => import('@/views/about.vue')
+    },
+    {
+      path: '/authentication',
+      component: () => import('@/views/authentication.vue')
+    },
+    {
+      path: '/editAuthen',
+      component: () => import('@/views/editAuthen.vue')
     }
   ]
 })
