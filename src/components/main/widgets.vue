@@ -5,7 +5,7 @@
         </mu-appbar>
         <div class="container-main">
             <div class="content">
-                <mu-carousel transition="fade" style="height: 150px">
+                <mu-carousel transition="fade" hide-controls style="height: 150px">
                     <mu-carousel-item>
                         <img :src="carouselImg1" />
                     </mu-carousel-item>
@@ -37,7 +37,7 @@
                     <mu-icon size="50" value="local_parking" color="#ff5242"></mu-icon>
                     <div class="text">车位分享</div>
                 </div>
-                <div class="flex-box" v-ripple>
+                <div class="flex-box" v-ripple  @click="share">
                     <mu-icon size="50" value="local_see" color="#ff5242"></mu-icon>
                     <div class="text">闲置分享</div>
                 </div>
@@ -104,6 +104,9 @@ export default {
         },
         loveBank() {
             this.$router.push("/loveBank");
+        },
+        share() {
+            this.$router.push("/share")
         }
     }
 };

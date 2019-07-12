@@ -46,7 +46,6 @@ import Qs from "qs";
 export default {
     data() {
         return {
-            bFlag: true,
             communityName: "",
             auditForm: {
                 phone: "",
@@ -65,6 +64,8 @@ export default {
         this.communityName = localStorage.getItem("myCommunity");
         this.auditForm.communityId = localStorage.getItem("communityId");
         this.auditForm.phone = localStorage.getItem("phone");
+        this.auditForm.realName = localStorage.getItem("realName");
+        this.auditForm.address = localStorage.getItem("address");
     },
     methods: {
         outPage() {
@@ -76,8 +77,7 @@ export default {
                     this.auditForm.communityId = this.communData[i].id;
                 }
             }
-            if (this.bFlag) {
-                this.$axios({
+            this.$axios({
                 url: "admin/mobile/communityMessage/addCommunityMember",
                 method: "post",
                 headers: {
@@ -86,7 +86,8 @@ export default {
                 data: Qs.stringify(this.auditForm)
             })
                 .then(result => {
-                    if (result.data.respCode === 1000) {
+                    console.log(result.data.respCode);
+                    if (result.data.respCode == "1000") {
                         this.$alert(
                             "工作人员将在1-2个工作日内完成审核",
                             "提示",
@@ -94,17 +95,15 @@ export default {
                                 okLabel: "知道了"
                             }
                         ).then(() => {
-                            this.$router.push("/layout/person")
+                            this.$router.push("/layout/person");
                         });
+                    } else {
+                        this.$toast.error("提交失败");
                     }
                 })
                 .catch(err => {
                     console.log(err);
                 });
-                this.bFlag = false;
-            } else {
-                this.$toast.error('不要重复提交');
-            }
         },
         getCommunity() {
             this.$axios({

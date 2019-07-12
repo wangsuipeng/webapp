@@ -5,7 +5,7 @@
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>爱心银行
             <mu-button icon slot="right">
-                <!-- <mu-icon size="30" value="more_horiz"></mu-icon> -->
+                <mu-icon size="30" value="add"></mu-icon>
             </mu-button>
         </mu-appbar>
         <div class="container-main">
@@ -102,8 +102,8 @@
                                         style="font-size: 18px;font-weight: 600;color: #000;margin-bottom: 10px"
                                     >陪宠物金毛散步</mu-list-item-title>
                                     <mu-list-item-sub-title>
-                                        <span style="color: #ff5242">爱心币 5/次</span>
-                                        <span class="public" @click="alert">做公益</span>
+                                        <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
+                                        <div class="public" @click="alert">做公益</div>
                                     </mu-list-item-sub-title>
                                 </mu-list-item-content>
                             </mu-list-item>
@@ -119,8 +119,8 @@
                                         style="font-size: 18px;font-weight: 600;color: #000;margin-bottom: 10px"
                                     >陪宠物金毛散步</mu-list-item-title>
                                     <mu-list-item-sub-title>
-                                        <span style="color: #ff5242">爱心币 5/次</span>
-                                        <span class="public" @click="alert">做公益</span>
+                                        <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
+                                        <div class="public" @click="alert">做公益</div>
                                     </mu-list-item-sub-title>
                                 </mu-list-item-content>
                             </mu-list-item>
@@ -136,8 +136,8 @@
                                         style="font-size: 18px;font-weight: 600;color: #000;margin-bottom: 10px"
                                     >陪宠物金毛散步</mu-list-item-title>
                                     <mu-list-item-sub-title>
-                                        <span style="color: #ff5242">爱心币 5/次</span>
-                                        <span class="public" @click="alert">做公益</span>
+                                        <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
+                                        <div class="public" @click="alert">做公益</div>
                                     </mu-list-item-sub-title>
                                 </mu-list-item-content>
                             </mu-list-item>
@@ -160,8 +160,8 @@
                                         style="font-size: 18px;font-weight: 600;color: #000;margin-bottom: 10px"
                                     >小区公园垃圾处理</mu-list-item-title>
                                     <mu-list-item-sub-title>
-                                        <span style="color: #ff5242">爱心币 5/次</span>
-                                        <span class="public">做公益</span>
+                                        <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
+                                        <div class="public" @click="alert">做公益</div>
                                     </mu-list-item-sub-title>
                                 </mu-list-item-content>
                             </mu-list-item>
@@ -177,8 +177,8 @@
                                         style="font-size: 18px;font-weight: 600;color: #000;margin-bottom: 10px"
                                     >小区公园垃圾处理</mu-list-item-title>
                                     <mu-list-item-sub-title>
-                                        <span style="color: #ff5242">爱心币 5/次</span>
-                                        <span class="public">做公益</span>
+                                        <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
+                                        <div class="public" @click="alert">做公益</div>
                                     </mu-list-item-sub-title>
                                 </mu-list-item-content>
                             </mu-list-item>
@@ -194,8 +194,8 @@
                                         style="font-size: 18px;font-weight: 600;color: #000;margin-bottom: 10px"
                                     >小区公园垃圾处理</mu-list-item-title>
                                     <mu-list-item-sub-title>
-                                        <span style="color: #ff5242">爱心币 5/次</span>
-                                        <span class="public">做公益</span>
+                                        <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
+                                        <div class="public" @click="alert">做公益</div>
                                     </mu-list-item-sub-title>
                                 </mu-list-item-content>
                             </mu-list-item>
@@ -250,7 +250,10 @@ export default {
     font-size: 30px;
 }
 .public {
-    float: right;
+    /* float: right; */
+    position: absolute;
+    top: 49px;
+    right: 10px;
     width: 4rem;
     height: 1.5rem;
     line-height: 1.5rem;
@@ -258,6 +261,6 @@ export default {
     color: #fff;
     border-radius: 5px;
     text-align: center;
-    background-color: blue;
+    background-color: #ff5242;
 }
 </style>

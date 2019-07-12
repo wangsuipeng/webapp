@@ -114,6 +114,10 @@ export default new Router({
     {
       path: '/editAuthen',
       component: () => import('@/views/editAuthen.vue')
+    },
+    {
+      path: '/share',
+      component: () => import('@/views/share.vue')
     }
   ]
 })

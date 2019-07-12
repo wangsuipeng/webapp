@@ -76,16 +76,8 @@ export default {
         };
     },
     created () {
-        // let date  = new Date();
-        // let Y = date.getFullYear() + '-';
-        // let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-        // let D = date.getDate() + ' ';
-        // let h = date.getHours() + ':';
-        // let m = date.getMinutes() + ':';
-        // let s = date.getSeconds(); 
-        // console.log(Y+M+D+h+m+s)
+        this.authenticationData.communityName = localStorage.getItem("myCommunity")
         this.authenticationData.userPhone = localStorage.getItem("phone")
-        // this.authenticationData.checkTime = Y+M+D+h+m+s;
         this.getCommunityMessage();  
     },
     methods: {
@@ -93,6 +85,8 @@ export default {
             this.$router.goBack();
         },
         editAuthen() {
+            localStorage.setItem('realName',this.authenticationData.realName);
+            localStorage.setItem('address',this.authenticationData.address);
             this.$router.push("/editAuthen")
         },
         getCommunityMessage() {
@@ -107,23 +101,23 @@ export default {
                     communityId: localStorage.getItem("communityId")
                 })
             }).then((result) => {
-                console.log(result.data.data.communityName)
-                this.authenticationData.address = result.data.data.address;
-                this.authenticationData.communityName = result.data.data.communityName;
-                this.authenticationData.realName = result.data.data.realName;
-                this.authenticationData.checkTime = result.data.data.createTime;
-                if (result.data.data.companyRoleType == 5) {
-                    this.authenticationData.roleType = "游客";
-                } else if (result.data.data.companyRoleType == 4) {
-                    this.authenticationData.roleType = "业主";
-                } else{
-                    this.authenticationData.roleType = "工作人员";
-                }
-                if (result.data.data.check == 0) {
-                    this.authenticationData.check = "未认证用户"
-                }
-                if (result.data.respCode === 1000) {
-
+                if (result.data.respCode == 1000) {
+                    this.authenticationData.address = result.data.data.address;
+                    this.authenticationData.communityName = result.data.data.communityName;
+                    this.authenticationData.realName = result.data.data.realName;
+                    this.authenticationData.checkTime = result.data.data.createTime;
+                    if (result.data.data.companyRoleType == 5) {
+                        this.authenticationData.roleType = "游客";
+                    } else if (result.data.data.companyRoleType == 4) {
+                        this.authenticationData.roleType = "业主";
+                    } else{
+                        this.authenticationData.roleType = "工作人员";
+                    }
+                    if (result.data.data.check == 0) {
+                        this.authenticationData.check = "未认证用户"
+                    } else {
+                        this.authenticationData.check = "认证用户"
+                    }
                 }
             }).catch((err) => {
                 console.log(err)

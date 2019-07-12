@@ -49,4 +49,7 @@ html,body{
 ul,li {
     list-style: none;
 }
+.word-list {
+    border-bottom: 0.5px solid #ccc !important;
+}
 </style>

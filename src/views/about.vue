@@ -9,25 +9,48 @@
             </mu-button>
         </mu-appbar>
         <div class="container-main">
-            <div class="box-list">当前版本V100R001C00SPC109</div>
-            <div class="box-list">当前版本V100R001C00SPC109</div>
-            <div class="upgrade">
+            <div class="box-list">当前版本 <span style="margin-left: 40px">1.2.1</span></div>
+            <div class="box-list">最新版本 <span style="margin-left: 40px">1.2.2</span></div>
+            <div class="upgrade" @click="downloadApk">
                 <button>在线升级</button>
-            </div>  
+            </div>
         </div>
     </div>
 </template>
 <script>
+import Qs from 'qs';
 export default {
     data() {
-        return {
-
-        }
+        return {};
     },
     methods: {
         outPage() {
             this.$router.goBack();
         },
+        downloadApk() {
+            this.$axios({
+                url: "admin/mobile/isNeedUpdate",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    version: '1.2.2',
+                    clientType: 'a'
+                })
+            })
+                .then(result => {
+                    if (result.data.respCode) {
+                        // console.log(result.data.appUrl)
+                        window.open(result.data.appUrl);
+                    } else {
+                        this.$toast.error("目前是最新版本");
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
     }
 };
 </script>
@@ -46,7 +69,8 @@ export default {
     width: 100%;
     height: 3rem;
     border: 1px solid #ccc;
-    text-align: center;
+    text-align: left;
+    padding-left: 25px;
     line-height: 3rem;
 }
 .box-list:first-child {

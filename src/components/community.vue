@@ -531,6 +531,7 @@ export default {
                     localStorage.setItem('communityId',this.communData[i].id)
                 }
             }
+            this.$store.dispatch("CHANGE_NAV","widgets")
             this.$router.push("/layout/widgets")
         },
         addressChange(value, index) {
