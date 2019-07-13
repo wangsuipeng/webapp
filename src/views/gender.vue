@@ -4,7 +4,7 @@
             <mu-button icon slot="left" @click="outPage">
                 <mu-icon value="keyboard_arrow_left" size="40"></mu-icon>
             </mu-button>性别
-            <mu-button flat slot="right" style="font-size: 16px">提交</mu-button>
+            <mu-button flat slot="right" style="font-size: 16px" @click="updateUser">提交</mu-button>
         </mu-appbar>
         <mu-flex class="flex-wrapper" justify-content="start">
             <mu-flex class="flex-demo" justify-content="center"></mu-flex>
@@ -15,7 +15,7 @@
                 <mu-flex class="select-control-row" :key="i.gender" v-for="i in item">
                     <mu-radio
                         :value="i.gender"
-                        v-model="radio.value1"
+                        v-model="radio.sex"
                         :label="i.gender"
                         label-left
                         color="#ff5242"
@@ -26,12 +26,12 @@
     </div>
 </template>
 <script>
+import Qs from "qs";
 export default {
     data() {
         return {
             radio: {
-                value1: [],
-                value2: "heart",
+                sex: [],
                 value3: "disable"
             },
             item: [{ gender: "男" }, { gender: "女" }]
@@ -40,6 +40,33 @@ export default {
     methods: {
         outPage() {
             this.$router.goBack();
+        },
+        // 修改资料
+        updateUser() {
+            this.$axios({
+                url: "admin/mobile/user/setPersonalCenter",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    nickName: "",
+                    userPhone: localStorage.getItem("phone"),
+                    newPhone: "",
+                    sex: this.radio.sex,
+                    imgId: ""
+                })
+            })
+                .then(result => {
+                    if (result.data.status == "success") {
+                        this.$router.push("/personalCenter");
+                    } else {
+                        this.$toast.error("修改失败");
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         }
     }
 };

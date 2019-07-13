@@ -27,6 +27,7 @@
             <div class="content-browse">
                 <h1 class="title">{{this.articleTitle}}</h1>
                 <textarea
+                    readonly
                     name="text"
                     id
                     cols="30"
@@ -217,9 +218,7 @@ export default {
 .flex-demo {
     width: 200px;
     height: 52px;
-    /* background-color: #e0e0e0; */
     text-align: center;
-    /* line-height: 32px; */
     margin-left: 8px;
 }
 .flex-wrapper:first-child {
@@ -235,12 +234,8 @@ export default {
 }
 .title {
     width: 100%;
-    /* line-height: 60px; */
-    padding: 20px 0;
-    /* border-bottom: 1px solid #000;
-    border-left: 1px solid #000;
-    border-right: 1px solid #000; */
-    background-color: #ccc;
+    padding: 15px 0;
+    background-color: rgb(204, 204, 204,0.3);
     text-align: center;
     margin: 0 !important;
 }
@@ -266,7 +261,7 @@ export default {
 }
 .textarea-text {
     width: 100%;
-    height: 16rem;
+    min-height: 18rem;
     text-indent: 20px;
     outline: none;
     padding: 5px 10px;

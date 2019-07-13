@@ -1,19 +1,19 @@
 <template>
-    <div class="loveBank">
+    <div class="myLove">
         <mu-appbar color="#ff5242" style="width: 100%; text-align: center">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
-            </mu-button>爱心银行
+            </mu-button>我的爱心
             <mu-button icon slot="right" @click="release">
-                <mu-icon size="30" value="add"></mu-icon>
+                <!-- <mu-icon size="30" value="add"></mu-icon> -->
             </mu-button>
         </mu-appbar>
         <div class="container-main">
             <mu-container>
                 <mu-tabs :value.sync="active2" color="#F8F8F8" indicator-color="#ff5242" full-width>
-                    <mu-tab style="color: #898989">爱心榜</mu-tab>
-                    <mu-tab style="color: #898989">爱心大厅</mu-tab>
-                    <!-- <mu-tab style="color: #898989">社会义工</mu-tab> -->
+                    <mu-tab style="color: #898989">进行中</mu-tab>
+                    <mu-tab style="color: #898989">待评估</mu-tab>
+                    <mu-tab style="color: #898989">已完成</mu-tab>
                 </mu-tabs>
                 <div class="demo-text" v-if="active2 === 0">
                     <mu-paper :z-depth="0" class="demo-list-wrap">
@@ -145,10 +145,10 @@
                         </mu-list>
                     </mu-paper>
                 </div>
-                <!-- <div class="demo-text" v-if="active2 === 2">
+                <div class="demo-text" v-if="active2 === 2">
                     <mu-paper :z-depth="0" class="demo-list-wrap">
                         <mu-list textline="three-line">
-                            <mu-sub-header>今天</mu-sub-header>
+                            <!-- <mu-sub-header>今天</mu-sub-header> -->
                             <mu-list-item avatar :ripple="false" button>
                                 <mu-list-item-action>
                                     <mu-avatar>
@@ -202,7 +202,7 @@
                             <mu-divider></mu-divider>
                         </mu-list>
                     </mu-paper>
-                </div> -->
+                </div>
             </mu-container>
         </div>
     </div>

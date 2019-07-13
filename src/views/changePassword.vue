@@ -4,7 +4,7 @@
             <mu-button icon slot="left" @click="outPage">
                 <mu-icon value="keyboard_arrow_left" size="40"></mu-icon>
             </mu-button>修改密码
-            <mu-button flat slot="right" style="font-size: 16px">提交</mu-button>
+            <mu-button flat slot="right" style="font-size: 16px" @click="updateUser">提交</mu-button>
         </mu-appbar>
         <div class="password">
             <mu-form
@@ -14,24 +14,26 @@
                 label-width="100"
             >
                 <mu-form-item prop="input">
-                    <mu-text-field v-model="form.input" placeholder="输入旧密码"></mu-text-field>
+                    <mu-text-field v-model="form.usedPassword" placeholder="输入旧密码"></mu-text-field>
                 </mu-form-item>
                 <mu-form-item prop="input">
-                    <mu-text-field v-model="form.input" placeholder="输入旧密码"></mu-text-field>
+                    <mu-text-field v-model="form.newPassword" placeholder="输入新密码"></mu-text-field>
                 </mu-form-item>
-                <mu-form-item prop="input">
+                <!-- <mu-form-item prop="input">
                     <mu-text-field class="text" v-model="form.input" placeholder="输入旧密码"></mu-text-field>
-                </mu-form-item>
+                </mu-form-item> -->
             </mu-form>
         </div>
     </div>
 </template>
 <script>
+import Qs from "qs";
 export default {
     data() {
         return {
             form: {
-                input: ''
+                usedPassword: '',
+                newPassword: '',
             },
             labelPosition: 'top',
         };
@@ -39,6 +41,30 @@ export default {
     methods: {
         outPage() {
             this.$router.goBack();
+        },
+        // 修改资料
+        updateUser() {
+            this.$axios({
+                url: "admin/mobile/user/modifyPassword",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    password: this.form.usedPassword,
+                    newPassword: this.form.newPassword,
+                })
+            })
+                .then(result => {
+                    if (result.data.status == "success") {
+                        this.$router.push("/personalCenter");
+                    } else {
+                        this.$toast.error("修改失败");
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         }
     }
 };

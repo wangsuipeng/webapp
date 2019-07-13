@@ -5,7 +5,7 @@
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>
-            <span style="color: #fff">新帖子</span>
+            <span style="color: #fff">爱心发布</span>
             <mu-button
                 flat
                 slot="right"
@@ -146,8 +146,8 @@ export default {
         onRead(file) {
             // 上传图片到图片服务器
             // this.$refs.clothImg.src = file.content
-            // console.log(typeof(file))
-            // this.imgList.push(file);
+            console.log(typeof(file))
+            this.imgList.push(file);
             // if (typeof(file) === Array) {
             //     console.log("不是对象")
             //     this.imgList = file;
@@ -158,24 +158,24 @@ export default {
             console.log(this.imgList)
             // this.postData.psuh(file); // postData是一个数组
             // console.log(this.postData)
-            let formImg = new FormData();
-            for (var i = 0;i < file.length;i++) {
-                formImg.append("file", file[i].file);
-            }
+            // let formImg = new FormData();
+            // for (var i = 0;i < file.length;i++) {
+            //     formImg.append("file", file[i].file);
+            // }
             
-            this.$axios({
-                url: "admin/mobile/sysFile/upload",
-                method: "post",
-                headers: {
-                    'Authorization': sessionStorage.getItem('token')
-                },
-                data: formImg
-            }).then((result) => {
-                console.log(result)
-                console.log(result.data.data)
-            }).catch((err) => {
-                console.log(err)
-            });
+            // this.$axios({
+            //     url: "admin/mobile/sysFile/upload",
+            //     method: "post",
+            //     headers: {
+            //         'Authorization': sessionStorage.getItem('token')
+            //     },
+            //     data: formImg
+            // }).then((result) => {
+            //     console.log(result)
+            //     console.log(result.data.data)
+            // }).catch((err) => {
+            //     console.log(err)
+            // });
         },
         deleteImg(file) {
             this.imgData = file;

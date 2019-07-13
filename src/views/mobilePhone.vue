@@ -7,9 +7,7 @@
             <mu-button flat slot="right" style="font-size: 16px" @click="updateUser">提交</mu-button>
         </mu-appbar>
         <mu-flex class="flex-wrapper" justify-content="start">
-            <mu-flex class="flex-demo" justify-content="start">
-                绑定新手机号
-            </mu-flex>
+            <mu-flex class="flex-demo" justify-content="start">绑定新手机号</mu-flex>
         </mu-flex>
         <div class="mobile">
             <mu-form
@@ -30,12 +28,9 @@ import Qs from "qs";
 export default {
     data() {
         return {
-            labelPosition: 'top',
+            labelPosition: "top",
             userForm: {
-                userPhone: '',// 用户手机
-                nickName: '',// 昵称
-                sex: '',// 性别
-                imgId: '',// 头像id
+                userPhone: localStorage.getItem("phone")
             }
         };
     },
@@ -48,25 +43,37 @@ export default {
             this.$axios({
                 url: "admin/mobile/user/setPersonalCenter",
                 method: "post",
-                data: Qs.stringify(this.userForm)
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    nickName: "",
+                    userPhone: localStorage.getItem("phone"),
+                    newPhone: this.userForm.userPhone,
+                    sex: "",
+                    imgId: ""
+                })
             })
                 .then(result => {
-                    if (result.status === 200) {
-                        console.log(result);
+                    if (result.data.status == "success") {
+                        localStorage.setItem("phone",this.userForm.userPhone)
+                        this.$router.push("/personalCenter");
+                    } else {
+                        this.$toast.error("修改失败");
                     }
                 })
                 .catch(err => {
                     console.log(err);
-                });
+                })
         }
     }
-};
+}
 </script>
 <style lang="less" scoped>
 .mu-form-item {
-    margin-bottom: 0!important;
-    padding-bottom: 0!important;
-    min-height: 0!important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: 0 !important;
 }
 </style>
 
@@ -101,7 +108,7 @@ export default {
 </style>
 <style>
 .mobile .mu-form-item-label {
-    font-size: 18px!important;
-    padding-left: 15px!important;
+    font-size: 18px !important;
+    padding-left: 15px !important;
 }
 </style>

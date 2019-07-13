@@ -118,6 +118,18 @@ export default new Router({
     {
       path: '/share',
       component: () => import('@/views/share.vue')
+    },
+    {
+      path: '/releasePublic',
+      component: () => import('@/views/releasePublic.vue')
+    },
+    {
+      path: '/loveProgress',
+      component: () => import('@/views/loveProgress.vue')
+    },
+    {
+      path: '/myLove',
+      component: () => import('@/views/myLove.vue')
     }
   ]
 })

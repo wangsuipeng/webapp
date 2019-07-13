@@ -120,7 +120,7 @@ export default {
                                     this.$store.dispatch("REMEMBER_PHONE",this.validateForm.phone)
                                     this.$router.push("/community");
                                 } else {
-                                    this.toast(result.data.data);
+                                    this.$toast(result.data.data);
                                 }
                             }
                         })

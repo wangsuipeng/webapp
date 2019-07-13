@@ -8,13 +8,14 @@
                 <!-- <mu-icon size="30" value="control_point"></mu-icon> -->
             </mu-button>
         </mu-appbar>
-        <mu-flex class="flex-wrapper" justify-content="start" @click="openBotttomSheet">
+        <mu-flex class="flex-wrapper" justify-content="start">
             <mu-flex class="flex-demo" justify-content="center">
                 <mu-row justify-content="center">
                     <h2 class="nickname">乔木社区</h2>
-                    <mu-avatar :size="size" class="avatar-person">
-                        <img src="../assets/images/1000046.jpg" />
+                    <mu-avatar :size="size" class="avatar-person" @click="uploadHeadImg">
+                        <img :src="imaName" />
                     </mu-avatar>
+                    <input type="file" accept="image/*" @change="handleFile" class="hiddenInput dn" />
                 </mu-row>
             </mu-flex>
         </mu-flex>
@@ -111,7 +112,8 @@ export default {
     data() {
         return {
             size: 56,
-            open: false
+            open: false,
+            imaName: ""
         };
     },
     methods: {
@@ -144,6 +146,30 @@ export default {
             this.imgPreview(this.picValue);
             console.log(this.picValue);
         },
+        uploadHeadImg() {
+            this.$el.querySelector(".hiddenInput").click();
+        },
+        // 将头像显示
+        handleFile(e) {
+            let target = e.target || e.srcElement;
+            let file = target.files[0];
+            console.log(file)
+            let formImg = new FormData(); //创建form对象
+            formImg.append("file", file); //通过append向form对象添加数据
+            this.$axios({
+                url: "admin/mobile/sysFile/upload",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: formImg
+            }).then((result) => {
+                this.imaName = result.data.name;
+                console.log(result.data.name)
+            }).catch((err) => {
+                console.log(err)
+            });
+        },
         // 退出登录
         outLogin() {
             this.$confirm("确定要退出？", "提示", {
@@ -175,6 +201,9 @@ export default {
 };
 </script>
 <style scoped>
+.dn {
+    display: none;
+}
 .container {
     padding: 0 !important;
 }
