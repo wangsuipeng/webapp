@@ -9,8 +9,14 @@
             </mu-button>
         </mu-appbar>
         <div class="container-main">
-            <div class="box-list">当前版本 <span style="margin-left: 40px">1.2.1</span></div>
-            <div class="box-list">最新版本 <span style="margin-left: 40px">1.2.2</span></div>
+            <div class="box-list">
+                当前版本
+                <span style="margin-left: 40px">1.2.5</span>
+            </div>
+            <div class="box-list">
+                最新版本
+                <span style="margin-left: 40px">1.2.6</span>
+            </div>
             <div class="upgrade" @click="downloadApk">
                 <button>在线升级</button>
             </div>
@@ -18,10 +24,12 @@
     </div>
 </template>
 <script>
-import Qs from 'qs';
+import Qs from "qs";
 export default {
     data() {
-        return {};
+        return {
+            appVersion: ""
+        };
     },
     methods: {
         outPage() {
@@ -35,14 +43,51 @@ export default {
                     Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
-                    version: '1.2.2',
-                    clientType: 'a'
+                    version: "1.2.5",
+                    clientType: "a"
                 })
             })
                 .then(result => {
-                    if (result.data.respCode) {
-                        // console.log(result.data.appUrl)
-                        window.open(result.data.appUrl);
+                    if (result.data.respCode == 1000) {
+                        // plus.runtime.openFile(window.open(result.data.appUrl))
+                        // window.open(result.data.appUrl);
+                        this.appVersion = result.data.appVersion;
+                        let url = result.data.appUrl;
+                        plus.nativeUI.showWaiting("下载中...");
+                        //创建下载管理对象
+                        var SX_down = plus.downloader.createDownload(
+                            url,
+                            {},
+                            function(d, status) {
+                                // 下载完成
+                                if (status == 200) {
+                                    plus.nativeUI.closeWaiting();
+                                    //下载成功后的回调函数
+                                    plus.nativeUI.toast(
+                                        "下载成功，准备安装" + d.filename
+                                    );
+                                    plus.runtime.install(
+                                        d.filename,
+                                        {},
+                                        function() {
+                                            plus.nativeUI.toast("安装成功");
+                                            plus.runtime.restart();
+                                        },
+                                        function(e) {
+                                            plus.nativeUI.toast(
+                                                d.filename + "安装失败"
+                                            );
+
+                                            alert(JSON.stringify(e));
+                                        }
+                                    );
+                                } else {
+                                    alert("下载失败 " + status);
+                                }
+                            }
+                        );
+                        //开始下载任务
+                        SX_down.start();
                     } else {
                         this.$toast.error("目前是最新版本");
                     }

@@ -116,7 +116,9 @@ export default {
                 headers: {
                     Authorization: sessionStorage.getItem("token")
                 },
-                data: {}
+                data: {
+                    communityId: localStorage.getItem("communityId")
+                }
             })
                 .then(result => {
                     if (result.status === 200) {

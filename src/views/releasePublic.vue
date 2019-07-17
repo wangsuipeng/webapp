@@ -9,7 +9,7 @@
             <mu-button
                 flat
                 slot="right"
-                @click="postingMsg"
+                @click="postingLove"
                 style="display: inline-block;color: #fff;font-size: 18px"
             >发布</mu-button>
         </mu-appbar>
@@ -20,7 +20,7 @@
             <div class="content-text">
                 <input
                     type="text"
-                    v-model="postForm.title"
+                    v-model="postForm.serviceName"
                     placeholder="请输入标题..."
                     class="input-text"
                 />
@@ -28,7 +28,7 @@
                     name
                     id
                     cols="30"
-                    v-model="postForm.content"
+                    v-model="postForm.seviceDetail"
                     rows="10"
                     class="textarea-text"
                     placeholder="说点什么..."
@@ -56,6 +56,7 @@
     </div>
 </template>
 <script>
+import Qs from "qs";
 export default {
     data() {
         return {
@@ -75,12 +76,10 @@ export default {
             height: "",
             labelPosition: "top",
             postForm: {
-                title: "",
-                content: "",
-                category: "2",
-                authorId: sessionStorage.getItem("userId"),
-                communityId: localStorage.getItem("communityId"),
-                isPrivate: "",
+                serviceName: "",// 标题
+                seviceDetail: "",// 内容
+                points: "2",// 金币
+                publishUserId: sessionStorage.getItem("userId"),
             },
             lineBool: false,
             imgsrc: "", //上传的·图片的地址
@@ -97,8 +96,8 @@ export default {
             dialogVisible: false,
             fileList: [],
             imgList: [],// 上传的图片集合
-            postData: [],
-            imgData: {},// 删除的图片名称集合
+            postData: [],// 上传图片的集合
+            imgData: [],// 删除的图片名称集合
             formImg: ''
         };
     },
@@ -111,30 +110,29 @@ export default {
         outPage() {
             this.$router.goBack();
         },
-        // 发帖
-        postingMsg() {
-            if (this.checked) {
-                this.postForm.isPrivate = 1;
-            } else {
-                this.postForm.isPrivate = 0;
-            }
-            let formImg = new FormData();
-            this.postData.forEach((img,index) => {
-                formImg.append(`img_${index}`,img)
-            })
-            // formImg.append("file", file.file);
+        // 发布公益任务
+        postingLove() {
+            let imgData = this.postData.filter(item => !this.imgData.some(ele=>ele.file.lastModified===item.file.lastModified));
+            let fd = new FormData();
+            imgData.forEach(item => {
+                fd.append("file", item.file); //第一个参数字符串可以填任意命名，第二个根据对象属性来找到file
+            });
+            fd.append("serviceName", this.postForm.serviceName);
+            fd.append("seviceDetail", this.postForm.seviceDetail);
+            fd.append("points", this.postForm.points);
+            fd.append("publishUserId", this.postForm.publishUserId);
             this.$axios({
-                url: "admin/mobile/article/publishMsg",
+                url: "admin/mobile/welfare/publishTask",
                 method: "post",
                 headers: {
-                    Authorization: sessionStorage.getItem("token")
+                    "Authorization": sessionStorage.getItem("token")
                 },
-                data: this.postForm
+                data: fd
             })
                 .then(result => {
                     console.log(result.data);
                     if (result.data.respCode == 1000) {
-                        this.$router.push("/familyD");
+                        this.$router.push("/loveBank");
                     } else {
 
                     }
@@ -144,45 +142,15 @@ export default {
                 });
         },
         onRead(file) {
-            // 上传图片到图片服务器
-            // this.$refs.clothImg.src = file.content
-            console.log(typeof(file))
-            this.imgList.push(file);
-            // if (typeof(file) === Array) {
-            //     console.log("不是对象")
-            //     this.imgList = file;
-            // } else {
-            //     console.log("对象")
-                
-            // }
-            console.log(this.imgList)
-            // this.postData.psuh(file); // postData是一个数组
-            // console.log(this.postData)
-            // let formImg = new FormData();
-            // for (var i = 0;i < file.length;i++) {
-            //     formImg.append("file", file[i].file);
-            // }
-            
-            // this.$axios({
-            //     url: "admin/mobile/sysFile/upload",
-            //     method: "post",
-            //     headers: {
-            //         'Authorization': sessionStorage.getItem('token')
-            //     },
-            //     data: formImg
-            // }).then((result) => {
-            //     console.log(result)
-            //     console.log(result.data.data)
-            // }).catch((err) => {
-            //     console.log(err)
-            // });
+            if (file.constructor == Object) {
+                this.postData.push(file)
+            } else if (file.constructor == Array) {
+                this.postData = this.postData.concat(file)
+            }
         },
         deleteImg(file) {
-            this.imgData = file;
-            console.log(file)
-            // this.imgData.push(file.file.name);
-            // console.log(this.imgData)
-            // console.log(file.file.name)
+            console.log(file.file.lastModified)
+            this.imgData.push(file)
         },
         close(index) {
             this.list.splice(index, 1);

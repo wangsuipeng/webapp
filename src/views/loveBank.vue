@@ -19,78 +19,32 @@
                     <mu-paper :z-depth="0" class="demo-list-wrap">
                         <mu-list>
                             <!-- <mu-sub-header>Today</mu-sub-header> -->
-                            <mu-list-item avatar button :ripple="false">
-                                <span style="font-size: 18px;margin-right: 15px">1</span>
-                                <mu-list-item-action>
-                                    <mu-avatar>
-                                        <img src="../assets/images/1000046.jpg" />
-                                    </mu-avatar>
-                                </mu-list-item-action>
-                                <mu-list-item-title>爱在天涯</mu-list-item-title>
-                                <mu-list-item-action>
-                                    <mu-icon color="#ff5242" value="favorite"></mu-icon>
-                                </mu-list-item-action>
-                            </mu-list-item>
-                            <mu-divider></mu-divider>
-                            <mu-list-item avatar button :ripple="false">
-                                <span style="font-size: 18px;margin-right: 15px">2</span>
-                                <mu-list-item-action>
-                                    <mu-avatar>
-                                        <img src="../assets/images/1000046.jpg" />
-                                    </mu-avatar>
-                                </mu-list-item-action>
-                                <mu-list-item-title>爱在天涯</mu-list-item-title>
-                                <mu-list-item-action>
-                                    <mu-icon color="#ff5242" value="favorite"></mu-icon>
-                                </mu-list-item-action>
-                            </mu-list-item>
-                            <mu-divider></mu-divider>
-                            <mu-list-item avatar button :ripple="false">
-                                <span style="font-size: 18px;margin-right: 15px">3</span>
-                                <mu-list-item-action>
-                                    <mu-avatar>
-                                        <img src="../assets/images/1000046.jpg" />
-                                    </mu-avatar>
-                                </mu-list-item-action>
-                                <mu-list-item-title>爱在天涯</mu-list-item-title>
-                                <mu-list-item-action>
-                                    <mu-icon color="#ff5242" value="favorite"></mu-icon>
-                                </mu-list-item-action>
-                            </mu-list-item>
-                            <mu-divider></mu-divider>
-                            <mu-list-item avatar button :ripple="false">
-                                <span style="font-size: 18px;margin-right: 15px">4</span>
-                                <mu-list-item-action>
-                                    <mu-avatar>
-                                        <img src="../assets/images/1000046.jpg" />
-                                    </mu-avatar>
-                                </mu-list-item-action>
-                                <mu-list-item-title>爱在天涯</mu-list-item-title>
-                                <mu-list-item-action>
-                                    <mu-icon color="#ff5242" value="favorite"></mu-icon>
-                                </mu-list-item-action>
-                            </mu-list-item>
-                            <mu-divider></mu-divider>
-                            <mu-list-item avatar button :ripple="false">
-                                <span style="font-size: 18px;margin-right: 15px">5</span>
-                                <mu-list-item-action>
-                                    <mu-avatar>
-                                        <img src="../assets/images/1000046.jpg" />
-                                    </mu-avatar>
-                                </mu-list-item-action>
-                                <mu-list-item-title>爱在天涯</mu-list-item-title>
-                                <mu-list-item-action>
-                                    <mu-icon color="#ff5242" value="favorite"></mu-icon>
-                                </mu-list-item-action>
-                            </mu-list-item>
+                            <div v-for="(item,index) in rankByGoldData" :key="index">
+                                <mu-list-item
+                                    avatar
+                                    button
+                                    :ripple="false"
+                                >
+                                    <!-- <span style="font-size: 18px;margin-right: 15px">{{index + 1}}</span> -->
+                                    <mu-list-item-action>
+                                        <mu-avatar>
+                                            <img src="../assets/images/1000046.jpg" />
+                                        </mu-avatar>
+                                    </mu-list-item-action>
+                                    <mu-list-item-title>{{item.realName}}</mu-list-item-title>
+                                    <!-- <span style="font-size: 18px;">{{index + 1}}</span> -->
+                                    <mu-list-item-action style="margin-left: 25px">
+                                        <mu-icon color="#ff5242" value="favorite"></mu-icon>
+                                    </mu-list-item-action>
+                                </mu-list-item>
+                                <mu-divider></mu-divider>
+                            </div>
                         </mu-list>
-                        <mu-divider></mu-divider>
                     </mu-paper>
                 </div>
                 <div class="demo-text" v-if="active2 === 1">
                     <mu-paper :z-depth="0" class="demo-list-wrap">
                         <mu-list textline="three-line">
-                            <!-- <mu-sub-header>今天</mu-sub-header> -->
                             <mu-list-item avatar :ripple="false" button @click="loveProgress">
                                 <mu-list-item-action>
                                     <mu-avatar>
@@ -103,7 +57,7 @@
                                     >陪宠物金毛散步</mu-list-item-title>
                                     <mu-list-item-sub-title>
                                         <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
-                                        <div class="public" @click="alert">做公益</div>
+                                        <div class="public">做公益</div>
                                     </mu-list-item-sub-title>
                                 </mu-list-item-content>
                             </mu-list-item>
@@ -120,7 +74,7 @@
                                     >陪宠物金毛散步</mu-list-item-title>
                                     <mu-list-item-sub-title>
                                         <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
-                                        <div class="public" @click="alert">做公益</div>
+                                        <div class="public">做公益</div>
                                     </mu-list-item-sub-title>
                                 </mu-list-item-content>
                             </mu-list-item>
@@ -137,7 +91,7 @@
                                     >陪宠物金毛散步</mu-list-item-title>
                                     <mu-list-item-sub-title>
                                         <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
-                                        <div class="public" @click="alert">做公益</div>
+                                        <div class="public">做公益</div>
                                     </mu-list-item-sub-title>
                                 </mu-list-item-content>
                             </mu-list-item>
@@ -145,74 +99,24 @@
                         </mu-list>
                     </mu-paper>
                 </div>
-                <!-- <div class="demo-text" v-if="active2 === 2">
-                    <mu-paper :z-depth="0" class="demo-list-wrap">
-                        <mu-list textline="three-line">
-                            <mu-sub-header>今天</mu-sub-header>
-                            <mu-list-item avatar :ripple="false" button>
-                                <mu-list-item-action>
-                                    <mu-avatar>
-                                        <img src="../assets/images/1000046.jpg" />
-                                    </mu-avatar>
-                                </mu-list-item-action>
-                                <mu-list-item-content>
-                                    <mu-list-item-title
-                                        style="font-size: 18px;font-weight: 600;color: #000;margin-bottom: 10px"
-                                    >小区公园垃圾处理</mu-list-item-title>
-                                    <mu-list-item-sub-title>
-                                        <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
-                                        <div class="public" @click="alert">做公益</div>
-                                    </mu-list-item-sub-title>
-                                </mu-list-item-content>
-                            </mu-list-item>
-                            <mu-divider></mu-divider>
-                            <mu-list-item avatar :ripple="false" button>
-                                <mu-list-item-action>
-                                    <mu-avatar>
-                                        <img src="../assets/images/1000046.jpg" />
-                                    </mu-avatar>
-                                </mu-list-item-action>
-                                <mu-list-item-content>
-                                    <mu-list-item-title
-                                        style="font-size: 18px;font-weight: 600;color: #000;margin-bottom: 10px"
-                                    >小区公园垃圾处理</mu-list-item-title>
-                                    <mu-list-item-sub-title>
-                                        <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
-                                        <div class="public" @click="alert">做公益</div>
-                                    </mu-list-item-sub-title>
-                                </mu-list-item-content>
-                            </mu-list-item>
-                            <mu-divider></mu-divider>
-                            <mu-list-item avatar :ripple="false" button>
-                                <mu-list-item-action>
-                                    <mu-avatar>
-                                        <img src="../assets/images/1000046.jpg" />
-                                    </mu-avatar>
-                                </mu-list-item-action>
-                                <mu-list-item-content>
-                                    <mu-list-item-title
-                                        style="font-size: 18px;font-weight: 600;color: #000;margin-bottom: 10px"
-                                    >小区公园垃圾处理</mu-list-item-title>
-                                    <mu-list-item-sub-title>
-                                        <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
-                                        <div class="public" @click="alert">做公益</div>
-                                    </mu-list-item-sub-title>
-                                </mu-list-item-content>
-                            </mu-list-item>
-                            <mu-divider></mu-divider>
-                        </mu-list>
-                    </mu-paper>
-                </div> -->
             </mu-container>
         </div>
     </div>
 </template>
 <script>
+import Qs from "qs";
 export default {
     data() {
         return {
-            active2: 0
+            active2: 0,
+            rankByGoldData: [], // 爱心榜数据
+            queryAllTaskData: [], // 爱心大厅数据
         };
+    },
+    created() {
+        this.queryAllCreatedTask();
+        this.rankByGold();
+        this.queryAllTask();
     },
     methods: {
         outPage() {
@@ -222,15 +126,79 @@ export default {
             this.$router.push("/releasePublic");
         },
         loveProgress() {
-            this.$router.push("/loveProgress")
+            this.$router.push("/loveProgress");
         },
-        alert () {
-            this.$alert('恭喜您提交成功', '提示', {
-              okLabel: '知道了'
+        alert() {
+            this.$alert("恭喜您提交成功", "提示", {
+                okLabel: "知道了"
             }).then(() => {
-            //   this.$toast.message('提示信息');
+                //   this.$toast.message('提示信息');
             });
         },
+        queryAllCreatedTask() {
+            this.$axios({
+                url: "admin/mobile/welfare/queryAllCreatedTask",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: {
+                    publishUserId: sessionStorage.getItem("userId")
+                }
+            })
+                .then(result => {
+                    if (result.data.respCode == 1000) {
+                        console.log(result);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        // 爱心大厅
+        queryAllTask() {
+            this.$axios({
+                url: "admin/mobile/welfare/queryAllTask",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: {
+                    communityId: localStorage.getItem("communityId")
+                }
+            })
+                .then(result => {
+                    if (result.data.respCode == 1000) {
+                        this.queryAllTaskData = result.data.data;
+                        console.log(result.data.data);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        // 爱心榜
+        rankByGold() {
+            this.$axios({
+                url: "admin/mobile/welfare/rankByGold",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: {
+                    communityId: localStorage.getItem("communityId")
+                }
+            })
+                .then(result => {
+                    if (result.data.respCode == 1000) {
+                        this.rankByGoldData = result.data.data;
+                        console.log(result);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
     }
 };
 </script>
@@ -244,6 +212,11 @@ export default {
 }
 </style>
 <style scoped>
+.container-main {
+    width: 100%;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+}
 .demo-text {
     padding: 0 !important;
 }

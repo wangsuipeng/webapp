@@ -130,6 +130,10 @@ export default new Router({
     {
       path: '/myLove',
       component: () => import('@/views/myLove.vue')
+    },
+    {
+      path: '/applyRepair',
+      component: () => import('@/views/applyRepair.vue')
     }
   ]
 })

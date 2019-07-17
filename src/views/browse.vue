@@ -30,13 +30,12 @@
                     readonly
                     name="text"
                     id
-                    cols="30"
                     v-model="postContent"
-                    rows="10"
+
                     class="textarea-text"
                 ></textarea>
-                <div class="images">
-                    <img src="../assets/images/1000100.jpg" alt />
+                <div class="images" v-for="(item,index) in imageUrls" :key="index">
+                    <img :src="item" alt />
                 </div>
             </div>
             <mu-flex class="flex-wrapper" align-items="center">
@@ -86,7 +85,8 @@ export default {
             loveBool: true,
             isloveBool: false,
             open: true,
-            praiseNum: "0"
+            praiseNum: "0",
+            imageUrls: [],// 发帖图片
         };
     },
     created() {
@@ -117,16 +117,21 @@ export default {
                 .then(result => {
                     if (result.status === 200) {
                         if (result.data.respCode == 1000) {
-                            let content = result.data.data;
+                            let content = result.data.data; 
+                            let imgData = {};
                             for (var i = 0; i < content.length; i++) {
                                 if (content[i].title == this.articleTitle) {
                                     this.postContent = content[i].content;
                                     this.articleId = content[i].articleId;
+                                    imgData = JSON.parse(content[i].imageUrls)
                                     localStorage.setItem(
                                         "articleId",
                                         this.articleId
                                     );
                                 }
+                            }
+                            for (var i in imgData) {
+                                this.imageUrls.push(imgData[i])
                             }
                         }
                     }
@@ -247,7 +252,7 @@ export default {
 }
 .images {
     width: 100%;
-    height: 120px;
+    height: 230px;
 }
 .images img {
     display: inline-block;
@@ -261,7 +266,7 @@ export default {
 }
 .textarea-text {
     width: 100%;
-    min-height: 18rem;
+    min-height: 15rem;
     text-indent: 20px;
     outline: none;
     padding: 5px 10px;

@@ -11,9 +11,9 @@
         <mu-flex class="flex-wrapper" justify-content="start">
             <mu-flex class="flex-demo" justify-content="center">
                 <mu-row justify-content="center">
-                    <h2 class="nickname">乔木社区</h2>
+                    <h2 class="nickname">{{nickName}}</h2>
                     <mu-avatar :size="size" class="avatar-person" @click="uploadHeadImg">
-                        <img :src="imaName" />
+                        <img :src="imgName" />
                     </mu-avatar>
                     <input type="file" accept="image/*" @change="handleFile" class="hiddenInput dn" />
                 </mu-row>
@@ -25,12 +25,12 @@
                     <mu-paper>
                         <mu-list>
                             <mu-divider shallow-inset></mu-divider>
-                            <mu-list-item v-ripple @click.native="nickName">
+                            <mu-list-item v-ripple @click.native="nickNames">
                                 <div class="title-info">
                                     <span>昵称</span>
                                 </div>
                                 <div style="position: absolute; right: -15px;">
-                                    <span class="content-text">乔木社区</span>
+                                    <span class="content-text">{{nickName}}</span>
                                     <mu-list-item-action>
                                         <mu-icon value="keyboard_arrow_right" color="#ccc"></mu-icon>
                                     </mu-list-item-action>
@@ -42,7 +42,7 @@
                                     <span>手机</span>
                                 </div>
                                 <div style="position: absolute; right: -15px;">
-                                    <span class="content-text">15216613489</span>
+                                    <span class="content-text">{{phone}}</span>
                                     <mu-list-item-action>
                                         <mu-icon value="keyboard_arrow_right" color="#ccc"></mu-icon>
                                     </mu-list-item-action>
@@ -54,7 +54,7 @@
                                     <span>性别</span>
                                 </div>
                                 <div style="position: absolute; right: -15px">
-                                    <span class="content-text">男</span>
+                                    <span class="content-text">{{sex}}</span>
                                     <mu-list-item-action>
                                         <mu-icon value="keyboard_arrow_right" color="#ccc"></mu-icon>
                                     </mu-list-item-action>
@@ -113,8 +113,21 @@ export default {
         return {
             size: 56,
             open: false,
-            imaName: ""
+            imgName: "",
+            nickName: "",// 昵称
+            sex: "",// 性别
+            phone: "",// 手机
+            imagesId: "",// 查询图片的id 
         };
+    },
+    created () {
+        if (localStorage.getItem("nickName") == "null") {
+            this.nickName = "";
+        } else {
+            this.nickName = localStorage.getItem("nickName");
+        }
+        this.sex = localStorage.getItem("sex");
+        this.phone = localStorage.getItem("phone");
     },
     methods: {
         closeBottomSheet() {
@@ -126,7 +139,7 @@ export default {
         outPage() {
             this.$router.goBack();
         },
-        nickName() {
+        nickNames() {
             this.$router.push("/nickName");
         },
         mobilePhone() {
@@ -164,11 +177,34 @@ export default {
                 },
                 data: formImg
             }).then((result) => {
-                this.imaName = result.data.name;
+                this.imgName = "http://103.26.76.116:9999/"+"admin/mobile/sysFile/showPicForMany?id="+ result.data.id;
+
+                let id = result.data.id;
                 console.log(result.data.name)
+                // this.getImage(id)
             }).catch((err) => {
                 console.log(err)
             });
+        },
+         // 查询图片
+        getImage(id) {
+            this.$axios({
+                url: `admin/mobile/sysFile/showPicForMany?id=${id}`,
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: {}
+            })
+                .then(result => {
+                    // this.images = result;
+                    // this.imgName = result.data;
+                    
+                    console.log(result.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         },
         // 退出登录
         outLogin() {

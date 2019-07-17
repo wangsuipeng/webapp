@@ -97,8 +97,8 @@ export default {
             dialogVisible: false,
             fileList: [],
             imgList: [],// 上传的图片集合
-            postData: [],
-            imgData: {},// 删除的图片名称集合
+            postData: [],// 上传的图片的集合
+            imgData: [],// 删除的图片名称集合
             formImg: ''
         };
     },
@@ -118,18 +118,24 @@ export default {
             } else {
                 this.postForm.isPrivate = 0;
             }
-            let formImg = new FormData();
-            this.postData.forEach((img,index) => {
-                formImg.append(`img_${index}`,img)
-            })
-            // formImg.append("file", file.file);
+            let imgData = this.postData.filter(item => !this.imgData.some(ele=>ele.file.lastModified===item.file.lastModified));
+            let fd = new FormData();
+            imgData.forEach((item,index) => {
+                fd.append("file"+index, item.file); //第一个参数字符串可以填任意命名，第二个根据对象属性来找到file
+            });
+            fd.append("title", this.postForm.title);
+            fd.append("content", this.postForm.content);
+            fd.append("category", this.postForm.category);
+            fd.append("authorId", this.postForm.authorId);
+            fd.append("communityId", this.postForm.communityId);
+            fd.append("isPrivate", this.postForm.isPrivate);
             this.$axios({
                 url: "admin/mobile/article/publishMsg",
                 method: "post",
                 headers: {
                     Authorization: sessionStorage.getItem("token")
                 },
-                data: this.postForm
+                data: fd
             })
                 .then(result => {
                     console.log(result.data);
@@ -144,68 +150,20 @@ export default {
                 });
         },
         onRead(file) {
-            // 上传图片到图片服务器
-            // this.$refs.clothImg.src = file.content
-            // console.log(typeof(file))
-            // this.imgList.push(file);
-            // if (typeof(file) === Array) {
-            //     console.log("不是对象")
-            //     this.imgList = file;
-            // } else {
-            //     console.log("对象")
-                
-            // }
-            console.log(this.imgList)
-            // this.postData.psuh(file); // postData是一个数组
-            // console.log(this.postData)
-            let formImg = new FormData();
-            for (var i = 0;i < file.length;i++) {
-                formImg.append("file", file[i].file);
+            if (file.constructor == Object) {
+                this.postData.push(file)
+            } else if (file.constructor == Array) {
+                this.postData = this.postData.concat(file)
             }
-            
-            this.$axios({
-                url: "admin/mobile/sysFile/upload",
-                method: "post",
-                headers: {
-                    'Authorization': sessionStorage.getItem('token')
-                },
-                data: formImg
-            }).then((result) => {
-                console.log(result)
-                console.log(result.data.data)
-            }).catch((err) => {
-                console.log(err)
-            });
         },
         deleteImg(file) {
-            this.imgData = file;
-            console.log(file)
-            // this.imgData.push(file.file.name);
-            // console.log(this.imgData)
-            // console.log(file.file.name)
+            console.log(file.file.lastModified)
+            this.imgData.push(file)
         },
         close(index) {
             this.list.splice(index, 1);
             this.maxStatus = this.list == this.max ? false : true;
         },
-        // 查询图片
-        getImage() {
-            this.$axios({
-                url: `admin/mobile/sysFile/showPicForMany?id=${this.imagesId}`,
-                method: "post",
-                headers: {
-                    Authorization: sessionStorage.getItem("token")
-                },
-                data: {}
-            })
-                .then(result => {
-                    this.images = result;
-                    console.log(result);
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        }
     }
 };
 </script>

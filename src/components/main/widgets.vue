@@ -19,7 +19,7 @@
                         <img :src="carouselImg4" />
                     </mu-carousel-item>
                 </mu-carousel>
-                <div class="flex-box" v-ripple>
+                <div class="flex-box" v-ripple @click="applyRepair">
                     <mu-icon size="50" value="build" color="#ff5242"></mu-icon>
                     <div class="text">报修申请</div>
                 </div>
@@ -82,9 +82,9 @@
 </template>
 <script>
 import carouselImg1 from "../../assets/images/325453.jpg";
-import carouselImg2 from "../../assets/images/325543.jpg";
-import carouselImg3 from "../../assets/images/325571.jpg";
-import carouselImg4 from "../../assets/images/325572.jpg";
+import carouselImg2 from "../../assets/images/325453.jpg";
+import carouselImg3 from "../../assets/images/325453.jpg";
+import carouselImg4 from "../../assets/images/325453.jpg";
 export default {
     data() {
         return {
@@ -107,6 +107,9 @@ export default {
         },
         share() {
             this.$router.push("/share")
+        },
+        applyRepair() {
+            this.$router.push("/applyRepair")
         }
     }
 };

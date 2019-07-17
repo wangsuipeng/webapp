@@ -211,8 +211,15 @@
 export default {
     data() {
         return {
-            active2: 0
+            active2: 0,
+            queryAllData: [],// 所有已完成的任务
+            allRuningTask: [],// 所有进行中的任务
+            allunReviewTask: [],// 所有审核中的任务
         };
+    },
+    created () {
+      this.queryAllCompleteTask();  
+      this.queryAllRuningTask();
     },
     methods: {
         outPage() {
@@ -231,6 +238,66 @@ export default {
             //   this.$toast.message('提示信息');
             });
         },
+        // 查询所有已完成的任务
+        queryAllCompleteTask() {
+            this.$axios({
+                url: "admin/mobile/welfare/queryAllCompleteTask",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: {
+                    userId: localStorage.getItem("userId")
+                }
+            }).then((result) => {
+                if (result.data.respCode == 1000) {
+                    this.queryAllData = result.data.data;
+                    console.log(result)
+                }
+            }).catch((err) => {
+                console.log(err)
+            });
+        },
+        // 查询所有进行中的任务
+        queryAllRuningTask() {
+            this.$axios({
+                url: "admin/mobile/welfare/queryAllRuningTask",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: {
+                    userId: localStorage.getItem("userId")
+                }
+            }).then((result) => {
+                if (result.data.respCode == 1000) {
+                    this.allRuningTask = result.data.data;
+                    console.log(result)
+                }
+            }).catch((err) => {
+                console.log(err)
+            });
+        },
+        // 查询所有待审核的任务
+        queryAllunReviewTask() {
+            this.$axios({
+                url: "admin/mobile/welfare/queryAllunReviewTask",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: {
+                    userId: localStorage.getItem("userId")
+                }
+            }).then((result) => {
+                if (result.data.respCode == 1000) {
+                    this.allunReviewTask = result.data.data;
+                    console.log(result)
+                }
+            }).catch((err) => {
+                console.log(err)
+            });
+        }
     }
 };
 </script>
