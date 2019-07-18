@@ -33,6 +33,9 @@ export default {
             nickName: "",
         }
     },
+    created () {
+        this.nickName = sessionStorage.getItem("nickName");
+    },
     methods: {
         outPage() {
             this.$router.goBack();

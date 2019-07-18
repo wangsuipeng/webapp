@@ -121,6 +121,7 @@ export default {
             fd.append("seviceDetail", this.postForm.seviceDetail);
             fd.append("points", this.postForm.points);
             fd.append("publishUserId", this.postForm.publishUserId);
+            fd.append("communityId", localStorage.getItem("communityId"));
             this.$axios({
                 url: "admin/mobile/welfare/publishTask",
                 method: "post",

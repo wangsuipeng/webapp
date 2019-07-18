@@ -103,7 +103,7 @@
                                     >陪宠物金毛散步</mu-list-item-title>
                                     <mu-list-item-sub-title>
                                         <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
-                                        <div class="public" @click="alert">做公益</div>
+                                        <!-- <div class="public" @click="alert">做公益</div> -->
                                     </mu-list-item-sub-title>
                                 </mu-list-item-content>
                             </mu-list-item>
@@ -120,7 +120,7 @@
                                     >陪宠物金毛散步</mu-list-item-title>
                                     <mu-list-item-sub-title>
                                         <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
-                                        <div class="public" @click="alert">做公益</div>
+                                        <!-- <div class="public" @click="alert">做公益</div> -->
                                     </mu-list-item-sub-title>
                                 </mu-list-item-content>
                             </mu-list-item>
@@ -137,7 +137,7 @@
                                     >陪宠物金毛散步</mu-list-item-title>
                                     <mu-list-item-sub-title>
                                         <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
-                                        <div class="public" @click="alert">做公益</div>
+                                        <!-- <div class="public" @click="alert">做公益</div> -->
                                     </mu-list-item-sub-title>
                                 </mu-list-item-content>
                             </mu-list-item>
@@ -161,7 +161,7 @@
                                     >小区公园垃圾处理</mu-list-item-title>
                                     <mu-list-item-sub-title>
                                         <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
-                                        <div class="public" @click="alert">做公益</div>
+                                        <!-- <div class="public" @click="alert">做公益</div> -->
                                     </mu-list-item-sub-title>
                                 </mu-list-item-content>
                             </mu-list-item>
@@ -178,7 +178,7 @@
                                     >小区公园垃圾处理</mu-list-item-title>
                                     <mu-list-item-sub-title>
                                         <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
-                                        <div class="public" @click="alert">做公益</div>
+                                        <!-- <div class="public" @click="alert">做公益</div> -->
                                     </mu-list-item-sub-title>
                                 </mu-list-item-content>
                             </mu-list-item>
@@ -195,7 +195,7 @@
                                     >小区公园垃圾处理</mu-list-item-title>
                                     <mu-list-item-sub-title>
                                         <div style="color: #ff5242;display: inline-block">爱心币 5/次</div>
-                                        <div class="public" @click="alert">做公益</div>
+                                        <!-- <div class="public" @click="alert">做公益</div> -->
                                     </mu-list-item-sub-title>
                                 </mu-list-item-content>
                             </mu-list-item>
@@ -220,6 +220,7 @@ export default {
     created () {
       this.queryAllCompleteTask();  
       this.queryAllRuningTask();
+      this.queryAllunReviewTask();
     },
     methods: {
         outPage() {

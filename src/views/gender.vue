@@ -37,6 +37,9 @@ export default {
             item: [{ gender: "男" }, { gender: "女" }]
         };
     },
+    created () {
+        this.radio.sex = sessionStorage.getItem("sex")  
+    },
     methods: {
         outPage() {
             this.$router.goBack();

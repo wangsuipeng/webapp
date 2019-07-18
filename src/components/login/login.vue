@@ -3,7 +3,7 @@
         <mu-container style="padding: 46px 0;">
             <mu-row justify-content="center">
                 <mu-avatar :size="size">
-                    <img src="../../assets/images/325415.jpg" />
+                    <img src="../../assets/images/avatar.png" />
                 </mu-avatar>
             </mu-row>
         </mu-container>
@@ -119,10 +119,11 @@ export default {
                                     localStorage.setItem('phone',this.validateForm.phone)
                                     localStorage.setItem('nickName',result.data.data.nickName)
                                     localStorage.setItem('sex',result.data.data.sex)
+                                    localStorage.setItem('handImgId',result.data.data.handImgId)
                                     this.$store.dispatch("REMEMBER_PHONE",this.validateForm.phone)
                                     this.$router.push("/community");
                                 } else {
-                                    this.$toast(result.data.data);
+                                    this.toast(result.data.data);
                                 }
                             }
                         })

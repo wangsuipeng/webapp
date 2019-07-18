@@ -78,17 +78,15 @@
                                     <mu-icon value="keyboard_arrow_right" color="#ccc"></mu-icon>
                                 </mu-list-item-action>
                             </mu-list-item>
-                            <!-- <mu-divider shallow-inset></mu-divider> -->
                         </mu-list>
                     </mu-paper>
                 </mu-col>
             </mu-row>
         </mu-container>
-        <!-- <input class="box" type="file" id="upload" accept="image/jpg" @change="upload" /> -->
+
         <mu-container>
             <mu-bottom-sheet :open.sync="open">
                 <mu-list @item-click="closeBottomSheet">
-                    <!-- <mu-sub-header>Select One</mu-sub-header> -->
                     <mu-list-item button>
                         <mu-list-item-action>
                             <mu-icon value="camera_alt" color="orange"></mu-icon>
@@ -108,26 +106,33 @@
 </template>
 <script>
 import Qs from "qs";
+import imgSrc from "../assets/images/avatar.png";
 export default {
     data() {
         return {
             size: 56,
             open: false,
             imgName: "",
-            nickName: "",// 昵称
-            sex: "",// 性别
-            phone: "",// 手机
-            imagesId: "",// 查询图片的id 
+            nickName: "", // 昵称
+            sex: "", // 性别
+            phone: "", // 手机
+            imagesId: "" // 查询图片的id
         };
     },
-    created () {
+    created() {
         if (localStorage.getItem("nickName") == "null") {
             this.nickName = "";
         } else {
             this.nickName = localStorage.getItem("nickName");
         }
+        if (this.$store.getters.headPortrait == "") {
+            this.imgName = imgSrc;
+        } else {
+            this.imgName = this.$store.getters.headPortrait;
+        }
         this.sex = localStorage.getItem("sex");
         this.phone = localStorage.getItem("phone");
+        this.getUserInfoByUser();
     },
     methods: {
         closeBottomSheet() {
@@ -166,41 +171,49 @@ export default {
         handleFile(e) {
             let target = e.target || e.srcElement;
             let file = target.files[0];
-            console.log(file)
+            console.log(file);
             let formImg = new FormData(); //创建form对象
             formImg.append("file", file); //通过append向form对象添加数据
             this.$axios({
-                url: "admin/mobile/sysFile/upload",
+                url: "admin/welfare/sysFile/upload",
                 method: "post",
-                headers: {
-                    Authorization: sessionStorage.getItem("token")
-                },
                 data: formImg
-            }).then((result) => {
-                this.imgName = "http://103.26.76.116:9999/"+"admin/mobile/sysFile/showPicForMany?id="+ result.data.id;
-
-                let id = result.data.id;
-                console.log(result.data.name)
-                // this.getImage(id)
-            }).catch((err) => {
-                console.log(err)
-            });
-        },
-         // 查询图片
-        getImage(id) {
-            this.$axios({
-                url: `admin/mobile/sysFile/showPicForMany?id=${id}`,
-                method: "post",
-                headers: {
-                    Authorization: sessionStorage.getItem("token")
-                },
-                data: {}
             })
                 .then(result => {
-                    // this.images = result;
-                    // this.imgName = result.data;
-                    
-                    console.log(result.data);
+                    this.imgName =
+                        "http://103.26.76.116:9999/" +
+                        "admin/welfare/sysFile/showPicForMany?id=" +
+                        result.data.id;
+                    this.$store.dispatch("HAND_PORTRAIT", this.imgName);
+                    let id = result.data.id;
+                    console.log(result.data.name);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        // 查询个人资料
+        getUserInfoByUser() {
+            this.$axios({
+                url: "admin/mobile/user/getUserInfoByUserId",
+                method: "post",
+                headers: {
+                    "Authorization": sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    userId: sessionStorage.getItem("userId")
+                })
+            })
+                .then(result => {
+                    if (result.status === 200) {
+                        console.log(result.data.data.nickName);
+                        this.nickName = result.data.data.nickName;// 昵称
+                        this.sex = result.data.data.sex; // 性别
+                        this.phone = result.data.data.username; // 手机
+                        sessionStorage.setItem("nickName",this.nickName)
+                        sessionStorage.setItem("sex",this.sex)
+                        sessionStorage.setItem("phone",this.phone)
+                    }
                 })
                 .catch(err => {
                     console.log(err);

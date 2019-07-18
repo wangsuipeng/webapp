@@ -134,6 +134,10 @@ export default new Router({
     {
       path: '/applyRepair',
       component: () => import('@/views/applyRepair.vue')
+    },
+    {
+      path: '/electricityRepair',
+      component: () => import('@/views/electricityRepair.vue')
     }
   ]
 })

@@ -2,7 +2,8 @@ const state = {
     bottomNav: sessionStorage.getItem('bottomNav') || 'notice',
     articleTitle: "",
     articleContent: "",
-    phoneNumber: localStorage.getItem("phone")
+    phoneNumber: localStorage.getItem("phone"),
+    headPortrait: ""
 }
 const mutations = {
     // 修改token，并将token存入localStorage 
@@ -18,7 +19,10 @@ const mutations = {
     },
     REMEMBER_PHONE(state,phone) {
         state.phoneNumber = phone;
-    }
+    },
+    HAND_PORTRAIT(state,img) {
+        state.headPortrait = img;
+    }   
 }
 const actions = {
     CHANGE_NAV({commit},nav) {
@@ -32,6 +36,9 @@ const actions = {
     },
     REMEMBER_PHONE({commit},phone) {
         commit('REMEMBER_PHONE',phone)
+    },
+    HAND_PORTRAIT({commit},img){
+        commit('HAND_PORTRAIT',img)
     }
 }
 export default {

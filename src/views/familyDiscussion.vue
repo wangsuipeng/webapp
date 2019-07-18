@@ -63,6 +63,7 @@
     </div>
 </template>
 <script>
+import Qs from "qs";
 export default {
     data() {
         return {
@@ -116,9 +117,9 @@ export default {
                 headers: {
                     Authorization: sessionStorage.getItem("token")
                 },
-                data: {
+                data: Qs.stringify({
                     communityId: localStorage.getItem("communityId")
-                }
+                })
             })
                 .then(result => {
                     if (result.status === 200) {

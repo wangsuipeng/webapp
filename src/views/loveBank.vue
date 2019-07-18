@@ -163,9 +163,9 @@ export default {
                 headers: {
                     Authorization: sessionStorage.getItem("token")
                 },
-                data: {
+                data: Qs.stringify({
                     communityId: localStorage.getItem("communityId")
-                }
+                })
             })
                 .then(result => {
                     if (result.data.respCode == 1000) {

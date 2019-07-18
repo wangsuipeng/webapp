@@ -4,10 +4,10 @@
             <mu-container style="padding: 16px 0;">
                 <mu-row justify-content="center" @click="personalCenter">
                     <mu-avatar :size="size">
-                        <img src="../../assets/images/325415.jpg">
+                        <img :src="avatar">
                     </mu-avatar>
                 </mu-row>
-                <p style="text-align: center;font-size: 20px;margin-top: 10px;color: #fff">小猪佩奇</p>
+                <p style="text-align: center;font-size: 20px;margin-top: 10px;color: #fff">{{nickName}}</p>
             </mu-container>
         </div>
         <mu-paper :z-depth="0" class="demo-list-wrap">
@@ -63,11 +63,23 @@
     </div>
 </template>
 <script>
+import imgSrc from '../../assets/images/avatar.png';
 export default {
     data() {
         return {
-            size: 100
+            size: 100,
+            avatar: "",// 头像
+            nickName: '',// 昵称
+            imgSrc: '../../assets/images/avatar.png'
         };
+    },
+    created () {
+        this.nickName = localStorage.getItem("nickName");
+        if (this.$store.getters.headPortrait == "") {
+            this.avatar = imgSrc
+        } else {
+            this.avatar = this.$store.getters.headPortrait;
+        }
     },
     methods: {
         personalCenter() {
