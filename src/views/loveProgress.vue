@@ -10,7 +10,7 @@
         </mu-appbar>
         <div class="container-main">
             <mu-flex class="flex-wrapper" justify-content="start">
-                <mu-flex class="flex-demo" justify-content="center">陪宠物金毛散步</mu-flex>
+                <mu-flex class="flex-demo" justify-content="center">{{loveTitle}}</mu-flex>
             </mu-flex>
             <textarea
                 readonly
@@ -37,24 +37,28 @@
                 <mu-button slot="actions" flat color="primary" @click="getTask">确定</mu-button>
             </mu-dialog>
             <button class="publicWelf" @click="openAlertDialog">做公益</button>
-            <button class="mylove" @click="myLove">我的爱心</button>
+            <!-- <button class="mylove" @click="myLove">我的爱心</button> -->
         </div>
     </div>
 </template>
 <script>
+import Qs from "qs";
 export default {
     data() {
         return {
+            loveTitle: "",
             postContent: "",
-            openAlert: false
+            openAlert: false,
+            serviceId: ""
         };
+    },
+    created () {
+        this.serviceId = sessionStorage.getItem("serviceId");
+        this.queryAllTask();
     },
     methods: {
         outPage() {
             this.$router.goBack();
-        },
-        myLove() {
-            this.$router.push("/myLove");
         },
         alert() {
             this.$alert("恭喜您提交成功", "提示", {
@@ -77,22 +81,48 @@ export default {
                 headers: {
                     Authorization: sessionStorage.getItem("token")
                 },
-                data: {
+                data: Qs.stringify({
                     receiveUserId: sessionStorage.getItem("userId"),
-                    serviceId: ""
-                }
+                    serviceId: this.serviceId
+                })
             })
                 .then(result => {
                     if (result.data.respCode == 1000) {
+                        this.$router.push("/loveBack")
                         console.log(result);
-                        
                     }
                 })
                 .catch(err => {
                     console.log(err);
                 });
                 this.openAlert = false;
-        }
+        },
+        // 爱心大厅
+        queryAllTask() {
+            this.$axios({
+                url: "admin/mobile/welfare/queryAllTask",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    communityId: localStorage.getItem("communityId")
+                })
+            })
+                .then(result => {
+                    if (result.data.respCode == 1000) {
+                        for (var i = 0;i < result.data.data.length;i++) {
+                            if (this.serviceId == result.data.data[i].serviceId) {
+                                this.postContent = result.data.data[i].seviceDetail;
+                                this.loveTitle = result.data.data[i].serviceName;
+                            }
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
     }
 };
 </script>
@@ -148,7 +178,7 @@ export default {
     width: 80px;
     height: 25px;
     margin-top: 5px;
-    background-color: blue;
+    background-color: #ff5242;
     line-height: 25px;
     border-radius: 6px;
     color: #fff;

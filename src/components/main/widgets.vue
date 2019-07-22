@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div class="content">
-                <div class="flex-box" v-ripple>
+                <div class="flex-box" v-ripple @click="parkingLot">
                     <mu-icon size="50" value="local_parking" color="#ff5242"></mu-icon>
                     <div class="text">车位分享</div>
                 </div>
@@ -110,6 +110,9 @@ export default {
         },
         applyRepair() {
             this.$router.push("/applyRepair")
+        },
+        parkingLot() {
+            this.$router.push("/parkingLot")
         }
     }
 };

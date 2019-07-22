@@ -107,6 +107,7 @@
 <script>
 import Qs from "qs";
 import imgSrc from "../assets/images/avatar.png";
+import { Dialog } from 'vant';
 export default {
     data() {
         return {
@@ -119,6 +120,9 @@ export default {
             imagesId: "" // 查询图片的id
         };
     },
+    components: {
+        [Dialog.Component.name]: Dialog.Component
+    },
     created() {
         if (localStorage.getItem("nickName") == "null") {
             this.nickName = "";
@@ -128,7 +132,10 @@ export default {
         if (this.$store.getters.headPortrait == "") {
             this.imgName = imgSrc;
         } else {
-            this.imgName = this.$store.getters.headPortrait;
+            this.imgName =
+                "http://103.26.76.116:9999/" +
+                "admin/welfare/sysFile/showPicForMany?id=" +
+                this.$store.getters.headPortrait;
         }
         this.sex = localStorage.getItem("sex");
         this.phone = localStorage.getItem("phone");
@@ -180,13 +187,35 @@ export default {
                 data: formImg
             })
                 .then(result => {
+                    this.imagesId = result.data.id;
                     this.imgName =
                         "http://103.26.76.116:9999/" +
                         "admin/welfare/sysFile/showPicForMany?id=" +
                         result.data.id;
-                    this.$store.dispatch("HAND_PORTRAIT", this.imgName);
-                    let id = result.data.id;
-                    console.log(result.data.name);
+                    this.$store.dispatch("HAND_PORTRAIT", this.imagesId);
+                    this.editImg();
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        editImg() {
+            this.$axios({
+                url: "admin/mobile/user/setPersonalCenter",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    nickName: "",
+                    userPhone: localStorage.getItem("phone"),
+                    newPhone: "",
+                    sex: "",
+                    imgId: this.imagesId
+                })
+            })
+                .then(result => {
+                    i;
                 })
                 .catch(err => {
                     console.log(err);
@@ -198,7 +227,7 @@ export default {
                 url: "admin/mobile/user/getUserInfoByUserId",
                 method: "post",
                 headers: {
-                    "Authorization": sessionStorage.getItem("token")
+                    Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
                     userId: sessionStorage.getItem("userId")
@@ -207,12 +236,12 @@ export default {
                 .then(result => {
                     if (result.status === 200) {
                         console.log(result.data.data.nickName);
-                        this.nickName = result.data.data.nickName;// 昵称
+                        this.nickName = result.data.data.nickName; // 昵称
                         this.sex = result.data.data.sex; // 性别
                         this.phone = result.data.data.username; // 手机
-                        sessionStorage.setItem("nickName",this.nickName)
-                        sessionStorage.setItem("sex",this.sex)
-                        sessionStorage.setItem("phone",this.phone)
+                        sessionStorage.setItem("nickName", this.nickName);
+                        sessionStorage.setItem("sex", this.sex);
+                        sessionStorage.setItem("phone", this.phone);
                     }
                 })
                 .catch(err => {
@@ -221,11 +250,12 @@ export default {
         },
         // 退出登录
         outLogin() {
-            this.$confirm("确定要退出？", "提示", {
-                type: "warning"
-            }).then(({ result }) => {
-                if (result) {
-                    // this.$toast.message("点击了确定");
+            Dialog.confirm({
+                title: "提示",
+                message: "你确定退出吗？"
+            })
+                .then(() => {
+                    // on confirm
                     this.$axios({
                         url: "admin/mobile/user/setPersonalCenter",
                         method: "post",
@@ -241,10 +271,10 @@ export default {
                         .catch(err => {
                             console.log(err);
                         });
-                } else {
-                    this.$toast.message("取消退出");
-                }
-            });
+                })
+                .catch(() => {
+                    // on cancel
+                });
         }
     }
 };

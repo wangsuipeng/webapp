@@ -56,8 +56,9 @@
                     </mu-list-item>
                 </div>
             </mu-list>
+            
             <mu-button fab color="#FF5242" class="create-articles" @click="postWord">
-                <mu-icon size="30" value="border_color"></mu-icon>
+                <mu-icon value="edit"></mu-icon>
             </mu-button>
         </div>
     </div>
@@ -216,20 +217,23 @@ export default {
 .select-list {
     float: right;
     font-size: 16px;
-    padding-left: 5px;
     width: 100%;
     height: 36px;
     line-height: 36px;
     text-align: center;
-    border: 1px solid #ccc;
+    background-color: #ccc;
+    opacity: 0.4;
     outline: none;
     color: black;
 }
 .create-articles {
     position: absolute;
     right: 20px;
-    bottom: 90px;
+    bottom: 20px;
     z-index: 9999;
+}
+option{
+    text-align:center;
 }
 </style>
 

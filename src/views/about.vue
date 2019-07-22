@@ -11,11 +11,11 @@
         <div class="container-main">
             <div class="box-list">
                 当前版本
-                <span style="margin-left: 40px">1.2.5</span>
+                <span style="margin-left: 40px">1.2.7</span>
             </div>
             <div class="box-list">
                 最新版本
-                <span style="margin-left: 40px">1.2.6</span>
+                <span style="margin-left: 40px">1.2.8</span>
             </div>
             <div class="upgrade" @click="downloadApk">
                 <button>在线升级</button>
@@ -43,14 +43,12 @@ export default {
                     Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
-                    version: "1.2.5",
+                    version: "1.2.7",
                     clientType: "a"
                 })
             })
                 .then(result => {
                     if (result.data.respCode == 1000) {
-                        // plus.runtime.openFile(window.open(result.data.appUrl))
-                        // window.open(result.data.appUrl);
                         this.appVersion = result.data.appVersion;
                         let url = result.data.appUrl;
                         plus.nativeUI.showWaiting("下载中...");
@@ -70,7 +68,7 @@ export default {
                                         d.filename,
                                         {},
                                         function() {
-                                            plus.nativeUI.toast("安装成功");
+                                            // plus.nativeUI.toast("安装成功");
                                             plus.runtime.restart();
                                         },
                                         function(e) {

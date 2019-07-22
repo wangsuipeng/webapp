@@ -140,7 +140,8 @@ export default {
                 .then(result => {
                     console.log(result.data);
                     if (result.data.respCode == 1000) {
-                        this.$router.push("/familyD");
+                        // this.$router.push("/familyD");
+                        this.$router.goBack();
                     } else {
 
                     }

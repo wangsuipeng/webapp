@@ -69,9 +69,9 @@
                 <mu-button color="#FF5242" class="step-next" @click="addCommunity" v-ripple>下一步</mu-button>
             </mu-container>
         </div>
-        <mu-flex class="flex-wrapper footer-bottom" justify-content="center" v-show="hidshow">
+        <div class="flex-wrapper footer-bottom" justify-content="center" v-show="hidShow">
             <mu-flex class="flex-demo" justify-content="center">携手共建美好家园</mu-flex>
-        </mu-flex>
+        </div>
     </div>
 </template>
 <script>
@@ -475,22 +475,16 @@ export default {
                 userPhone: "", // 手机号码
                 contactPhone: "" // 联系人
             },
-            docmHeight: "0", //默认屏幕高度
-            showHeight: "0", //实时屏幕高度
-            hidshow: true, //显示或者隐藏footer,
-            isResize: false //默认屏幕高度是否已获取
+            docmHeight: document.documentElement.clientHeight, // 默认屏幕高度
+            showHeight: document.documentElement.clientHeight, // 实时屏幕高度
+            hidShow: true // 显示或者隐藏footer
         };
     },
     mounted() {
-        window.onresize监听页面高度的变化
+        let vm = this;
+        // window.resize监听页面高度的变化
         window.onresize = () => {
             return (() => {
-                if (!this.isResize) {
-                    //默认屏幕高度
-                    this.docmHeight = document.documentElement.clientHeight;
-                    this.isResize = true;
-                }
-                //实时屏幕高度
                 this.showHeight = document.body.clientHeight;
             })();
         };
@@ -498,12 +492,14 @@ export default {
     watch: {
         showHeight: function() {
             if (this.docmHeight > this.showHeight) {
-                this.hidshow = false;
+                this.hidShow = false;
+                console.log(this.hidShow)
             } else {
-                this.hidshow = true;
+                this.hidShow = true;
             }
         }
     },
+
     methods: {
         searchVague() {},
         addCommunity() {
@@ -566,6 +562,7 @@ export default {
 }
 .step-next {
     width: 100%;
+    height: 2.8rem;
     margin-top: 5vh;
 }
 .placeholder-text {

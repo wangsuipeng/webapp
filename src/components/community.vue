@@ -10,7 +10,7 @@
                 </mu-button>
             </mu-appbar>
             <div class="search-value">
-                <input type="text" v-model="searchValue" placeholder="请输入社区名">
+                <input type="text" v-model="searchValue" placeholder="请输入社区名" />
                 <mu-icon value="search" color="#FF5242" class="magnifier" @click="searchVague"></mu-icon>
             </div>
             <mu-container ref="container" class="demo-loadmore-content">
@@ -25,18 +25,18 @@
                             <mu-list-item v-ripple @click.native="myCommunity">
                                 <mu-list-item-title>{{item.name}}</mu-list-item-title>
                             </mu-list-item>
-                            <mu-divider/>
+                            <mu-divider />
                         </template>
                     </mu-list>
                 </mu-load-more>
             </mu-container>
         </mu-paper>
-        <mu-button v-ripple fab color="red" class="add-commun" @click="createProject">
+        <mu-button v-ripple fab color="red" class="add-commun" @click="createProject" v-show="hidShow">
             <mu-icon value="add"></mu-icon>
         </mu-button>
-        <mu-flex class="flex-wrapper footer-bottom" justify-content="center">
+        <div class="flex-wrapper footer-bottom" justify-content="center" v-show="hidShow">
             <mu-flex class="flex-demo" justify-content="center">携手共建美好家园</mu-flex>
-        </mu-flex>
+        </div>
         <mu-container>
             <mu-bottom-sheet :open.sync="open">
                 <div class="demo-picker-container">
@@ -517,22 +517,44 @@ export default {
             communData: [], // 所有社区的集合
             pageSize: 10,
             currentPage: 1,
-            searchValue: ''// 搜索内容
+            searchValue: "", // 搜索内容
+            docmHeight: document.documentElement.clientHeight, // 默认屏幕高度
+            showHeight: document.documentElement.clientHeight, // 实时屏幕高度
+            hidShow: true // 显示或者隐藏footer
         };
     },
     created() {
         this.getCommunity();
     },
+    mounted() {
+        let vm = this;
+        // window.resize监听页面高度的变化
+        window.onresize = () => {
+            return (() => {
+                this.showHeight = document.body.clientHeight;
+            })();
+        };
+    },
+    watch: {
+        showHeight: function() {
+            if (this.docmHeight > this.showHeight) {
+                this.hidShow = false;
+                console.log(this.hidShow)
+            } else {
+                this.hidShow = true;
+            }
+        }
+    },
     methods: {
         myCommunity(e) {
-            localStorage.setItem("myCommunity",e.target.innerText)
-            for (let i = 0;i < this.communData.length;i++) {
+            localStorage.setItem("myCommunity", e.target.innerText);
+            for (let i = 0; i < this.communData.length; i++) {
                 if (e.target.innerText == this.communData[i].name) {
-                    localStorage.setItem('communityId',this.communData[i].id)
+                    localStorage.setItem("communityId", this.communData[i].id);
                 }
             }
-            this.$store.dispatch("CHANGE_NAV","widgets")
-            this.$router.push("/layout/widgets")
+            this.$store.dispatch("CHANGE_NAV", "widgets");
+            this.$router.push("/layout/widgets");
         },
         addressChange(value, index) {
             switch (index) {
@@ -589,21 +611,21 @@ export default {
                 url: "admin/mobile/communityMessage/list",
                 method: "post",
                 headers: {
-                    'Authorization': sessionStorage.getItem('token')
+                    Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
                     page: this.currentPage,
                     limit: this.pageSize,
                     name: this.searchValue,
-                    cityName: ''
+                    cityName: ""
                 })
             })
-            .then(result => {
-                this.communData = result.data.data.list;
-            })
-            .catch(err => {
-                console.log(err);
-            });
+                .then(result => {
+                    this.communData = result.data.data.list;
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         },
         // 模糊搜索
         searchVague() {
@@ -649,7 +671,7 @@ export default {
 .add-commun {
     position: fixed;
     bottom: 14vh;
-    left: 40%;
+    left: 43%;
     top: auto !important;
     right: auto !important;
 }
@@ -664,7 +686,7 @@ export default {
     border-top: 1px solid #ccc;
 }
 .mu-appbar {
-    background-color:#FF5242 !important;
+    background-color: #ff5242 !important;
 }
 .search-value {
     position: relative;

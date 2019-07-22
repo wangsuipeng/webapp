@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import './assets/js/mui.js'
 import MuseUI from 'muse-ui'
 import 'muse-ui/dist/muse-ui.css'
 import axios from 'axios'
@@ -17,7 +18,10 @@ import 'muse-ui-loading/dist/muse-ui-loading.css'; // load css
 import Loading from 'muse-ui-loading';
 import { Uploader } from 'vant';
 import { Cell, CellGroup } from 'vant';
+import { Dialog } from 'vant';
 
+// 全局注册
+Vue.use(Dialog);
 Vue.use(Cell).use(CellGroup);
 Vue.use(Uploader);
 Vue.use(Loading);

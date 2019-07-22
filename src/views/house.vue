@@ -1,9 +1,9 @@
 <template>
-    <div class>
+    <div class="house">
         <mu-appbar color="#ff5242" style="width: 100%; text-align: center;margin-bottom: 10px">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
-            </mu-button>电力报修
+            </mu-button>房屋报修
             <mu-button icon slot="right">
                 <!-- <mu-icon size="30" value="add"></mu-icon> -->
             </mu-button>

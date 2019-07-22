@@ -13,13 +13,13 @@
         <mu-paper :z-depth="0" class="demo-list-wrap">
             <mu-list>
                 <!-- <mu-sub-header>Today</mu-sub-header> -->
-                <mu-list-item avatar button :ripple="true" class="word-list">
+                <mu-list-item avatar button :ripple="true" class="word-list" @click.native="integral">
                     <mu-list-item-action>
                         <img class="picture-img" src="../../assets/images/integral.png">
                     </mu-list-item-action>
                     <mu-list-item-title>我的积分</mu-list-item-title>
                     <mu-list-item-action>
-                        <mu-icon size="36" value="chevron_right"></mu-icon>
+                        <mu-icon size="25" value="chevron_right"></mu-icon>
                     </mu-list-item-action>
                 </mu-list-item>
                 <mu-list-item avatar button :ripple="true" class="word-list">
@@ -28,7 +28,16 @@
                     </mu-list-item-action>
                     <mu-list-item-title>我的申请</mu-list-item-title>
                     <mu-list-item-action>
-                        <mu-icon size="36" value="chevron_right"></mu-icon>
+                        <mu-icon size="25" value="chevron_right"></mu-icon>
+                    </mu-list-item-action>
+                </mu-list-item>
+                <mu-list-item avatar button :ripple="true" class="word-list" @click.native="myLove">
+                    <mu-list-item-action>
+                        <img class="picture-img" src="../../assets/images/love.png">
+                    </mu-list-item-action>
+                    <mu-list-item-title>我的爱心</mu-list-item-title>
+                    <mu-list-item-action>
+                        <mu-icon size="25" value="chevron_right"></mu-icon>
                     </mu-list-item-action>
                 </mu-list-item>
                 <mu-list-item avatar button :ripple="true" class="word-list" @click.native="authentication">
@@ -37,7 +46,7 @@
                     </mu-list-item-action>
                     <mu-list-item-title>我的认证</mu-list-item-title>
                     <mu-list-item-action>
-                        <mu-icon size="36" value="chevron_right"></mu-icon>
+                        <mu-icon size="25" value="chevron_right"></mu-icon>
                     </mu-list-item-action>
                 </mu-list-item>
                 <mu-list-item avatar button :ripple="true" class="word-list">
@@ -46,7 +55,7 @@
                     </mu-list-item-action>
                     <mu-list-item-title>安全设置</mu-list-item-title>
                     <mu-list-item-action>
-                        <mu-icon size="36" value="chevron_right"></mu-icon>
+                        <mu-icon size="25" value="chevron_right"></mu-icon>
                     </mu-list-item-action>
                 </mu-list-item>
                 <mu-list-item avatar button :ripple="true" class="word-list" @click="about">
@@ -55,7 +64,7 @@
                     </mu-list-item-action>
                     <mu-list-item-title>关于</mu-list-item-title>
                     <mu-list-item-action>
-                        <mu-icon size="36" value="chevron_right"></mu-icon>
+                        <mu-icon size="25" value="chevron_right"></mu-icon>
                     </mu-list-item-action>
                 </mu-list-item>
             </mu-list>
@@ -78,7 +87,7 @@ export default {
         if (this.$store.getters.headPortrait == "") {
             this.avatar = imgSrc
         } else {
-            this.avatar = this.$store.getters.headPortrait;
+            this.avatar = "http://103.26.76.116:9999/" + "admin/welfare/sysFile/showPicForMany?id=" + this.$store.getters.headPortrait;
         }
     },
     methods: {
@@ -90,7 +99,13 @@ export default {
         },
         authentication() {
             this.$router.push('/authentication')
-        }
+        },
+        integral() {
+            this.$router.push('/integral')
+        },
+        myLove() {
+            this.$router.push("/myLove");
+        },
     }
 };
 </script>

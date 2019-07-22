@@ -11,19 +11,19 @@
         <div class="container-main">
             <div class="content">
                 <div class="flex-box" v-ripple @click="electricityRepair">
-                    <mu-icon size="50" value="local_parking" color="#ff5242"></mu-icon>
+                    <mu-icon size="50" value="flash_off" color="#ff5242"></mu-icon>
                     <div class="text">电力报修</div>
                 </div>
-                <div class="flex-box" v-ripple>
-                    <mu-icon size="50" value="local_see" color="#ff5242"></mu-icon>
+                <div class="flex-box" v-ripple @click="water">
+                    <mu-icon size="50" value="invert_colors" color="#ff5242"></mu-icon>
                     <div class="text">供水报修</div>
                 </div>
-                <div class="flex-box" v-ripple>
-                    <mu-icon class="icon-explain" size="50" value="local_shipping" color="#ff5242"></mu-icon>
+                <div class="flex-box" v-ripple @click="coalGas">
+                    <mu-icon class="icon-explain" size="50" value="cake" color="#ff5242"></mu-icon>
                     <div class="text">煤气报修</div>
                 </div>
-                <div class="flex-box" v-ripple>
-                    <mu-icon class="icon-explain" size="50" value="local_shipping" color="#ff5242"></mu-icon>
+                <div class="flex-box" v-ripple @click="house">
+                    <mu-icon class="icon-explain" size="50" value="domain" color="#ff5242"></mu-icon>
                     <div class="text">房屋报修</div>
                 </div>
             </div>
@@ -145,6 +145,15 @@ export default {
             this.list = this.list.sort((a, b) =>
                 order === "asc" ? a[name] - b[name] : b[name] - a[name]
             );
+        },
+        water() {
+            this.$router.push("/water");
+        },
+        coalGas() {
+            this.$router.push("/coalGas");
+        },
+        house() {
+            this.$router.push("/house");
         }
     }
 };

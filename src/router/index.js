@@ -138,6 +138,26 @@ export default new Router({
     {
       path: '/electricityRepair',
       component: () => import('@/views/electricityRepair.vue')
+    },
+    {
+      path: '/water',
+      component: () => import('@/views/water.vue')
+    },
+    {
+      path: '/coalGas',
+      component: () => import('@/views/coalGas.vue')
+    },
+    {
+      path: '/house',
+      component: () => import('@/views/house.vue')
+    },
+    {
+      path: '/integral',
+      component: () => import('@/views/integral.vue')
+    },
+    {
+      path: '/parkingLot',
+      component: () => import('@/views/parkingLot.vue')
     }
   ]
 })

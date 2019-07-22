@@ -121,6 +121,7 @@ export default {
                                     localStorage.setItem('sex',result.data.data.sex)
                                     localStorage.setItem('handImgId',result.data.data.handImgId)
                                     this.$store.dispatch("REMEMBER_PHONE",this.validateForm.phone)
+                                    this.$store.dispatch("HAND_PORTRAIT", result.data.data.handImgId);
                                     this.$router.push("/community");
                                 } else {
                                     this.toast(result.data.data);
