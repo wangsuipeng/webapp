@@ -18,15 +18,34 @@
                 <div class="demo-text" v-if="active2 === 0">
                     <mu-paper :z-depth="0" class="demo-list-wrap">
                         <mu-list>
-                            <div v-for="(item,index) in allRuningTask" :key="index">
-                                <mu-list-item avatar button :ripple="false">
-                                    <span style="font-size: 18px;margin-right: 15px">{{index}}</span>
+                            <mu-sub-header>我领取的爱心</mu-sub-header>
+                            <div v-for="(item,index) in releaseLove" :key="index">
+                                <mu-list-item avatar button v-ripple @click.native="submitAudit(item.serviceId)">
+                                    <span style="font-size: 18px;margin-right: 15px">{{index+1}}</span>
                                     <mu-list-item-action>
                                         <mu-avatar>
                                             <img src="../assets/images/1000046.jpg" />
                                         </mu-avatar>
                                     </mu-list-item-action>
-                                    <mu-list-item-title>爱在天涯</mu-list-item-title>
+                                    <mu-list-item-title>{{item.serviceName}}</mu-list-item-title>
+                                    <mu-list-item-action>
+                                        <mu-icon color="#ff5242" value="favorite"></mu-icon>
+                                    </mu-list-item-action>
+                                </mu-list-item>
+                                <mu-divider></mu-divider>
+                            </div>
+                        </mu-list>
+                        <mu-list>
+                            <mu-sub-header>我发布的爱心</mu-sub-header>
+                            <div v-for="(item,index) in allRuningTask" :key="index">
+                                <mu-list-item avatar button v-ripple @click.native="submitAudit(item.serviceId)">
+                                    <span style="font-size: 18px;margin-right: 15px">{{index+1}}</span>
+                                    <mu-list-item-action>
+                                        <mu-avatar>
+                                            <img src="../assets/images/1000046.jpg" />
+                                        </mu-avatar>
+                                    </mu-list-item-action>
+                                    <mu-list-item-title>{{item.serviceName}}</mu-list-item-title>
                                     <mu-list-item-action>
                                         <mu-icon color="#ff5242" value="favorite"></mu-icon>
                                     </mu-list-item-action>
@@ -40,7 +59,7 @@
                     <mu-paper :z-depth="0" class="demo-list-wrap">
                         <mu-list textline="three-line">
                             <div v-for="(item,index) in allunReviewTask" :key="index">
-                                <mu-list-item avatar :ripple="false" button @click="loveProgress">
+                                <mu-list-item avatar v-ripple button @click="loveProgress">
                                     <mu-list-item-action>
                                         <mu-avatar>
                                             <img src="../assets/images/1000046.jpg" />
@@ -100,6 +119,7 @@ export default {
             active2: 0,
             queryAllData: [], // 所有已完成的任务
             allRuningTask: [], // 所有进行中的任务
+            releaseLove: [],
             allunReviewTask: [] // 所有审核中的任务
         };
     },
@@ -110,7 +130,7 @@ export default {
     },
     methods: {
         outPage() {
-            this.$router.goBack();
+            this.$router.push('/layout/person');
         },
         release() {
             this.$router.push("/releasePublic");
@@ -124,6 +144,10 @@ export default {
             }).then(() => {
                 //   this.$toast.message('提示信息');
             });
+        },
+        submitAudit(id) {
+            localStorage.setItem('serviceIds',id)
+            this.$router.push('/submitAudit');
         },
         // 查询所有已完成的任务
         queryAllCompleteTask() {
@@ -156,12 +180,13 @@ export default {
                     Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
-                    userId: localStorage.getItem("userId")
+                    userId: sessionStorage.getItem("userId")
                 })
             })
                 .then(result => {
                     if (result.data.respCode == 1000) {
-                        this.allRuningTask = result.data.data.publishTasks;
+                        this.allRuningTask = result.data.data.receiveTasks;
+                        this.releaseLove = result.data.data.publishTasks;
                     }
                 })
                 .catch(err => {
@@ -226,5 +251,10 @@ export default {
     border-radius: 5px;
     text-align: center;
     background-color: #ff5242;
+}
+.container-main {
+    width: 100%;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
 }
 </style>

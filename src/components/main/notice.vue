@@ -32,6 +32,7 @@
                     </mu-list-item-action>
                     <mu-list-item-title>Mike Li</mu-list-item-title>
                 </mu-list-item>
+                <mu-divider></mu-divider>
                 <mu-list-item avatar button :ripple="true" class="word-list" v-ripple>
                     <mu-list-item-action>
                         <mu-avatar :size="size">
@@ -40,6 +41,7 @@
                     </mu-list-item-action>
                     <mu-list-item-title>Maco Mai</mu-list-item-title>
                 </mu-list-item>
+                <mu-divider></mu-divider>
                 <mu-list-item avatar button :ripple="true" class="word-list" v-ripple>
                     <mu-list-item-action>
                         <mu-avatar :size="size">
@@ -48,6 +50,7 @@
                     </mu-list-item-action>
                     <mu-list-item-title>Alex Qin</mu-list-item-title>
                 </mu-list-item>
+                <mu-divider></mu-divider>
                 <mu-list-item avatar button :ripple="true" class="word-list" v-ripple>
                     <mu-list-item-action>
                         <mu-avatar :size="size">
@@ -56,6 +59,7 @@
                     </mu-list-item-action>
                     <mu-list-item-title>Allen Qun</mu-list-item-title>
                 </mu-list-item>
+                <mu-divider></mu-divider>
                 <mu-list-item avatar button :ripple="true" class="word-list" v-ripple>
                     <mu-list-item-action>
                         <mu-avatar :size="size">
@@ -64,12 +68,13 @@
                     </mu-list-item-action>
                     <mu-list-item-title>Myron Liu</mu-list-item-title>
                 </mu-list-item>
+                <mu-divider></mu-divider>
             </mu-list>
-            <!-- <mu-divider></mu-divider> -->
         </mu-paper>
     </div>
 </template>
 <script>
+import '../../assets/js/mui.js';
 export default {
     data() {
         return {
@@ -87,8 +92,5 @@ export default {
     width: 100%;
     height: 100%;
     overflow-y: scroll;
-}
-.word-list {
-    border-bottom: 1px solid #ccc;
 }
 </style>

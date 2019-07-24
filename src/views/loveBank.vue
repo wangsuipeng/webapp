@@ -74,6 +74,7 @@
 </template>
 <script>
 import Qs from "qs";
+import '../assets/js/childMui.js';
 export default {
     data() {
         return {

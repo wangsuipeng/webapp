@@ -158,6 +158,18 @@ export default new Router({
     {
       path: '/parkingLot',
       component: () => import('@/views/parkingLot.vue')
+    },
+    {
+      path: '/myApply',
+      component: () => import('@/views/myApply.vue')
+    },
+    {
+      path: '/submitAudit',
+      component: () => import('@/views/submitAudit.vue')
+    },
+    {
+      path: '/auditContents',
+      component: () => import('@/views/auditContents.vue')
     }
   ]
 })

@@ -22,7 +22,7 @@
                         <mu-icon size="25" value="chevron_right"></mu-icon>
                     </mu-list-item-action>
                 </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list">
+                <mu-list-item avatar button :ripple="true" class="word-list" @click.native="myApply">
                     <mu-list-item-action>
                         <img class="picture-img" src="../../assets/images/apply.png">
                     </mu-list-item-action>
@@ -73,6 +73,7 @@
 </template>
 <script>
 import imgSrc from '../../assets/images/avatar.png';
+import '../../assets/js/mui.js';
 export default {
     data() {
         return {
@@ -106,6 +107,9 @@ export default {
         myLove() {
             this.$router.push("/myLove");
         },
+        myApply() {
+            this.$router.push("/myApply");
+        }
     }
 };
 </script>

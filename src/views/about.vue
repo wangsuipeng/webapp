@@ -11,11 +11,11 @@
         <div class="container-main">
             <div class="box-list">
                 当前版本
-                <span style="margin-left: 40px">1.2.7</span>
+                <span style="margin-left: 40px">1.2.8</span>
             </div>
             <div class="box-list">
                 最新版本
-                <span style="margin-left: 40px">1.2.8</span>
+                <span style="margin-left: 40px">1.2.9</span>
             </div>
             <div class="upgrade" @click="downloadApk">
                 <button>在线升级</button>
@@ -28,7 +28,8 @@ import Qs from "qs";
 export default {
     data() {
         return {
-            appVersion: ""
+            appVersion: "",
+            version: '1.2.8',
         };
     },
     methods: {
@@ -43,13 +44,14 @@ export default {
                     Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
-                    version: "1.2.7",
+                    version: this.version,
                     clientType: "a"
                 })
             })
                 .then(result => {
                     if (result.data.respCode == 1000) {
                         this.appVersion = result.data.appVersion;
+                        this.version = '1.2.9';
                         let url = result.data.appUrl;
                         plus.nativeUI.showWaiting("下载中...");
                         //创建下载管理对象

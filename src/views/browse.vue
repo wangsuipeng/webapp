@@ -25,13 +25,12 @@
 
         <div class="container-main">
             <div class="content-browse">
-                <h1 class="title">{{this.articleTitle}}</h1>
+                <h1 class="title">{{articleTitle}}</h1>
                 <textarea
                     readonly
                     name="text"
                     id
                     v-model="postContent"
-
                     class="textarea-text"
                 ></textarea>
                 <div class="images" v-for="(item,index) in imageUrls" :key="index">

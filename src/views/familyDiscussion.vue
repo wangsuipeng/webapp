@@ -40,25 +40,27 @@
                     </div>
                 </mu-sub-header>
                 <div class="list-content">
-                    <mu-list-item
-                        avatar
-                        class="word-list"
-                        v-ripple
-                        v-for="item in postContent"
-                        @click.native="browsePost"
-                    >
-                        <mu-list-item-action>
-                            <mu-avatar :size="size">
-                                <img src="../assets/images/1000053.jpg" />
-                            </mu-avatar>
-                        </mu-list-item-action>
-                        <mu-list-item-title>{{item.title}}</mu-list-item-title>
-                    </mu-list-item>
+                    <div v-for="(item,index) in postContent" :key="index">
+                        <mu-list-item
+                            avatar
+                            class="word-list"
+                            
+                            v-ripple
+                            @click.native="browsePost"
+                        >
+                            <mu-list-item-action>
+                                <mu-avatar :size="size">
+                                    <img src="../assets/images/1000053.jpg" />
+                                </mu-avatar>
+                            </mu-list-item-action>
+                            <mu-list-item-title>{{item.title}}</mu-list-item-title>
+                        </mu-list-item>
+                        <mu-divider></mu-divider>
+                    </div>
                 </div>
             </mu-list>
-            
             <mu-button fab color="#FF5242" class="create-articles" @click="postWord">
-                <mu-icon value="edit"></mu-icon>
+                <mu-icon size="28" value="edit"></mu-icon>
             </mu-button>
         </div>
     </div>
@@ -99,14 +101,17 @@ export default {
         browsePost(e) {
             this.articleTitle = e.target.innerText;
             this.$store.dispatch("ARTICLE_TITLE", this.articleTitle);
-            for (var i = 0;i < this.postContent.length;i++) {
+            for (var i = 0; i < this.postContent.length; i++) {
                 if (this.articleTitle == this.postContent[i].title) {
                     if (this.postContent[i].praiseNum) {
-                        localStorage.setItem("praiseNum",this.postContent[i].praiseNum)
+                        localStorage.setItem(
+                            "praiseNum",
+                            this.postContent[i].praiseNum
+                        );
                     } else {
-                        localStorage.setItem("praiseNum",0)
+                        localStorage.setItem("praiseNum", 0);
                     }
-                }   
+                }
             }
             this.$router.push("/browse");
         },
@@ -187,9 +192,9 @@ export default {
     height: 100%;
     overflow-y: scroll;
 }
-.word-list {
-    border-bottom: 1px solid #ccc;
-}
+/* .word-list {
+    border-bottom: 0.5px solid #ccc;
+} */
 .search-value {
     width: 100%;
     height: 100%;
@@ -229,11 +234,14 @@ export default {
 .create-articles {
     position: absolute;
     right: 20px;
-    bottom: 20px;
+    bottom: 28px;
     z-index: 9999;
 }
-option{
-    text-align:center;
+option {
+    text-align: center;
+}
+.has-avatar {
+    height: 50px !important;
 }
 </style>
 

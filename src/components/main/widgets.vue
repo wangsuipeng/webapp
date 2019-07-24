@@ -85,6 +85,7 @@ import carouselImg1 from "../../assets/images/325453.jpg";
 import carouselImg2 from "../../assets/images/325453.jpg";
 import carouselImg3 from "../../assets/images/325453.jpg";
 import carouselImg4 from "../../assets/images/325453.jpg";
+import '../../assets/js/mui.js';
 export default {
     data() {
         return {
