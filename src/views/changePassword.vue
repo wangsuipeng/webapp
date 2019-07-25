@@ -51,13 +51,14 @@ export default {
                     Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
+                    userId: sessionStorage.getItem("userId"),
                     password: this.form.usedPassword,
                     newPassword: this.form.newPassword,
                 })
             })
                 .then(result => {
-                    if (result.data.status == "success") {
-                        this.$router.push("/personalCenter");
+                    if (result.data.respCode == 1000) {
+                        this.$router.goBack();
                     } else {
                         this.$toast.error("修改失败");
                     }

@@ -88,7 +88,7 @@ export default {
             })
                 .then(result => {
                     if (result.data.respCode == 1000) {
-                        this.$router.push("/loveBack")
+                        this.$router.goBack();
                     }
                 })
                 .catch(err => {

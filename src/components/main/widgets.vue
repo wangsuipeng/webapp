@@ -63,15 +63,15 @@
             </div>
             <div class="hot-info">
                 <ul>
-                    <li>
+                    <li class="muse-list ">
                         <span>通知：</span>
                         <span>今日海尚菊园小区20：30~明日01：30停水检修。</span>
                     </li>
-                    <li>
+                    <li class="muse-list ">
                         <span>信息：</span>
                         <span>今日海尚菊园小区20：30~明日01：30停水检修。</span>
                     </li>
-                    <li>
+                    <li class="muse-list ">
                         <span>提醒：</span>
                         <span>今日海尚菊园小区20：30~明日01：30停水检修。</span>
                     </li>
@@ -96,7 +96,40 @@ export default {
             community: localStorage.getItem("myCommunity")
         };
     },
+    mounted () {
+        document.addEventListener("plusready", this.plusReady());    
+    },
     methods: {
+        plusReady() {
+            // 监听“返回”按钮事件
+            var first = null;
+            plus.key.addEventListener("backbutton", function() {
+                //首次按键，提示‘再按一次退出应用’
+                if (!first) {
+                    first = new Date().getTime();
+                    // plus.nativeUI.alert("再按一次退出应用");
+                    plus.nativeUI.toast(
+                        '<font style="font-size:14px">再按一次返回键退出</font>',
+                        {
+                            type: "richtext",
+                            duration: "long",
+                            richTextStyle: { align: "center" }
+                        }
+                    );
+                    setTimeout(function() {
+                        plus.nativeUI.closeToast();
+                    }, 500);
+                    setTimeout(function() {
+                        first = null;
+                    }, 1000);
+                } else {
+                    if (new Date().getTime() - first < 1000) {
+                        plus.runtime.quit();
+                        // plus.nativeUI.alert("退出成功");
+                    }
+                }
+            }); // 在这里调用plus api
+        },
         familyDiscussion() {
             this.$router.push("/familyD");
         },
@@ -218,6 +251,27 @@ export default {
 .hot-info ul li {
     width: 100%;
     padding: 15px 0px 15px 15px;
-    border-bottom: 1px solid #ccc;
+    /* border-bottom: 1px solid #ccc; */
+}
+.muse-list {
+    position: relative;
+}
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+    .muse-list:before {
+        content: "";
+        pointer-events: none; /* 防止点击触发 */
+        box-sizing: border-box;
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        left: 0;
+        top: 0;
+        /* border-radius: 8px; */
+        border-bottom: 1px solid #dcdcdc;
+        -webkit-transform: scale(0.5);
+        -webkit-transform-origin: 0 0;
+        transform: scale(0.5);
+        transform-origin: 0 0;
+    }
 }
 </style>

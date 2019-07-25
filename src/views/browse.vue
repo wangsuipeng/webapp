@@ -38,14 +38,14 @@
                 </div>
             </div>
             <mu-flex class="flex-wrapper" align-items="center">
-                <mu-flex class="flex-demo reading-volume" justify-content="start" fill>阅读：{{number}}</mu-flex>
+                <mu-flex class="flex-demo reading-volume" justify-content="start" fill></mu-flex>
                 <mu-flex class="flex-demo" justify-content="center" fill>
                     <ul class="share">
                         <li @click="giveThumbs">
                             <mu-icon
                                 v-show="loveBool"
                                 :size="size"
-                                value="favorite_border"
+                                value="thumb_up_alt"
                                 color="#ff5242"
                             ></mu-icon>
                             <mu-icon
@@ -58,7 +58,7 @@
                         </li>
                         <li>
                             <!-- <mu-icon :size="size" value="textsms" color="#ff5242"></mu-icon> -->
-                            <mu-icon :size="size" value="textsms" color="#ff5242"></mu-icon>
+                            <mu-icon :size="size" value="textsms" color="#ff5242" @click="comment"></mu-icon>
                             <p>90</p>
                         </li>
                         <li>
@@ -68,6 +68,15 @@
                     </ul>
                 </mu-flex>
             </mu-flex>
+            <div class="comment">
+                <div class="avatia">
+                    <img src="../assets/images/325571.jpg" alt />
+                </div>
+                <div class="comment-text">
+                    <input type="text" placeholder="评论" id="inputText"/>
+                    <span>发送</span>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -95,6 +104,9 @@ export default {
     },
     mounted() {},
     methods: {
+        comment() {
+            document.getElementById("inputText").focus();
+        },
         editPost() {
             this.$router.push("/editPost");
             console.log(this.postContent);
@@ -269,5 +281,65 @@ export default {
     text-indent: 20px;
     outline: none;
     padding: 5px 10px;
+}
+.comment {
+    width: 100%;
+    border-top: 0.5px solid #e9e9e9;
+    position: fixed;
+    line-height: 0 !important;
+    padding: 2.8%;
+    bottom: 0;
+    left: 0;
+}
+.avatia {
+    float: left;
+    width: 10%;
+}
+.comment-text {
+    float: left;
+    width: 90%;
+}
+.comment img {
+    display: block;
+    /* float: left; */
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+}
+.comment input {
+    display: block;
+    /* float: left; */
+    width: 98%;
+    height: 2.5rem;
+    border-radius: 1.25rem;
+    margin-left: 1%;
+    background-color: #fefbfa;
+    border: 1px solid #e9e9e9;
+    /* box-shadow:inset 0 0 2px 2px #E9E9E9; */
+    border-color: #e9e9e9;
+    /* outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #e9e9e9;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #e9e9e9; */
+    padding: 0 6% 0 3%;
+    position: relative;
+    background-color: white;
+    caret-color: red;
+}
+.comment input:after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #d9d9d9;
+    content: " ";
+    display: block;
+    transform: scaley(0.5);
+}
+.comment span {
+    display: inline-block;
+    position: absolute;
+    color: red;
+    top: 28px;
+    right: 26px;
 }
 </style>

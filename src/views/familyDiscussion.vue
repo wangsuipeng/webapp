@@ -43,8 +43,7 @@
                     <div v-for="(item,index) in postContent" :key="index">
                         <mu-list-item
                             avatar
-                            class="word-list"
-                            
+                            class="word-list muse-list"
                             v-ripple
                             @click.native="browsePost"
                         >
@@ -55,7 +54,7 @@
                             </mu-list-item-action>
                             <mu-list-item-title>{{item.title}}</mu-list-item-title>
                         </mu-list-item>
-                        <mu-divider></mu-divider>
+                        <!-- <mu-divider></mu-divider> -->
                     </div>
                 </div>
             </mu-list>
@@ -242,6 +241,27 @@ option {
 }
 .has-avatar {
     height: 50px !important;
+}
+.muse-list {
+    position: relative;
+}
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+    .muse-list:before {
+        content: "";
+        pointer-events: none; /* 防止点击触发 */
+        box-sizing: border-box;
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        left: 0;
+        top: 0;
+        /* border-radius: 8px; */
+        border-bottom: 1px solid #dcdcdc;
+        -webkit-transform: scale(0.5);
+        -webkit-transform-origin: 0 0;
+        transform: scale(0.5);
+        transform-origin: 0 0;
+    }
 }
 </style>
 

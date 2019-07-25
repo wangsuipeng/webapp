@@ -13,7 +13,7 @@
         <mu-paper :z-depth="0" class="demo-list-wrap">
             <mu-list>
                 <!-- <mu-sub-header>Today</mu-sub-header> -->
-                <mu-list-item avatar button :ripple="true" class="word-list" @click.native="integral">
+                <mu-list-item avatar button :ripple="true" class="word-list muse-list" @click.native="integral">
                     <mu-list-item-action>
                         <img class="picture-img" src="../../assets/images/integral.png">
                     </mu-list-item-action>
@@ -22,7 +22,7 @@
                         <mu-icon size="25" value="chevron_right"></mu-icon>
                     </mu-list-item-action>
                 </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list" @click.native="myApply">
+                <mu-list-item avatar button :ripple="true" class="word-list muse-list" @click.native="myApply">
                     <mu-list-item-action>
                         <img class="picture-img" src="../../assets/images/apply.png">
                     </mu-list-item-action>
@@ -31,7 +31,7 @@
                         <mu-icon size="25" value="chevron_right"></mu-icon>
                     </mu-list-item-action>
                 </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list" @click.native="myLove">
+                <mu-list-item avatar button :ripple="true" class="word-list muse-list" @click.native="myLove">
                     <mu-list-item-action>
                         <img class="picture-img" src="../../assets/images/love.png">
                     </mu-list-item-action>
@@ -40,7 +40,7 @@
                         <mu-icon size="25" value="chevron_right"></mu-icon>
                     </mu-list-item-action>
                 </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list" @click.native="authentication">
+                <mu-list-item avatar button :ripple="true" class="word-list muse-list" @click.native="authentication">
                     <mu-list-item-action>
                         <img class="picture-img" src="../../assets/images/authentication.png">
                     </mu-list-item-action>
@@ -49,7 +49,7 @@
                         <mu-icon size="25" value="chevron_right"></mu-icon>
                     </mu-list-item-action>
                 </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list">
+                <mu-list-item avatar button :ripple="true" class="word-list muse-list">
                     <mu-list-item-action>
                         <img class="picture-img" src="../../assets/images/security.png">
                     </mu-list-item-action>
@@ -58,7 +58,7 @@
                         <mu-icon size="25" value="chevron_right"></mu-icon>
                     </mu-list-item-action>
                 </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list" @click="about">
+                <mu-list-item avatar button :ripple="true" class="word-list muse-list" @click="about">
                     <mu-list-item-action>
                         <img class="picture-img" src="../../assets/images/about.png">
                     </mu-list-item-action>
@@ -91,7 +91,40 @@ export default {
             this.avatar = "http://103.26.76.116:9999/" + "admin/welfare/sysFile/showPicForMany?id=" + this.$store.getters.headPortrait;
         }
     },
+    mounted () {
+        document.addEventListener("plusready", this.plusReady());  
+    },
     methods: {
+        plusReady() {
+            // 监听“返回”按钮事件
+            var first = null;
+            plus.key.addEventListener("backbutton", function() {
+                //首次按键，提示‘再按一次退出应用’
+                if (!first) {
+                    first = new Date().getTime();
+                    // plus.nativeUI.alert("再按一次退出应用");
+                    plus.nativeUI.toast(
+                        '<font style="font-size:14px">再按一次返回键退出</font>',
+                        {
+                            type: "richtext",
+                            duration: "long",
+                            richTextStyle: { align: "center" }
+                        }
+                    );
+                    setTimeout(function() {
+                        plus.nativeUI.closeToast();
+                    }, 500);
+                    setTimeout(function() {
+                        first = null;
+                    }, 1000);
+                } else {
+                    if (new Date().getTime() - first < 1000) {
+                        plus.runtime.quit();
+                        // plus.nativeUI.alert("退出成功");
+                    }
+                }
+            }); // 在这里调用plus api
+        },
         personalCenter() {
             this.$router.push('/personalCenter')
         },
@@ -126,8 +159,29 @@ export default {
     background-color: bisque;
     padding: 30px 0 0px;
 }
-.word-list {
+/* .word-list {
     border-bottom: 1px solid #ccc;
+} */
+.muse-list {
+    position: relative;
+}
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+    .muse-list:before {
+        content: "";
+        pointer-events: none; /* 防止点击触发 */
+        box-sizing: border-box;
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        left: 0;
+        top: 0;
+        /* border-radius: 8px; */
+        border-bottom: 1px solid #dcdcdc;
+        -webkit-transform: scale(0.5);
+        -webkit-transform-origin: 0 0;
+        transform: scale(0.5);
+        transform-origin: 0 0;
+    }
 }
 .picture-img {
     width: 35px;

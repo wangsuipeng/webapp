@@ -10,66 +10,66 @@
         </mu-appbar>
         <div class="container-main">
             <mu-paper :z-depth="0" class="demo-list-wrap">
-                        <mu-list>
-                            <!-- <mu-sub-header>Today</mu-sub-header> -->
-                            <mu-list-item avatar button :ripple="false">
-                                <mu-list-item-action>
-                                    <mu-avatar>
-                                        <img src="../assets/images/325543.jpg" />
-                                    </mu-avatar>
-                                </mu-list-item-action>
-                                <mu-list-item-title>Mike Li</mu-list-item-title>
-                                <mu-list-item-action>
-                                    <mu-icon value="chat_bubble"></mu-icon>
-                                </mu-list-item-action>
-                            </mu-list-item>
-                            <mu-list-item avatar button :ripple="false">
-                                <mu-list-item-action>
-                                    <mu-avatar>
-                                        <img src="../assets/images/325543.jpg" />
-                                    </mu-avatar>
-                                </mu-list-item-action>
-                                <mu-list-item-title>Maco Mai</mu-list-item-title>
-                                <mu-list-item-action>
-                                    <mu-icon value="chat_bubble"></mu-icon>
-                                </mu-list-item-action>
-                            </mu-list-item>
-                            <mu-list-item avatar button :ripple="false">
-                                <mu-list-item-action>
-                                    <mu-avatar>
-                                        <img src="../assets/images/325543.jpg" />
-                                    </mu-avatar>
-                                </mu-list-item-action>
-                                <mu-list-item-title>Alex Qin</mu-list-item-title>
-                                <mu-list-item-action>
-                                    <mu-icon value="chat_bubble"></mu-icon>
-                                </mu-list-item-action>
-                            </mu-list-item>
-                            <mu-list-item avatar button :ripple="false">
-                                <mu-list-item-action>
-                                    <mu-avatar>
-                                        <img src="../assets/images/325543.jpg" />
-                                    </mu-avatar>
-                                </mu-list-item-action>
-                                <mu-list-item-title>Allen Qun</mu-list-item-title>
-                                <mu-list-item-action>
-                                    <mu-icon value="chat_bubble"></mu-icon>
-                                </mu-list-item-action>
-                            </mu-list-item>
-                            <mu-list-item avatar button :ripple="false" v-ripple>
-                                <mu-list-item-action>
-                                    <mu-avatar>
-                                        <img src="../assets/images/325543.jpg" />
-                                    </mu-avatar>
-                                </mu-list-item-action>
-                                <mu-list-item-title>Myron Liu</mu-list-item-title>
-                                <mu-list-item-action>
-                                    <mu-icon value="chat_bubble"></mu-icon>
-                                </mu-list-item-action>
-                            </mu-list-item>
-                        </mu-list>
-                        <!-- <mu-divider></mu-divider> -->
-                    </mu-paper>
+                <mu-list>
+                    <!-- <mu-sub-header>Today</mu-sub-header> -->
+                    <mu-list-item avatar button v-ripple class="muse-list">
+                        <mu-list-item-action>
+                            <mu-avatar>
+                                <img src="../assets/images/325543.jpg" />
+                            </mu-avatar>
+                        </mu-list-item-action>
+                        <mu-list-item-title>Mike Li</mu-list-item-title>
+                        <mu-list-item-action>
+                            <mu-icon value="chat_bubble"></mu-icon>
+                        </mu-list-item-action>
+                    </mu-list-item>
+                    <mu-list-item avatar button v-ripple class="muse-list">
+                        <mu-list-item-action>
+                            <mu-avatar>
+                                <img src="../assets/images/325543.jpg" />
+                            </mu-avatar>
+                        </mu-list-item-action>
+                        <mu-list-item-title>Maco Mai</mu-list-item-title>
+                        <mu-list-item-action>
+                            <mu-icon value="chat_bubble"></mu-icon>
+                        </mu-list-item-action>
+                    </mu-list-item>
+                    <mu-list-item avatar button v-ripple class="muse-list">
+                        <mu-list-item-action>
+                            <mu-avatar>
+                                <img src="../assets/images/325543.jpg" />
+                            </mu-avatar>
+                        </mu-list-item-action>
+                        <mu-list-item-title>Alex Qin</mu-list-item-title>
+                        <mu-list-item-action>
+                            <mu-icon value="chat_bubble"></mu-icon>
+                        </mu-list-item-action>
+                    </mu-list-item>
+                    <mu-list-item avatar button v-ripple class="muse-list">
+                        <mu-list-item-action>
+                            <mu-avatar>
+                                <img src="../assets/images/325543.jpg" />
+                            </mu-avatar>
+                        </mu-list-item-action>
+                        <mu-list-item-title>Allen Qun</mu-list-item-title>
+                        <mu-list-item-action>
+                            <mu-icon value="chat_bubble"></mu-icon>
+                        </mu-list-item-action>
+                    </mu-list-item>
+                    <mu-list-item avatar button v-ripple class="muse-list">
+                        <mu-list-item-action>
+                            <mu-avatar>
+                                <img src="../assets/images/325543.jpg" />
+                            </mu-avatar>
+                        </mu-list-item-action>
+                        <mu-list-item-title>Myron Liu</mu-list-item-title>
+                        <mu-list-item-action>
+                            <mu-icon value="chat_bubble"></mu-icon>
+                        </mu-list-item-action>
+                    </mu-list-item>
+                </mu-list>
+                <!-- <mu-divider></mu-divider> -->
+            </mu-paper>
             <!-- <mu-container>
                 <mu-tabs
                     :value.sync="active"
@@ -97,7 +97,7 @@
                     <p>“我不需要你的帮忙！未来我会一手开启，什么样的敌人我也不会惧怕……还有，其实我们可以成为朋友的……”</p>
                     <p>“也许吧，未来……给你了。”</p>
                 </div>
-            </mu-container> -->
+            </mu-container>-->
             <mu-button fab color="#FF5242" class="create-articles">
                 <mu-icon size="28" value="border_color"></mu-icon>
             </mu-button>
@@ -146,7 +146,7 @@ export default {
 </script>
 <style scoped>
 .demo-list-wrap {
-  width: 100%;
+    width: 100%;
 }
 .container {
     padding: 0 !important;
@@ -170,5 +170,26 @@ export default {
     right: 20px;
     bottom: 90px;
     z-index: 9999;
+}
+.muse-list {
+    position: relative;
+}
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+    .muse-list:before {
+        content: "";
+        pointer-events: none; /* 防止点击触发 */
+        box-sizing: border-box;
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        left: 0;
+        top: 0;
+        /* border-radius: 8px; */
+        border-bottom: 1px solid #dcdcdc;
+        -webkit-transform: scale(0.5);
+        -webkit-transform-origin: 0 0;
+        transform: scale(0.5);
+        transform-origin: 0 0;
+    }
 }
 </style>
