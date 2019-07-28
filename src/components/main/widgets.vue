@@ -160,7 +160,7 @@ export default {
 }
 .flex-demo {
     width: 100%;
-    background-color: #e0e0e0;
+    background-color: #F7F7F9;
 }
 .header {
     position: fixed;

@@ -11,11 +11,11 @@
         <div class="container-main">
             <div class="box-list">
                 当前版本
-                <span style="margin-left: 40px">1.2.8</span>
+                <span style="margin-left: 40px">1.3.0</span>
             </div>
             <div class="box-list">
                 最新版本
-                <span style="margin-left: 40px">1.2.9</span>
+                <span style="margin-left: 40px">1.3.1</span>
             </div>
             <div class="upgrade" @click="downloadApk">
                 <button>在线升级</button>
@@ -29,7 +29,7 @@ export default {
     data() {
         return {
             appVersion: "",
-            version: '1.2.8',
+            version: "1.3.0"
         };
     },
     methods: {
@@ -50,46 +50,50 @@ export default {
             })
                 .then(result => {
                     if (result.data.respCode == 1000) {
-                        this.appVersion = result.data.appVersion;
-                        this.version = '1.2.9';
-                        let url = result.data.appUrl;
-                        plus.nativeUI.showWaiting("下载中...");
-                        //创建下载管理对象
-                        var SX_down = plus.downloader.createDownload(
-                            url,
-                            {},
-                            function(d, status) {
-                                // 下载完成
-                                if (status == 200) {
-                                    plus.nativeUI.closeWaiting();
-                                    //下载成功后的回调函数
-                                    plus.nativeUI.toast(
-                                        "下载成功，准备安装" + d.filename
-                                    );
-                                    plus.runtime.install(
-                                        d.filename,
-                                        {},
-                                        function() {
-                                            // plus.nativeUI.toast("安装成功");
-                                            plus.runtime.restart();
-                                        },
-                                        function(e) {
-                                            plus.nativeUI.toast(
-                                                d.filename + "安装失败"
-                                            );
+                        if (result.data.isNeedUpdate == 1) {
+                            this.appVersion = result.data.appVersion;
+                            this.version = "1.3.1";
+                            let url = result.data.appUrl;
+                            plus.nativeUI.showWaiting("下载中...");
+                            //创建下载管理对象
+                            var SX_down = plus.downloader.createDownload(
+                                url,
+                                {},
+                                function(d, status) {
+                                    // 下载完成
+                                    if (status == 200) {
+                                        plus.nativeUI.closeWaiting();
+                                        //下载成功后的回调函数
+                                        plus.nativeUI.toast(
+                                            "下载成功，准备安装" + d.filename
+                                        );
+                                        plus.runtime.install(
+                                            d.filename,
+                                            {},
+                                            function() {
+                                                // plus.nativeUI.toast("安装成功");
+                                                plus.runtime.restart();
+                                            },
+                                            function(e) {
+                                                plus.nativeUI.toast(
+                                                    d.filename + "安装失败"
+                                                );
 
-                                            alert(JSON.stringify(e));
-                                        }
-                                    );
-                                } else {
-                                    alert("下载失败 " + status);
+                                                alert(JSON.stringify(e));
+                                            }
+                                        );
+                                    } else {
+                                        alert("下载失败 " + status);
+                                    }
                                 }
-                            }
-                        );
-                        //开始下载任务
-                        SX_down.start();
+                            );
+                            //开始下载任务
+                            SX_down.start();
+                        } else {
+                            this.$toast.error("目前是最新版本");
+                        }
                     } else {
-                        this.$toast.error("目前是最新版本");
+                        this.$toast.error("下载失败");
                     }
                 })
                 .catch(err => {
@@ -124,11 +128,11 @@ export default {
 .upgrade {
     margin-top: 50px;
     width: 100%;
-    height: 3.2rem;
+    height: 2.2rem;
     font-size: 18px;
     color: #fff;
     text-align: center;
-    line-height: 3.2rem;
+    line-height: 2.2rem;
     border-radius: 6px;
     background-color: #ff5242;
 }

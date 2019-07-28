@@ -49,12 +49,11 @@
                         >
                             <mu-list-item-action>
                                 <mu-avatar :size="size">
-                                    <img src="../assets/images/1000053.jpg" />
+                                    <img :src="item.headUrl" />
                                 </mu-avatar>
                             </mu-list-item-action>
                             <mu-list-item-title>{{item.title}}</mu-list-item-title>
                         </mu-list-item>
-                        <!-- <mu-divider></mu-divider> -->
                     </div>
                 </div>
             </mu-list>
@@ -73,7 +72,7 @@ export default {
             size: "36",
             open: false,
             postContent: [],
-            articleTitle: "" // 文章标题
+            articleTitle: "", // 文章标题
         };
     },
     created() {
@@ -117,13 +116,14 @@ export default {
         //查询所有新闻或公告
         articleQueryAll() {
             this.$axios({
-                url: "admin/mobile/article/queryAll",
+                url: "admin/mobile/article/queryAllByCommunityIdAndCategary",
                 method: "post",
                 headers: {
                     Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
-                    communityId: localStorage.getItem("communityId")
+                    communityId: localStorage.getItem("communityId"),
+                    category: '2'
                 })
             })
                 .then(result => {
@@ -149,7 +149,6 @@ export default {
         }
     }
     .grid-cell {
-        // border-radius: 4px;
         height: 36px;
         background: rgba(255, 255, 255, 0.8);
     }
@@ -191,9 +190,6 @@ export default {
     height: 100%;
     overflow-y: scroll;
 }
-/* .word-list {
-    border-bottom: 0.5px solid #ccc;
-} */
 .search-value {
     width: 100%;
     height: 100%;

@@ -4,95 +4,137 @@
             <mu-container style="padding: 16px 0;">
                 <mu-row justify-content="center" @click="personalCenter">
                     <mu-avatar :size="size">
-                        <img :src="avatar">
+                        <img :src="avatar" />
                     </mu-avatar>
                 </mu-row>
-                <p style="text-align: center;font-size: 20px;margin-top: 10px;color: #fff">{{nickName}}</p>
+                <p
+                    style="text-align: center;font-size: 20px;margin-top: 10px;color: #fff"
+                >{{nickName}}</p>
             </mu-container>
         </div>
-        <mu-paper :z-depth="0" class="demo-list-wrap">
-            <mu-list>
-                <!-- <mu-sub-header>Today</mu-sub-header> -->
-                <mu-list-item avatar button :ripple="true" class="word-list muse-list" @click.native="integral">
-                    <mu-list-item-action>
-                        <img class="picture-img" src="../../assets/images/integral.png">
-                    </mu-list-item-action>
-                    <mu-list-item-title>我的积分</mu-list-item-title>
-                    <mu-list-item-action>
-                        <mu-icon size="25" value="chevron_right"></mu-icon>
-                    </mu-list-item-action>
-                </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list muse-list" @click.native="myApply">
-                    <mu-list-item-action>
-                        <img class="picture-img" src="../../assets/images/apply.png">
-                    </mu-list-item-action>
-                    <mu-list-item-title>我的申请</mu-list-item-title>
-                    <mu-list-item-action>
-                        <mu-icon size="25" value="chevron_right"></mu-icon>
-                    </mu-list-item-action>
-                </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list muse-list" @click.native="myLove">
-                    <mu-list-item-action>
-                        <img class="picture-img" src="../../assets/images/love.png">
-                    </mu-list-item-action>
-                    <mu-list-item-title>我的爱心</mu-list-item-title>
-                    <mu-list-item-action>
-                        <mu-icon size="25" value="chevron_right"></mu-icon>
-                    </mu-list-item-action>
-                </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list muse-list" @click.native="authentication">
-                    <mu-list-item-action>
-                        <img class="picture-img" src="../../assets/images/authentication.png">
-                    </mu-list-item-action>
-                    <mu-list-item-title>我的认证</mu-list-item-title>
-                    <mu-list-item-action>
-                        <mu-icon size="25" value="chevron_right"></mu-icon>
-                    </mu-list-item-action>
-                </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list muse-list">
-                    <mu-list-item-action>
-                        <img class="picture-img" src="../../assets/images/security.png">
-                    </mu-list-item-action>
-                    <mu-list-item-title>安全设置</mu-list-item-title>
-                    <mu-list-item-action>
-                        <mu-icon size="25" value="chevron_right"></mu-icon>
-                    </mu-list-item-action>
-                </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list muse-list" @click="about">
-                    <mu-list-item-action>
-                        <img class="picture-img" src="../../assets/images/about.png">
-                    </mu-list-item-action>
-                    <mu-list-item-title>关于</mu-list-item-title>
-                    <mu-list-item-action>
-                        <mu-icon size="25" value="chevron_right"></mu-icon>
-                    </mu-list-item-action>
-                </mu-list-item>
-            </mu-list>
-        </mu-paper>
+        <!-- <mu-flex class="flex-wrapper" justify-content="start">
+            <mu-flex class="flex-demo" justify-content="center"></mu-flex>
+        </mu-flex>-->
+        <div class="container-main">
+            <mu-paper :z-depth="0" class="demo-list-wrap">
+                <mu-list>
+                    <!-- <mu-sub-header>Today</mu-sub-header> -->
+                    <mu-list-item
+                        avatar
+                        button
+                        :ripple="true"
+                        class="word-list muse-list"
+                        @click.native="integral"
+                    >
+                        <mu-list-item-action>
+                            <img class="picture-img" src="../../assets/images/integral.png" />
+                        </mu-list-item-action>
+                        <mu-list-item-title>我的积分</mu-list-item-title>
+                        <mu-list-item-action>
+                            <mu-icon size="25" value="chevron_right"></mu-icon>
+                        </mu-list-item-action>
+                    </mu-list-item>
+                    <mu-list-item
+                        avatar
+                        button
+                        :ripple="true"
+                        class="word-list muse-list"
+                        @click.native="myLove"
+                    >
+                        <mu-list-item-action>
+                            <img class="picture-img" src="../../assets/images/love.png" />
+                        </mu-list-item-action>
+                        <mu-list-item-title>我的爱心</mu-list-item-title>
+                        <mu-list-item-action>
+                            <mu-icon size="25" value="chevron_right"></mu-icon>
+                        </mu-list-item-action>
+                    </mu-list-item>
+                    <mu-flex class="flex-wrapper" justify-content="start">
+                        <mu-flex class="flex-demo" justify-content="center"></mu-flex>
+                    </mu-flex>
+                    <mu-list-item
+                        avatar
+                        button
+                        :ripple="true"
+                        class="word-list muse-list"
+                    >
+                        <mu-list-item-action>
+                            <img class="picture-img" src="../../assets/images/apply.png" />
+                        </mu-list-item-action>
+                        <mu-list-item-title>报修申请</mu-list-item-title>
+                        <mu-list-item-action>
+                            <mu-icon size="25" value="chevron_right"></mu-icon>
+                        </mu-list-item-action>
+                    </mu-list-item>
+                    <mu-list-item
+                        avatar
+                        button
+                        :ripple="true"
+                        class="word-list muse-list"
+                        @click.native="authentication"
+                    >
+                        <mu-list-item-action>
+                            <img class="picture-img" src="../../assets/images/authentication.png" />
+                        </mu-list-item-action>
+                        <mu-list-item-title>我的认证</mu-list-item-title>
+                        <mu-list-item-action>
+                            <mu-icon size="25" value="chevron_right"></mu-icon>
+                        </mu-list-item-action>
+                    </mu-list-item>
+                    <mu-list-item avatar button :ripple="true" class="word-list muse-list">
+                        <mu-list-item-action>
+                            <img class="picture-img" src="../../assets/images/security.png" />
+                        </mu-list-item-action>
+                        <mu-list-item-title>安全设置</mu-list-item-title>
+                        <mu-list-item-action>
+                            <mu-icon size="25" value="chevron_right"></mu-icon>
+                        </mu-list-item-action>
+                    </mu-list-item>
+                    <mu-list-item
+                        avatar
+                        button
+                        :ripple="true"
+                        class="word-list muse-list"
+                        @click="about"
+                    >
+                        <mu-list-item-action>
+                            <img class="picture-img" src="../../assets/images/about.png" />
+                        </mu-list-item-action>
+                        <mu-list-item-title>关于</mu-list-item-title>
+                        <mu-list-item-action>
+                            <mu-icon size="25" value="chevron_right"></mu-icon>
+                        </mu-list-item-action>
+                    </mu-list-item>
+                </mu-list>
+            </mu-paper>
+        </div>
     </div>
 </template>
 <script>
-import imgSrc from '../../assets/images/avatar.png';
-import '../../assets/js/mui.js';
+import imgSrc from "../../assets/images/avatar.png";
+import "../../assets/js/mui.js";
 export default {
     data() {
         return {
             size: 100,
-            avatar: "",// 头像
-            nickName: '',// 昵称
-            imgSrc: '../../assets/images/avatar.png'
+            avatar: "", // 头像
+            nickName: "", // 昵称
+            imgSrc: "../../assets/images/avatar.png"
         };
     },
-    created () {
+    created() {
         this.nickName = localStorage.getItem("nickName");
         if (this.$store.getters.headPortrait == "") {
-            this.avatar = imgSrc
+            this.avatar = imgSrc;
         } else {
-            this.avatar = "http://103.26.76.116:9999/" + "admin/welfare/sysFile/showPicForMany?id=" + this.$store.getters.headPortrait;
+            this.avatar =
+                "http://103.26.76.116:9999/" +
+                "admin/welfare/sysFile/showPicForMany?id=" +
+                this.$store.getters.headPortrait;
         }
     },
-    mounted () {
-        document.addEventListener("plusready", this.plusReady());  
+    mounted() {
+        document.addEventListener("plusready", this.plusReady());
     },
     methods: {
         plusReady() {
@@ -126,23 +168,23 @@ export default {
             }); // 在这里调用plus api
         },
         personalCenter() {
-            this.$router.push('/personalCenter')
+            this.$router.push("/personalCenter");
         },
         about() {
-            this.$router.push('/about')
+            this.$router.push("/about");
         },
         authentication() {
-            this.$router.push('/authentication')
+            this.$router.push("/authentication");
         },
         integral() {
-            this.$router.push('/integral')
+            this.$router.push("/integral");
         },
         myLove() {
             this.$router.push("/myLove");
         },
-        myApply() {
-            this.$router.push("/myApply");
-        }
+        // myApply() {
+        //     this.$router.push("/myApply");
+        // }
     }
 };
 </script>
@@ -151,19 +193,30 @@ export default {
     width: 100%;
     margin-top: 0;
 }
+.flex-demo {
+    width: 100%;
+    height: 0.5rem;
+    background-color: #f7f7f9;
+}
+.person {
+    width: 100%;
+    height: calc(100vh - 56px);
+    overflow-y: scroll;
+}
 .mu-list {
     padding: 0;
 }
 .avatar {
     width: 100%;
-    background-color: bisque;
-    padding: 30px 0 0px;
+    height: 10.82rem;
+    background-color: rgb(255, 225, 196);
+    padding-top: 1rem;
 }
-/* .word-list {
-    border-bottom: 1px solid #ccc;
-} */
 .muse-list {
     position: relative;
+}
+.container-main {
+    width: 100%;
 }
 @media screen and (-webkit-min-device-pixel-ratio: 2) {
     .muse-list:before {
@@ -184,7 +237,10 @@ export default {
     }
 }
 .picture-img {
-    width: 35px;
-    height: 35px;
+    width: 25px;
+    height: 25px;
+}
+.has-avatar {
+    height: 48px !important;
 }
 </style>

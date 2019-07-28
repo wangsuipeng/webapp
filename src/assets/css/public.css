@@ -26,7 +26,7 @@ body {
     /*禁止链接长按弹出选项*/
 }
 
-@media screen and (min-width: 320px) {
+/* @media screen and (min-width: 320px) {
 
     html,
     body {
@@ -72,4 +72,4 @@ body {
     body {
         font-size: 40.96px !important;
     }
-}
+} */

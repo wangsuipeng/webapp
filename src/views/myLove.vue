@@ -20,11 +20,11 @@
                         <mu-list>
                             <mu-sub-header>我领取的爱心</mu-sub-header>
                             <div v-for="(item,index) in releaseLove" :key="index">
-                                <mu-list-item avatar button v-ripple @click.native="submitAudit(item.serviceId)">
+                                <mu-list-item avatar button v-ripple @click.native="submitAudit(item.serviceId)" class="muse-list">
                                     <span style="font-size: 18px;margin-right: 15px">{{index+1}}</span>
                                     <mu-list-item-action>
                                         <mu-avatar>
-                                            <img src="../assets/images/1000046.jpg" />
+                                            <img :src="item.headUrl" />
                                         </mu-avatar>
                                     </mu-list-item-action>
                                     <mu-list-item-title>{{item.serviceName}}</mu-list-item-title>
@@ -32,17 +32,16 @@
                                         <mu-icon color="#ff5242" value="favorite"></mu-icon>
                                     </mu-list-item-action>
                                 </mu-list-item>
-                                <mu-divider></mu-divider>
                             </div>
                         </mu-list>
                         <mu-list>
                             <mu-sub-header>我发布的爱心</mu-sub-header>
                             <div v-for="(item,index) in allRuningTask" :key="index">
-                                <mu-list-item avatar button v-ripple @click.native="submitAudit(item.serviceId)">
+                                <mu-list-item avatar button v-ripple @click.native="submitAudit(item.serviceId)" class="muse-list">
                                     <span style="font-size: 18px;margin-right: 15px">{{index+1}}</span>
                                     <mu-list-item-action>
                                         <mu-avatar>
-                                            <img src="../assets/images/1000046.jpg" />
+                                            <img :src="item.headUrl" />
                                         </mu-avatar>
                                     </mu-list-item-action>
                                     <mu-list-item-title>{{item.serviceName}}</mu-list-item-title>
@@ -50,7 +49,6 @@
                                         <mu-icon color="#ff5242" value="favorite"></mu-icon>
                                     </mu-list-item-action>
                                 </mu-list-item>
-                                <mu-divider></mu-divider>
                             </div>
                         </mu-list>
                     </mu-paper>
@@ -58,11 +56,12 @@
                 <div class="demo-text" v-if="active2 === 1">
                     <mu-paper :z-depth="0" class="demo-list-wrap">
                         <mu-list textline="three-line">
+                            <mu-sub-header>待审核</mu-sub-header>
                             <div v-for="(item,index) in allunReviewTask" :key="index">
-                                <mu-list-item avatar v-ripple button @click="loveProgress">
+                                <mu-list-item avatar v-ripple button @click.native="auditContents(item.serviceId)" class="muse-list">
                                     <mu-list-item-action>
                                         <mu-avatar>
-                                            <img src="../assets/images/1000046.jpg" />
+                                            <img :src="item.headUrl" />
                                         </mu-avatar>
                                     </mu-list-item-action>
                                     <mu-list-item-content>
@@ -78,6 +77,27 @@
                                 </mu-list-item>
                                 <mu-divider></mu-divider>
                             </div>
+                            <mu-sub-header>审核中</mu-sub-header>
+                            <div v-for="(item,index) in queryAllSubmitData" :key="index">
+                                <mu-list-item avatar v-ripple button @click.native="auditContents(item.serviceId)" class="muse-list">
+                                    <mu-list-item-action>
+                                        <mu-avatar>
+                                            <img :src="item.headUrl" />
+                                        </mu-avatar>
+                                    </mu-list-item-action>
+                                    <mu-list-item-content>
+                                        <mu-list-item-title
+                                            style="font-size: 18px;font-weight: 600;color: #000;margin-bottom: 10px"
+                                        >{{item.serviceName}}</mu-list-item-title>
+                                        <mu-list-item-sub-title>
+                                            <div
+                                                style="color: #ff5242;display: inline-block"
+                                            >爱心币 {{item.points}}/次</div>
+                                        </mu-list-item-sub-title>
+                                    </mu-list-item-content>
+                                </mu-list-item>
+                                <!-- <mu-divider></mu-divider> -->
+                            </div>
                         </mu-list>
                     </mu-paper>
                 </div>
@@ -85,10 +105,10 @@
                     <mu-paper :z-depth="0" class="demo-list-wrap">
                         <mu-list textline="three-line">
                             <div v-for="(item,index) in queryAllData" :key="index">
-                                <mu-list-item avatar :ripple="false" button>
+                                <mu-list-item avatar :ripple="false" button class="muse-list">
                                     <mu-list-item-action>
                                         <mu-avatar>
-                                            <img src="../assets/images/1000046.jpg" />
+                                            <img :src="item.headUrl" />
                                         </mu-avatar>
                                     </mu-list-item-action>
                                     <mu-list-item-content>
@@ -120,23 +140,26 @@ export default {
             queryAllData: [], // 所有已完成的任务
             allRuningTask: [], // 所有进行中的任务
             releaseLove: [],
-            allunReviewTask: [] // 所有审核中的任务
+            allunReviewTask: [], // 所有审核中的任务
+            queryAllSubmitData: [],
         };
     },
     created() {
         this.queryAllCompleteTask();
         this.queryAllRuningTask();
         this.queryAllunReviewTask();
+        this.queryAllSubmitReviewTask();
     },
     methods: {
+        auditContents(id) {
+            localStorage.setItem("applyId",id)
+            this.$router.push('/auditContents');
+        },
         outPage() {
             this.$router.push('/layout/person');
         },
         release() {
             this.$router.push("/releasePublic");
-        },
-        loveProgress() {
-            this.$router.push("/loveProgress");
         },
         alert() {
             this.$alert("恭喜您提交成功", "提示", {
@@ -158,13 +181,12 @@ export default {
                     Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
-                    userId: localStorage.getItem("userId")
+                    userId: sessionStorage.getItem("userId")
                 })
             })
                 .then(result => {
                     if (result.data.respCode == 1000) {
                         this.queryAllData = result.data.data;
-                        console.log(result);
                     }
                 })
                 .catch(err => {
@@ -193,6 +215,27 @@ export default {
                     console.log(err);
                 });
         },
+        // 所有审核中的任务
+        queryAllSubmitReviewTask() {
+            this.$axios({
+                url: "admin/mobile/welfare/queryAllSubmitReviewTask",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    receiveUserId: sessionStorage.getItem("userId")
+                })
+            })
+                .then(result => {
+                    if (result.data.respCode == 1000) {
+                        this.queryAllSubmitData = result.data.data;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
         // 查询所有待审核的任务
         queryAllunReviewTask() {
             this.$axios({
@@ -208,13 +251,13 @@ export default {
                 .then(result => {
                     if (result.data.respCode == 1000) {
                         this.allunReviewTask = result.data.data;
-                        console.log(result);
+                        console.log(result.data)
                     }
                 })
                 .catch(err => {
                     console.log(err);
                 });
-        }
+        },
     }
 };
 </script>
@@ -256,5 +299,26 @@ export default {
     width: 100%;
     height: calc(100vh - 56px);
     overflow-y: auto;
+}
+.muse-list {
+    position: relative;
+}
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+    .muse-list:before {
+        content: "";
+        pointer-events: none; /* 防止点击触发 */
+        box-sizing: border-box;
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        left: 0;
+        top: 0;
+        /* border-radius: 8px; */
+        border-bottom: 1px solid #dcdcdc;
+        -webkit-transform: scale(0.5);
+        -webkit-transform-origin: 0 0;
+        transform: scale(0.5);
+        transform-origin: 0 0;
+    }
 }
 </style>

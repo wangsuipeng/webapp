@@ -162,11 +162,11 @@ tr:hover{
 .upgrade {
     margin-top: 30px;
     width: 100%;
-    height: 3rem;
+    height: 2.2rem;
     font-size: 18px;
     color: #fff;
     text-align: center;
-    line-height: 3rem;
+    line-height: 2.2rem;
     border-radius: 6px;
     background-color: #ff5242;
 }

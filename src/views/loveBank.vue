@@ -13,15 +13,13 @@
                 <mu-tabs :value.sync="active2" color="#F8F8F8" indicator-color="#ff5242" full-width>
                     <mu-tab style="color: #898989">爱心榜</mu-tab>
                     <mu-tab style="color: #898989">爱心大厅</mu-tab>
-                    <!-- <mu-tab style="color: #898989">社会义工</mu-tab> -->
                 </mu-tabs>
                 <div class="demo-text" v-if="active2 === 0">
                     <mu-paper :z-depth="0" class="demo-list-wrap">
                         <mu-list>
-                            <!-- <mu-sub-header>Today</mu-sub-header> -->
                             <div v-for="(item,index) in rankByGoldData" :key="index">
                                 <mu-list-item avatar button :ripple="false">
-                                    <!-- <span style="font-size: 18px;margin-right: 15px">{{index + 1}}</span> -->
+                                    <span style="font-size: 18px;margin-right: 15px;font-style:italic">{{index + 1}}</span>
                                     <mu-list-item-action>
                                         <mu-avatar>
                                             <img src="../assets/images/1000046.jpg" />
@@ -32,6 +30,7 @@
                                     <mu-list-item-action style="margin-left: 25px">
                                         <mu-icon color="#ff5242" value="favorite"></mu-icon>
                                     </mu-list-item-action>
+                                    <span class="loveNum">{{item.point}}</span>
                                 </mu-list-item>
                                 <mu-divider></mu-divider>
                             </div>
@@ -74,7 +73,6 @@
 </template>
 <script>
 import Qs from "qs";
-import '../assets/js/childMui.js';
 export default {
     data() {
         return {
@@ -158,14 +156,13 @@ export default {
                 headers: {
                     Authorization: sessionStorage.getItem("token")
                 },
-                data: {
+                data: Qs.stringify({
                     communityId: localStorage.getItem("communityId")
-                }
+                })
             })
                 .then(result => {
                     if (result.data.respCode == 1000) {
                         this.rankByGoldData = result.data.data;
-                        console.log(result);
                     }
                 })
                 .catch(err => {
@@ -235,5 +232,12 @@ export default {
     border-radius: 5px;
     text-align: center;
     background-color: #ccc;
+}
+.loveNum {
+    display: inline-block;
+    width: 80px;
+    height: 20px;
+    /* border: 1px solid #ff5242; */
+    margin-left: 10px;
 }
 </style>

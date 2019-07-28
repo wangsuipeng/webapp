@@ -26,12 +26,12 @@ export default {
             articleTitle: "",
             releaseLove: [],
             allRuningTask: [],
-            serviceId: "",
+            serviceId: ""
         };
     },
-    created () {
+    created() {
         this.serviceId = localStorage.getItem("serviceIds");
-        this.queryAllRuningTask();  
+        this.queryAllRuningTask();
     },
     methods: {
         outPage() {
@@ -53,16 +53,29 @@ export default {
                     if (result.data.respCode == 1000) {
                         this.allRuningTask = result.data.data.receiveTasks;
                         this.releaseLove = result.data.data.publishTasks;
-                        for (let i = 0;i < this.allRuningTask.length;i++) {
-                            if (this.serviceId == this.allRuningTask[i].serviceId) {
-                                this.postContent = this.allRuningTask[i].serviceName;
-                                this.articleTitle = this.allRuningTask[i].seviceDetail;
+                        for (let i = 0; i < this.allRuningTask.length; i++) {
+                            if (
+                                this.serviceId ==
+                                this.allRuningTask[i].serviceId
+                            ) {
+                                this.postContent = this.allRuningTask[
+                                    i
+                                ].serviceName;
+                                this.articleTitle = this.allRuningTask[
+                                    i
+                                ].seviceDetail;
                             }
                         }
-                        for (let i = 0;i < this.releaseLove.length;i++) {
-                            if (this.serviceId == this.releaseLove[i].serviceId) {
-                                this.postContent = this.releaseLove[i].serviceName;
-                                this.articleTitle = this.releaseLove[i].seviceDetail;
+                        for (let i = 0; i < this.releaseLove.length; i++) {
+                            if (
+                                this.serviceId == this.releaseLove[i].serviceId
+                            ) {
+                                this.postContent = this.releaseLove[
+                                    i
+                                ].serviceName;
+                                this.articleTitle = this.releaseLove[
+                                    i
+                                ].seviceDetail;
                             }
                         }
                     }
@@ -87,12 +100,19 @@ export default {
                 .then(result => {
                     if (result.data.respCode == 1000) {
                         this.$router.goBack();
+                    } else {
+                        this.$alert(result.data.errorMsg, "提示", {
+                            okLabel: "知道了"
+                        }).then(() => {
+                            // this.$toast.message("提示信息");
+                            this.$router.goBack();
+                        });
                     }
                 })
                 .catch(err => {
                     console.log(err);
                 });
-        },
+        }
     }
 };
 </script>

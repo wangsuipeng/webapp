@@ -5,11 +5,11 @@
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>
-            <span style="color: #fff">爱心发布</span>
+            <span style="color: #fff">新帖子</span>
             <mu-button
                 flat
                 slot="right"
-                @click="postingLove"
+                @click="postingMsg"
                 style="display: inline-block;color: #fff;font-size: 18px"
             >发布</mu-button>
         </mu-appbar>
@@ -20,7 +20,7 @@
             <div class="content-text">
                 <input
                     type="text"
-                    v-model="postForm.serviceName"
+                    v-model="postForm.title"
                     placeholder="请输入标题..."
                     class="input-text"
                 />
@@ -28,7 +28,7 @@
                     name
                     id
                     cols="30"
-                    v-model="postForm.seviceDetail"
+                    v-model="postForm.content"
                     rows="10"
                     class="textarea-text"
                     placeholder="说点什么..."
@@ -56,7 +56,6 @@
     </div>
 </template>
 <script>
-import Qs from "qs";
 export default {
     data() {
         return {
@@ -76,10 +75,12 @@ export default {
             height: "",
             labelPosition: "top",
             postForm: {
-                serviceName: "",// 标题
-                seviceDetail: "",// 内容
-                points: "2",// 金币
-                publishUserId: sessionStorage.getItem("userId"),
+                title: "",
+                content: "",
+                category: "3",
+                authorId: sessionStorage.getItem("userId"),
+                communityId: localStorage.getItem("communityId"),
+                isPrivate: "",
             },
             lineBool: false,
             imgsrc: "", //上传的·图片的地址
@@ -96,7 +97,7 @@ export default {
             dialogVisible: false,
             fileList: [],
             imgList: [],// 上传的图片集合
-            postData: [],// 上传图片的集合
+            postData: [],// 上传的图片的集合
             imgData: [],// 删除的图片名称集合
             formImg: ''
         };
@@ -110,33 +111,37 @@ export default {
         outPage() {
             this.$router.goBack();
         },
-        // 发布公益任务
-        postingLove() {
+        // 发帖
+        postingMsg() {
+            if (this.checked) {
+                this.postForm.isPrivate = 1;
+            } else {
+                this.postForm.isPrivate = 0;
+            }
             let imgData = this.postData.filter(item => !this.imgData.some(ele=>ele.file.lastModified===item.file.lastModified));
             let fd = new FormData();
             imgData.forEach((item,index) => {
                 fd.append("file"+index, item.file); //第一个参数字符串可以填任意命名，第二个根据对象属性来找到file
             });
-            fd.append("serviceName", this.postForm.serviceName);
-            fd.append("seviceDetail", this.postForm.seviceDetail);
-            fd.append("points", this.postForm.points);
-            fd.append("publishUserId", this.postForm.publishUserId);
-            fd.append("communityId", localStorage.getItem("communityId"));
+            fd.append("title", this.postForm.title);
+            fd.append("content", this.postForm.content);
+            fd.append("category", this.postForm.category);
+            fd.append("authorId", this.postForm.authorId);
+            fd.append("communityId", this.postForm.communityId);
+            fd.append("isPrivate", this.postForm.isPrivate);
             this.$axios({
-                url: "admin/mobile/welfare/publishTask",
+                url: "admin/mobile/article/publishMsg",
                 method: "post",
                 headers: {
-                    "Authorization": sessionStorage.getItem("token")
+                    Authorization: sessionStorage.getItem("token")
                 },
                 data: fd
             })
                 .then(result => {
-                    console.log(result.data);
                     if (result.data.respCode == 1000) {
-                        // this.$router.push("/loveBank");
                         this.$router.goBack();
-                    } else {
-
+                    } else if(result.data.respCode === '1001') {
+                        this.$toast.warning(result.data.errorMsg);
                     }
                 })
                 .catch(err => {
@@ -158,24 +163,6 @@ export default {
             this.list.splice(index, 1);
             this.maxStatus = this.list == this.max ? false : true;
         },
-        // 查询图片
-        getImage() {
-            this.$axios({
-                url: `admin/mobile/sysFile/showPicForMany?id=${this.imagesId}`,
-                method: "post",
-                headers: {
-                    Authorization: sessionStorage.getItem("token")
-                },
-                data: {}
-            })
-                .then(result => {
-                    this.images = result;
-                    console.log(result);
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        }
     }
 };
 </script>
@@ -205,7 +192,7 @@ export default {
 }
 .content-text {
     width: 100%;
-    min-height: 18.5rem;
+    min-height: 16.5rem;
     background-color: #fff;
 }
 .textarea-text {

@@ -32,24 +32,35 @@
             </mu-flex>
             <mu-row>
                 <mu-col span="12">
-                    <div class="grid-cell"><span class="current-application">当前申请</span></div>
+                    <div class="grid-cell">
+                        <span class="current-application">当前申请</span>
+                    </div>
                 </mu-col>
             </mu-row>
             <mu-paper :z-depth="0">
                 <mu-data-table
-                    border
+                    stripe
+                    
                     :columns="columns"
                     :sort.sync="sort"
                     @sort-change="handleSortChange"
-                    :data="list.slice(0, 6)"
+                    :data="listTable"
                 >
                     <template slot-scope="scope">
-                        <td>{{scope.row.name}}</td>
-                        <td class="is-center">{{scope.row.calories}}</td>
-                        <td class="is-center">{{scope.row.fat}}</td>
-                        <td class="is-center">{{scope.row.carbs}}</td>
-                        <td class="is-center">{{scope.row.protein}}</td>
-                        <td class="is-center">{{scope.row.iron}}%</td>
+                        <td class="is-center">
+                            <span v-if="scope.row.workflowType == '2'">电力报修</span>
+                            <span v-else-if="scope.row.workflowType == '1'">供水维修</span>
+                            <span v-else-if="scope.row.workflowType == '3'">煤气维修</span>
+                            <span v-else-if="scope.row.workflowType == '4'">房屋报修</span>
+                            <span v-else></span>
+                        </td>
+                        <td class="is-center">{{scope.row.detail}}</td>
+                        <td class="is-center">
+                            <span v-if="scope.row.type == '4'">处理完成</span>
+                            <span v-else>处理中...</span>
+                        </td>
+                        <td class="is-center">{{scope.row.detailPhoneOneName}}</td>
+                        <td class="is-center">{{scope.row.detailOneDate}}</td>
                     </template>
                 </mu-data-table>
             </mu-paper>
@@ -58,7 +69,9 @@
             </mu-flex>
             <mu-row>
                 <mu-col span="12">
-                    <div class="grid-cell"><span class="current-application">历史申请</span></div>
+                    <div class="grid-cell">
+                        <span class="current-application">历史申请</span>
+                    </div>
                 </mu-col>
             </mu-row>
             <mu-paper :z-depth="0">
@@ -67,15 +80,20 @@
                     :columns="columns"
                     :sort.sync="sort"
                     @sort-change="handleSortChange"
-                    :data="list.slice(0, 6)"
+                    :data="listTableHis.slice(0, 6)"
                 >
                     <template slot-scope="scope">
-                        <td>{{scope.row.name}}</td>
-                        <td class="is-center">{{scope.row.calories}}</td>
-                        <td class="is-center">{{scope.row.fat}}</td>
-                        <td class="is-center">{{scope.row.carbs}}</td>
-                        <td class="is-center">{{scope.row.protein}}</td>
-                        <td class="is-center">{{scope.row.iron}}%</td>
+                        <td class="is-center">
+                            <span v-if="scope.row.workflowType == '2'">电力报修</span>
+                            <span v-else-if="scope.row.workflowType == '1'">供水维修</span>
+                            <span v-else-if="scope.row.workflowType == '3'">煤气维修</span>
+                            <span v-else-if="scope.row.workflowType == '4'">房屋报修</span>
+                            <span v-else></span>
+                        </td>
+                        <td class="is-center">{{scope.row.detail}}</td>
+                        <td class="is-center">{{scope.row.type}}</td>
+                        <td class="is-center">{{scope.row.userId}}</td>
+                        <td class="is-center">{{scope.row.detailOneDate}}</td>
                     </template>
                 </mu-data-table>
             </mu-paper>
@@ -83,6 +101,7 @@
     </div>
 </template>
 <script>
+import Qs from "qs";
 export default {
     data() {
         return {
@@ -91,48 +110,44 @@ export default {
                 order: "asc"
             },
             columns: [
-                { title: "事项", width: 100, name: "name" },
+                {
+                    title: "事项",
+                    name: "workflowType",
+                    width: 150,
+                    align: "center"
+                },
                 {
                     title: "描述",
-                    name: "calories",
-                    width: 150,
+                    name: "detail",
+                    width: 226,
                     align: "center",
-                    sortable: true
+                },
+                {
+                    title: "阶段",
+                    name: "type",
+                    width: 126,
+                    align: "center",
                 },
                 {
                     title: "当前处理人",
-                    name: "fat",
+                    name: "userId",
                     width: 126,
                     align: "center",
-                    sortable: true
                 },
                 {
                     title: "处理时间",
-                    name: "carbs",
+                    name: "detailOneDate",
                     width: 126,
                     align: "center",
-                    sortable: true
                 }
             ],
-            list: [
-                {
-                    name: "Frozen",
-                    calories: "Frozen",
-                    fat: 6.0,
-                    carbs: 24,
-                    protein: 4.0,
-                    iron: 1
-                },
-                {
-                    name: "Ice cream",
-                    calories: 237,
-                    fat: 9.0,
-                    carbs: 37,
-                    protein: 4.3,
-                    iron: 1
-                }
-            ]
+            listTable: [], // 申请中的数据
+            listTableHis: [] // 历史申请的数据
         };
+    },
+    created() {
+        this.getUserApplyWorkflowInfo();
+        this.getUserApplyInfoHistory();
     },
     methods: {
         outPage() {
@@ -154,6 +169,51 @@ export default {
         },
         house() {
             this.$router.push("/house");
+        },
+        //获取用户申请中的
+        getUserApplyWorkflowInfo() {
+            this.$axios({
+                url: "admin/mobile/processCheck/getUserApplyWorkflowInfo",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    communityId: localStorage.getItem("communityId"),
+                    type: "0"
+                })
+            })
+                .then(result => {
+                    if (result.data.respCode === '1000') {
+                        this.listTable = result.data.data.list;
+                    }
+                    console.log(result);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        //获取用户历史申请
+        getUserApplyInfoHistory() {
+            this.$axios({
+                url: "admin/mobile/processCheck/getUserApplyWorkflowInfo",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    communityId: localStorage.getItem("communityId"),
+                    type: "4"
+                })
+            })
+                .then(result => {
+                    if (result.data.respCode === '1000') {
+                        this.listTableHis = result.data.data.list;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         }
     }
 };

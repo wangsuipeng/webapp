@@ -3,7 +3,7 @@
         <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 56px">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
-            </mu-button>我的申请
+            </mu-button>爱心审核
             <mu-button icon slot="right">
                 <!-- <mu-icon size="30" value="control_point"></mu-icon> -->
             </mu-button>

@@ -21,8 +21,8 @@
                 rows="6"
                 class="textarea-text"
             ></textarea>
-            <div class="love-img">
-                <!-- <img class="images" src="../assets/images/325571.jpg" alt=""> -->
+            <div class="love-img" v-for="(item,index) in imgUrl" :key="index">
+                <img class="images" :src="item" alt="">
             </div>
             <mu-dialog
                 title="提示"
@@ -49,7 +49,8 @@ export default {
             loveTitle: "",
             postContent: "",
             openAlert: false,
-            serviceId: ""
+            serviceId: "",
+            imgUrl: [],
         };
     },
     created () {
@@ -110,11 +111,16 @@ export default {
             })
                 .then(result => {
                     if (result.data.respCode == 1000) {
+                        let imgData = {};
                         for (var i = 0;i < result.data.data.length;i++) {
                             if (this.serviceId == result.data.data[i].serviceId) {
                                 this.postContent = result.data.data[i].seviceDetail;
                                 this.loveTitle = result.data.data[i].serviceName;
+                                imgData = JSON.parse(result.data.data[i].imageUrls)
                             }
+                        }
+                        for (var i in imgData) {
+                            this.imgUrl.push(imgData[i])
                         }
                     }
                 })

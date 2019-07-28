@@ -170,6 +170,14 @@ export default new Router({
     {
       path: '/auditContents',
       component: () => import('@/views/auditContents.vue')
+    },
+    {
+      path: '/sharePosts',
+      component: () => import('@/views/sharePosts.vue')
+    },
+    {
+      path: '/browseShare',
+      component: () => import('@/views/browseShare.vue')
     }
   ]
 })

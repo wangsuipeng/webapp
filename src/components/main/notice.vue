@@ -62,7 +62,7 @@
                             <img src="../../assets/images/1000046.jpg" />
                         </mu-avatar>
                     </mu-list-item-action>
-                    <mu-list-item-title>Myron Liu</mu-list-item-title>
+                    <mu-list-item-title>Myron Liu888</mu-list-item-title>
                 </mu-list-item>
                 <!-- <mu-divider></mu-divider> -->
             </mu-list>

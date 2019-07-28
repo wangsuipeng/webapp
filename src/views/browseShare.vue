@@ -3,7 +3,7 @@
         <mu-appbar color="#ff5242" style="width: 100%; text-align: center">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
-            </mu-button>家事讨论
+            </mu-button>闲置分享
             <mu-button icon slot="right">
                 <!-- <mu-icon size="30" value="more_horiz"></mu-icon> -->
                 <mu-menu>

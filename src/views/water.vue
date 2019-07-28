@@ -11,29 +11,29 @@
         <div class="container-main">
             <mu-container>
                 <mu-form
-                    :model="form"
+                    :model="submitForm"
                     class="mu-demo-form"
                     :label-position="labelPosition"
                     label-width="100"
                 >
-                    <mu-form-item prop="input" label="报修位置">
-                        <mu-text-field v-model="form.input"></mu-text-field>
+                    <mu-form-item prop="location" label="报修位置">
+                        <mu-text-field v-model="submitForm.location"></mu-text-field>
                     </mu-form-item>
-                    <mu-form-item prop="select" label="处理人员">
-                        <mu-select v-model="form.select">
+                    <mu-form-item prop="workflowId" label="处理人员">
+                        <mu-select v-model="submitForm.workflowId">
                             <mu-option
-                                v-for="option,index in options"
-                                :key="option"
-                                :label="option"
-                                :value="option"
+                                v-for="(item,index) in options"
+                                :key="index"
+                                :label="item.phoneOneName"
+                                :value="item.id"
                             ></mu-option>
                         </mu-select>
                     </mu-form-item>
-                    <mu-form-item prop="date" label="可上门时间">
-                        <mu-date-input v-model="form.date" type="dateTime" actions></mu-date-input>
+                    <mu-form-item prop="serviceDate" label="可上门时间">
+                        <mu-date-input v-model="submitForm.serviceDate" type="dateTime" actions></mu-date-input>
                     </mu-form-item>
-                    <mu-form-item prop="textarea" label="问题描述">
-                        <mu-text-field multi-line :rows="3" :rows-max="6" v-model="form.textarea"></mu-text-field>
+                    <mu-form-item label="问题描述">
+                        <mu-text-field multi-line :rows="2" :rows-max="6" v-model="submitForm.detail"></mu-text-field>
                     </mu-form-item>
                     <div class="content-img">
                         <van-uploader
@@ -45,45 +45,96 @@
                             capture
                         />
                     </div>
-                    <button class="submit">提交</button>
+                    <div>
+                        <div class="submit" @click="saveWorkflow">提交</div>
+                    </div>
                 </mu-form>
             </mu-container>
         </div>
     </div>
 </template>
 <script>
+import Qs from "qs";
 export default {
     data() {
         return {
-            options: [
-                "Option 1",
-                "Option 2",
-                "Option 3",
-                "Option 4",
-                "Option 5",
-                "Option 6",
-                "Option 7",
-                "Option 8",
-                "Option 9",
-                "Option 10"
-            ],
+            options: [],
             labelPosition: "top",
-            form: {
-                input: "",
-                select: "",
-                date: "",
-                radio: "",
-                checkbox: [],
-                switch: false,
-                slider: 30,
-                textarea: ""
+            submitForm: {
+                userId: sessionStorage.getItem("userId"),
+                location: "",// 位置
+                detail: "",// 事件详情
+                pictureId: "",//图片
+                serviceDate: "",// 时间
+                workflowId: "",// 社区或者物业工作流ID
+                communityId: localStorage.getItem("communityId"),// 社区id
+            },
+            processForm: {
+                userId: sessionStorage.getItem("userId"),
+                workflowType: '1',
+                communityId: 14
             },
             fileList: [],
         };
     },
+    created () {
+        // this.getUserApplyWorkflowInfo();  
+        this.getCompanyCommunityWorkFlowInfo();
+    },
     methods: {
         outPage() {
             this.$router.goBack();
+        },
+        // 报修申请
+        saveWorkflow() {
+            this.$axios({
+                url: "admin/mobile/processCheck/saveWorkflowInfo",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify(this.submitForm)
+            }).then((result) => {
+                if (result.data.respCode === '1000') {
+                    this.$router.goBack();
+                }
+            }).catch((err) => {
+                console.log(err)
+            });
+        },
+        // 获取维修人员
+        getCompanyCommunityWorkFlowInfo() {
+            this.$axios({
+                url: "admin/mobile/processCheck/getCompanyCommunityWorkFlowInfo",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    communityId: localStorage.getItem("communityId")
+                })
+            }).then((result) => {
+                if (result.data.respCode == 1000) {
+                    this.options = result.data.data.list;
+                }
+            }).catch((err) => {
+                console.log(err)
+            });
+        },
+        //获取用户申请流程信息
+        getUserApplyWorkflowInfo() {
+            this.$axios({
+                url: "admin/mobile/processCheck/getUserApplyWorkflowInfo",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify(this.processForm)
+            }).then((result) => {
+                console.log(result)
+            }).catch((err) => {
+                console.log(err)
+            });
         }
     }
 };
@@ -101,10 +152,10 @@ export default {
 }
 .submit {
     width: 100%;
-    height: 40px;
+    height: 2.2rem;
     background-color: #ff5242;
     color: #fff;
-    line-height: 40px;
+    line-height: 2.2rem;
     text-align: center;
     border-radius: 6px;
     margin-top: 15px;

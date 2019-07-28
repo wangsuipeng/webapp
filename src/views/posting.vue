@@ -142,8 +142,8 @@ export default {
                     if (result.data.respCode == 1000) {
                         // this.$router.push("/familyD");
                         this.$router.goBack();
-                    } else {
-
+                    } else if(result.data.respCode === '1001') {
+                        this.$toast.warning(result.data.errorMsg);
                     }
                 })
                 .catch(err => {
@@ -194,7 +194,7 @@ export default {
 }
 .content-text {
     width: 100%;
-    min-height: 18.5rem;
+    min-height: 16.5rem;
     background-color: #fff;
 }
 .textarea-text {

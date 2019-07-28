@@ -176,7 +176,7 @@ export default {
 }
 .signIn {
     width: 100%;
-    height: 40px;
+    height: 2rem;
     border-radius: 20px !important;
     font-size: 16px;
 }
