@@ -178,6 +178,34 @@ export default new Router({
     {
       path: '/browseShare',
       component: () => import('@/views/browseShare.vue')
+    },
+    {
+      path: '/parkingLotCart',
+      component: () => import('@/views/parkingLotCart.vue')
+    },
+    {
+      path: '/leasePark',
+      component: () => import('@/views/leasePark.vue')
+    },
+    {
+      path: '/rentSeeking',
+      component: () => import('@/views/rentSeeking.vue')
+    },
+    {
+      path: '/sellVehicle',
+      component: () => import('@/views/sellVehicle.vue')
+    },
+    {
+      path: '/auditProgress',
+      component: () => import('@/views/auditProgress.vue')
+    },
+    {
+      path: '/propertyFee',
+      component: () => import('@/views/propertyFee.vue')
+    },
+    {
+      path: '/myApplication',
+      component: () => import('@/views/myApplication.vue')
     }
   ]
 })

@@ -19,21 +19,41 @@
                     <mu-form-item prop="location" label="报修位置">
                         <mu-text-field v-model="submitForm.location"></mu-text-field>
                     </mu-form-item>
-                    <mu-form-item prop="workflowId" label="处理人员">
-                        <mu-select v-model="submitForm.workflowId">
+                    <mu-form-item prop="workflowId" label="处理流程">
+                        <mu-select v-model="submitForm.workflowId" full-width>
                             <mu-option
                                 v-for="(item,index) in options"
+                                avatar
                                 :key="index"
-                                :label="item.phoneOneName"
+                                :label="item.processName"
                                 :value="item.id"
-                            ></mu-option>
+                            >
+                                <mu-list-item-content>
+                                    <mu-list-item-title>{{item.processName}}</mu-list-item-title>
+                                </mu-list-item-content>
+                            </mu-option>
                         </mu-select>
                     </mu-form-item>
                     <mu-form-item prop="serviceDate" label="可上门时间">
-                        <mu-date-input v-model="submitForm.serviceDate" type="dateTime" actions></mu-date-input>
+                        <mu-select v-model="submitForm.serviceDate" full-width>
+                            <mu-option
+                                v-for="(language,index) in languages"
+                                avatar
+                                :key="index"
+                                :label="language"
+                                :value="language"
+                            >
+                                <mu-list-item-action avatar>
+                                    <mu-icon size="36" value="timer" color="blue"></mu-icon>
+                                </mu-list-item-action>
+                                <mu-list-item-content>
+                                    <mu-list-item-title>{{language}}</mu-list-item-title>
+                                </mu-list-item-content>
+                            </mu-option>
+                        </mu-select>
                     </mu-form-item>
                     <mu-form-item label="问题描述">
-                        <mu-text-field multi-line :rows="2" :rows-max="6" v-model="submitForm.detail"></mu-text-field>
+                        <mu-text-field multi-line :rows="1" :rows-max="6" v-model="submitForm.detail"></mu-text-field>
                     </mu-form-item>
                     <div class="content-img">
                         <van-uploader
@@ -60,6 +80,12 @@ export default {
         return {
             options: [],
             labelPosition: "top",
+            languages: [
+                "9:00-11:00",
+                "11:00-13:00",
+                "13:00-15:00",
+                "15:00-17:00"
+            ],
             submitForm: {
                 userId: sessionStorage.getItem("userId"),
                 location: "",// 位置
@@ -75,6 +101,8 @@ export default {
                 communityId: 14
             },
             fileList: [],
+            postData: [],// 上传的图片的集合
+            imgData: [],// 删除的图片名称集合
         };
     },
     created () {
@@ -85,15 +113,41 @@ export default {
         outPage() {
             this.$router.goBack();
         },
+        onRead(file) {
+            if (file.constructor == Object) {
+                this.postData.push(file);
+            } else if (file.constructor == Array) {
+                this.postData = this.postData.concat(file);
+            }
+        },
+        deleteImg(file) {
+            this.imgData.push(file);
+        },
+        close(index) {
+            this.list.splice(index, 1);
+            this.maxStatus = this.list == this.max ? false : true;
+        },
         // 报修申请
         saveWorkflow() {
+            let imgData = this.postData.filter(item => !this.imgData.some(ele=>ele.file.lastModified===item.file.lastModified));
+            let fd = new FormData();
+            imgData.forEach((item,index) => {
+                fd.append("file"+index, item.file); //第一个参数字符串可以填任意命名，第二个根据对象属性来找到file
+            });
+            // fd.append("userId", this.submitForm.userId);
+            fd.append("location", this.submitForm.location);
+            fd.append("detail", this.submitForm.detail);
+            fd.append("serviceDate", this.submitForm.serviceDate);
+            fd.append("communityId", this.submitForm.communityId);
+            fd.append("workflowId", this.submitForm.workflowId);
+            fd.append("userId", sessionStorage.getItem("userId"));
             this.$axios({
                 url: "admin/mobile/processCheck/saveWorkflowInfo",
                 method: "post",
                 headers: {
                     Authorization: sessionStorage.getItem("token")
                 },
-                data: Qs.stringify(this.submitForm)
+                data: fd
             }).then((result) => {
                 if (result.data.respCode === '1000') {
                     this.$router.goBack();
@@ -111,11 +165,13 @@ export default {
                     Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
-                    communityId: localStorage.getItem("communityId")
+                    communityId: localStorage.getItem("communityId"),
+                    workflowType: '1',
+                    userId: sessionStorage.getItem("userId"),
                 })
             }).then((result) => {
                 if (result.data.respCode == 1000) {
-                    this.options = result.data.data.list;
+                    this.options = result.data.data;
                 }
             }).catch((err) => {
                 console.log(err)

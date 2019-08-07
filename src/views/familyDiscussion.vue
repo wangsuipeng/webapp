@@ -45,7 +45,7 @@
                             avatar
                             class="word-list muse-list"
                             v-ripple
-                            @click.native="browsePost"
+                            @click.native="browsePost(item)"
                         >
                             <mu-list-item-action>
                                 <mu-avatar :size="size">
@@ -85,32 +85,11 @@ export default {
         outPage() {
             this.$router.goBack();
         },
-        closeBottomSheet() {
-            this.open = false;
-            console.log(333);
-        },
-        openBotttomSheet() {
-            this.open = true;
-            console.log(111);
-        },
         postWord() {
             this.$router.push("./post");
         },
-        browsePost(e) {
-            this.articleTitle = e.target.innerText;
-            this.$store.dispatch("ARTICLE_TITLE", this.articleTitle);
-            for (var i = 0; i < this.postContent.length; i++) {
-                if (this.articleTitle == this.postContent[i].title) {
-                    if (this.postContent[i].praiseNum) {
-                        localStorage.setItem(
-                            "praiseNum",
-                            this.postContent[i].praiseNum
-                        );
-                    } else {
-                        localStorage.setItem("praiseNum", 0);
-                    }
-                }
-            }
+        browsePost(item) {
+            localStorage.setItem('familyDiscussion',JSON.stringify(item))
             this.$router.push("/browse");
         },
         //查询所有新闻或公告

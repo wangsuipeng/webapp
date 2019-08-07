@@ -12,7 +12,7 @@
             <mu-paper :z-depth="0" class="demo-list-wrap">
                 <mu-list>
                     <div v-for="(item,index) in postContent" :key="index">
-                        <mu-list-item avatar button v-ripple class="muse-list" @click="browseShare">
+                        <mu-list-item avatar button v-ripple class="muse-list" @click="browseShare(item)">
                             <mu-list-item-action>
                                 <mu-avatar>
                                     <img :src="item.headUrl" />
@@ -52,7 +52,9 @@ export default {
         sharePosts() {
             this.$router.push("/sharePosts");
         },
-        browseShare() {
+        browseShare(item) {
+            console.log(item);      console.log(item);
+            localStorage.setItem('browseShare',JSON.stringify(item))
             this.$router.push('/browseShare')
         },
         //查询所有新闻或公告

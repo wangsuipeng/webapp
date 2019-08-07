@@ -10,7 +10,7 @@
         </mu-appbar>
         <div class="container-main">
             <div class="content">
-                <div class="flex-box" v-ripple>
+                <div class="flex-box" v-ripple @click="propertyFee">
                     <mu-icon size="50" value="account_balance" color="#ff5242"></mu-icon>
                     <div class="text">物业费</div>
                 </div>
@@ -75,6 +75,9 @@ export default {
     methods: {
         outPage() {
             this.$router.goBack();
+        },
+        propertyFee() {
+            this.$router.push("/propertyFee")
         }
     }
 };

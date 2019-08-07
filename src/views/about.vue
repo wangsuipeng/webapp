@@ -11,11 +11,11 @@
         <div class="container-main">
             <div class="box-list">
                 当前版本
-                <span style="margin-left: 40px">1.3.0</span>
+                <span style="margin-left: 40px">1.3.5</span>
             </div>
             <div class="box-list">
                 最新版本
-                <span style="margin-left: 40px">1.3.1</span>
+                <span style="margin-left: 40px">1.3.6</span>
             </div>
             <div class="upgrade" @click="downloadApk">
                 <button>在线升级</button>
@@ -29,14 +29,26 @@ export default {
     data() {
         return {
             appVersion: "",
-            version: "1.3.0"
+            version: "1.3.4"
         };
+    },
+    created() {
+        // if (this.$store.getters.versionNum == "") {
+        //     this.version = "1.3.4";
+        // } else {
+        //     this.version = this.$store.getters.versionNum;
+        // }
     },
     methods: {
         outPage() {
             this.$router.goBack();
         },
         downloadApk() {
+            // if (this.$store.getters.versionNum == "") {
+            //     this.version = "1.3.4";
+            // } else {
+            //     this.version = this.$store.getters.versionNum;
+            // }
             this.$axios({
                 url: "admin/mobile/isNeedUpdate",
                 method: "post",
@@ -49,10 +61,14 @@ export default {
                 })
             })
                 .then(result => {
-                    if (result.data.respCode == 1000) {
-                        if (result.data.isNeedUpdate == 1) {
-                            this.appVersion = result.data.appVersion;
-                            this.version = "1.3.1";
+                    if (result.data.respCode == "1000") {
+                        if (result.data.isNeedUpdate == "1") {
+                            this.version = "1.3.5";
+                            // this.$store.dispatch(
+                            //     "VERSION_NUM",
+                            //     result.data.appVersion
+                            // );
+                            this.version = result.data.appVersion;
                             let url = result.data.appUrl;
                             plus.nativeUI.showWaiting("下载中...");
                             //创建下载管理对象
@@ -78,8 +94,7 @@ export default {
                                                 plus.nativeUI.toast(
                                                     d.filename + "安装失败"
                                                 );
-
-                                                alert(JSON.stringify(e));
+                                                // alert(JSON.stringify(e));
                                             }
                                         );
                                     } else {
@@ -90,7 +105,7 @@ export default {
                             //开始下载任务
                             SX_down.start();
                         } else {
-                            this.$toast.error("目前是最新版本");
+                            this.$toast("当前已是最新版本");
                         }
                     } else {
                         this.$toast.error("下载失败");
@@ -116,17 +131,17 @@ export default {
 }
 .box-list {
     width: 100%;
-    height: 3rem;
+    height: 2.4rem;
     border: 1px solid #ccc;
     text-align: left;
     padding-left: 25px;
-    line-height: 3rem;
+    line-height: 2.4rem;
 }
 .box-list:first-child {
     border-bottom: none;
 }
 .upgrade {
-    margin-top: 50px;
+    margin-top: 2rem;
     width: 100%;
     height: 2.2rem;
     font-size: 18px;
@@ -135,5 +150,9 @@ export default {
     line-height: 2.2rem;
     border-radius: 6px;
     background-color: #ff5242;
+}
+.upgrade button {
+    width: 100%;
+    height: 2.2rem;
 }
 </style>

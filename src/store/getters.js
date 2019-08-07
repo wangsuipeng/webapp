@@ -3,6 +3,7 @@ const getters = {
     articleTitle: state => state.settings.articleTitle,
     articleContent: state => state.settings.articleContent,
     phoneNumber: state => state.settings.phoneNumber,
-    headPortrait: state => state.settings.headPortrait
+    headPortrait: state => state.settings.headPortrait,
+    versionNum: state => state.settings.versionNum
 }
 export default getters;

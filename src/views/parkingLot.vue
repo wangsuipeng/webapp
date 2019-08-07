@@ -10,7 +10,12 @@
         </mu-appbar>
         <div class="container-main">
             <mu-container>
-                <mu-tabs :value.sync="active2" color="#F8F8F8" indicator-color="#ff5242">
+                <mu-tabs
+                    :value.sync="active2"
+                    color="#F8F8F8"
+                    indicator-color="#ff5242"
+                    @change="tabChange(active2)"
+                >
                     <mu-tab style="color: #898989">出租车位</mu-tab>
                     <mu-tab style="color: #898989">求租车位</mu-tab>
                     <mu-tab style="color: #898989">车位出售</mu-tab>
@@ -18,67 +23,170 @@
                 <div class="demo-text" v-if="active2 === 0">
                     <mu-paper :z-depth="0" class="demo-list-wrap">
                         <mu-list>
-                            <mu-list-item avatar button :ripple="false">
-                                <mu-list-item-action>
-                                    <mu-avatar>
-                                        <!-- <img src="../../assets/images/avatar1.jpg" /> -->
-                                    </mu-avatar>
-                                </mu-list-item-action>
-                                <mu-list-item-title>A区308地库车位出租</mu-list-item-title>
-                                <mu-list-item-action>
-                                    <mu-icon value="chat_bubble"></mu-icon>
-                                </mu-list-item-action>
-                            </mu-list-item>
+                            <div v-for="(item,index) in leaseParking" :key="index">
+                                <mu-list-item avatar button v-ripple class="muse-list" @click="leasePark(item)">
+                                    <mu-list-item-action>
+                                        <mu-avatar>
+                                            <img :src="item.handImg" />
+                                        </mu-avatar>
+                                    </mu-list-item-action>
+                                    <mu-list-item-title>{{item.title}}</mu-list-item-title>
+                                    <mu-list-item-action>
+                                        <mu-icon value="chat_bubble"></mu-icon>
+                                    </mu-list-item-action>
+                                </mu-list-item>
+                            </div>
                         </mu-list>
-                        <mu-divider></mu-divider>
                     </mu-paper>
                 </div>
                 <div class="demo-text" v-if="active2 === 1">
                     <mu-list>
-                        <mu-list-item avatar button :ripple="false">
-                            <mu-list-item-action>
-                                <mu-avatar>
-                                    <!-- <img src="../../assets/images/avatar1.jpg" /> -->
-                                </mu-avatar>
-                            </mu-list-item-action>
-                            <mu-list-item-title>A区308地库车位出租</mu-list-item-title>
-                            <mu-list-item-action>
-                                <mu-icon value="chat_bubble"></mu-icon>
-                            </mu-list-item-action>
-                        </mu-list-item>
+                        <div v-for="(item,index) in seekGroup" :key="index">
+                            <mu-list-item avatar button v-ripple class="muse-list" @click="rentSeeking(item)">
+                                <mu-list-item-action>
+                                    <mu-avatar>
+                                        <img :src="item.handImg" />
+                                    </mu-avatar>
+                                </mu-list-item-action>
+                                <mu-list-item-title>{{item.title}}</mu-list-item-title>
+                                <mu-list-item-action>
+                                    <mu-icon value="chat_bubble"></mu-icon>
+                                </mu-list-item-action>
+                            </mu-list-item>
+                        </div>
                     </mu-list>
-                    <mu-divider></mu-divider>
                 </div>
                 <div class="demo-text" v-if="active2 === 2">
                     <mu-list>
-                        <mu-list-item avatar button :ripple="false">
-                            <mu-list-item-action>
-                                <mu-avatar>
-                                    <!-- <img src="../../assets/images/avatar1.jpg" /> -->
-                                </mu-avatar>
-                            </mu-list-item-action>
-                            <mu-list-item-title>A区308地库车位出租</mu-list-item-title>
-                            <mu-list-item-action>
-                                <!-- <mu-icon value="chat_bubble"></mu-icon> -->
-                            </mu-list-item-action>
-                        </mu-list-item>
+                        <div v-for="(item,index) in sellvehicle" :key="index">
+                            <mu-list-item avatar button v-ripple class="muse-list" @click="sellVehicle(item)">
+                                <mu-list-item-action>
+                                    <mu-avatar>
+                                        <img :src="item.handImg" />
+                                    </mu-avatar>
+                                </mu-list-item-action>
+                                <mu-list-item-title>{{item.title}}</mu-list-item-title>
+                                <mu-list-item-action>
+                                    <mu-icon value="chat_bubble"></mu-icon>
+                                </mu-list-item-action>
+                            </mu-list-item>
+                        </div>
                     </mu-list>
-                    <mu-divider></mu-divider>
                 </div>
             </mu-container>
+            <mu-button fab color="#FF5242" class="create-articles" @click="vehicle">
+                <mu-icon size="28" value="add"></mu-icon>
+            </mu-button>
         </div>
     </div>
 </template>
 <script>
+import Qs from "qs";
 export default {
     data() {
         return {
-            active2: 0
+            active2: 0,
+            leaseParking: [], // 出租车位
+            seekGroup: [], // 求租车位
+            sellvehicle: []
         };
+    },
+    created() {
+        this.getAll();
+        this.seekGetAll();
+        this.sellvehicleGetAll();
     },
     methods: {
         outPage() {
             this.$router.goBack();
+        },
+        vehicle() {
+            this.$router.push("/parkingLotCart");
+        },
+        tabChange() {
+            console.log();
+        },
+        leasePark(item) {
+            console.log(item)
+            localStorage.setItem("parkingLot",JSON.stringify(item))
+            this.$router.push('/leasePark')
+        },
+        rentSeeking(item) {
+            localStorage.setItem("parkingLot",JSON.stringify(item))
+            this.$router.push('/rentSeeking')
+        },
+        sellVehicle(item) {
+            localStorage.setItem("parkingLot",JSON.stringify(item))
+            this.$router.push('/sellVehicle')
+        },
+        // 获取出租车位信息
+        getAll() {
+            this.$axios({
+                url: "admin/mobile/carport/getAll",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    userId: sessionStorage.getItem("userId"),
+                    communityId: localStorage.getItem("communityId"),
+                    type: "1"
+                })
+            })
+                .then(result => {
+                    if (result.data.respCode == "1000") {
+                        this.leaseParking = result.data.data;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        // 获取求租车位信息
+        seekGetAll() {
+            this.$axios({
+                url: "admin/mobile/carport/getAll",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    userId: sessionStorage.getItem("userId"),
+                    communityId: localStorage.getItem("communityId"),
+                    type: "2"
+                })
+            })
+                .then(result => {
+                    if (result.data.respCode == "1000") {
+                        this.seekGroup = result.data.data;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        // 获取出售车位信息
+        sellvehicleGetAll() {
+            this.$axios({
+                url: "admin/mobile/carport/getAll",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    userId: sessionStorage.getItem("userId"),
+                    communityId: localStorage.getItem("communityId"),
+                    type: "3"
+                })
+            })
+                .then(result => {
+                    if (result.data.respCode == "1000") {
+                        this.sellvehicle = result.data.data;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         }
     }
 };
@@ -107,5 +215,32 @@ export default {
 }
 .container {
     padding: 0 !important;
+}
+.create-articles {
+    position: absolute;
+    right: 20px;
+    bottom: 28px;
+    z-index: 9999;
+}
+.muse-list {
+    position: relative;
+}
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+    .muse-list:before {
+        content: "";
+        pointer-events: none; /* 防止点击触发 */
+        box-sizing: border-box;
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        left: 0;
+        top: 0;
+        /* border-radius: 8px; */
+        border-bottom: 1px solid #dcdcdc;
+        -webkit-transform: scale(0.5);
+        -webkit-transform-origin: 0 0;
+        transform: scale(0.5);
+        transform-origin: 0 0;
+    }
 }
 </style>

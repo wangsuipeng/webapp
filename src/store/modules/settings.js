@@ -3,7 +3,8 @@ const state = {
     articleTitle: "",
     articleContent: "",
     phoneNumber: localStorage.getItem("phone"),
-    headPortrait: ""
+    headPortrait: "",
+    versionNum: "",
 }
 const mutations = {
     // 修改token，并将token存入localStorage 
@@ -22,7 +23,10 @@ const mutations = {
     },
     HAND_PORTRAIT(state,img) {
         state.headPortrait = img;
-    }   
+    },
+    VERSION_NUM(state,num) {
+        state.versionNum = num;
+    }
 }
 const actions = {
     CHANGE_NAV({commit},nav) {
@@ -39,6 +43,9 @@ const actions = {
     },
     HAND_PORTRAIT({commit},img){
         commit('HAND_PORTRAIT',img)
+    },
+    VERSION_NUM({commit},version) {
+        commit('VERSION_NUM',version)
     }
 }
 export default {

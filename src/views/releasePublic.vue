@@ -205,7 +205,7 @@ export default {
 }
 .content-text {
     width: 100%;
-    min-height: 18.5rem;
+    min-height: 16.5rem;
     background-color: #fff;
 }
 .textarea-text {

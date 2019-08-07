@@ -11,10 +11,10 @@
         <div class="container-main">
             <h3 class="title">{{title}}</h3>
             <textarea readonly name="text" id v-model="content" class="textarea-text"></textarea>
-            <!-- <div style="text-align: right;padding: 0 15px">
+            <div style="text-align: right;padding: 0 15px">
                 <mu-button style="width: 100px" round color="#ff5242" @click="reviewSuccess">通过</mu-button>
                 <mu-button style="width: 100px" round color="#ff5242" @click="reviewFail">不通过</mu-button>
-            </div> -->
+            </div>
         </div>
     </div>
 </template>

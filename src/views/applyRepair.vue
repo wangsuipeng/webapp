@@ -40,7 +40,6 @@
             <mu-paper :z-depth="0">
                 <mu-data-table
                     stripe
-                    
                     :columns="columns"
                     :sort.sync="sort"
                     @sort-change="handleSortChange"
@@ -76,11 +75,10 @@
             </mu-row>
             <mu-paper :z-depth="0">
                 <mu-data-table
-                    border
                     :columns="columns"
                     :sort.sync="sort"
                     @sort-change="handleSortChange"
-                    :data="listTableHis.slice(0, 6)"
+                    :data="listTableHis"
                 >
                     <template slot-scope="scope">
                         <td class="is-center">
@@ -180,12 +178,13 @@ export default {
                 },
                 data: Qs.stringify({
                     communityId: localStorage.getItem("communityId"),
-                    type: "0"
+                    status: "0",
+                    userId: sessionStorage.getItem("userId")
                 })
             })
                 .then(result => {
                     if (result.data.respCode === '1000') {
-                        this.listTable = result.data.data.list;
+                        this.listTable = result.data.data;
                     }
                     console.log(result);
                 })
@@ -203,12 +202,13 @@ export default {
                 },
                 data: Qs.stringify({
                     communityId: localStorage.getItem("communityId"),
-                    type: "4"
+                    status: "1",
+                    userId: sessionStorage.getItem("userId")
                 })
             })
                 .then(result => {
                     if (result.data.respCode === '1000') {
-                        this.listTableHis = result.data.data.list;
+                        this.listTableHis = result.data.data;
                     }
                 })
                 .catch(err => {

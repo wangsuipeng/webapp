@@ -5,11 +5,11 @@
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>
-            <span style="color: #fff">新帖子</span>
+            <span style="color: #fff">车位发布</span>
             <mu-button
                 flat
                 slot="right"
-                @click="postingMsg"
+                @click="publishParkingSpaces"
                 style="display: inline-block;color: #fff;font-size: 18px"
             >发布</mu-button>
         </mu-appbar>
@@ -31,10 +31,12 @@
                     v-model="postForm.content"
                     rows="10"
                     class="textarea-text"
-                    placeholder="说点什么..."
+                    placeholder="输入车位详情..."
                 ></textarea>
                 <div class="content-img">
                     <van-uploader
+                        :after-read="onRead"
+                        @delete="deleteImg"
                         v-model="fileList"
                         accept="image/*"
                         preview-size="60px"
@@ -47,9 +49,19 @@
             <mu-flex class="flex-wrapper" justify-content="start">
                 <mu-flex class="flex-demo" justify-content="center"></mu-flex>
             </mu-flex>
-            <van-cell-group>
-                <van-switch-cell active-color="#ff5242" v-model="checked" title="仅本小区可见" />
-            </van-cell-group>
+            <van-radio-group v-model="postForm.type">
+                <van-cell-group>
+                    <van-cell title="出租车位" clickable @click="postForm.type = '1'">
+                        <van-radio checked-color="#ff5242" slot="right-icon" name="1" />
+                    </van-cell>
+                    <van-cell title="求租车位" clickable @click="postForm.type = '2'">
+                        <van-radio checked-color="#ff5242" slot="right-icon" name="2" />
+                    </van-cell>
+                    <van-cell title="车位出售" clickable @click="postForm.type = '3'">
+                        <van-radio checked-color="#ff5242" slot="right-icon" name="3" />
+                    </van-cell>
+                </van-cell-group>
+            </van-radio-group>
         </div>
     </div>
 </template>
@@ -57,7 +69,6 @@
 export default {
     data() {
         return {
-            checked: true,
             size: "46",
             labelPosition: "top",
             form: {
@@ -73,12 +84,11 @@ export default {
             height: "",
             labelPosition: "top",
             postForm: {
-                title: "",
-                content: "",
-                category: "2",
-                authorId: sessionStorage.getItem("userId"),
+                title: "",// 标题
+                content: "",// 内容
+                userId: sessionStorage.getItem("userId"),
                 communityId: localStorage.getItem("communityId"),
-                isPrivate: ""
+                type: "",// 类型
             },
             lineBool: false,
             imgsrc: "", //上传的·图片的地址
@@ -94,12 +104,15 @@ export default {
             dialogImageUrl: "",
             dialogVisible: false,
             fileList: [],
+            imgList: [], // 上传的图片集合
             postData: [], // 上传的图片的集合
             imgData: [], // 删除的图片名称集合
             formImg: ""
         };
     },
-    created() {},
+    created() {
+        
+    },
     mounted() {
         // if (window.plus) {
         //     this.height = plus.navigator.getStatusbarHeight();
@@ -109,13 +122,8 @@ export default {
         outPage() {
             this.$router.goBack();
         },
-        // 发帖
-        postingMsg() {
-            if (this.checked) {
-                this.postForm.isPrivate = 1;
-            } else {
-                this.postForm.isPrivate = 0;
-            }
+        // 发布车位
+        publishParkingSpaces() {
             let imgData = this.postData.filter(
                 item =>
                     !this.imgData.some(
@@ -128,12 +136,11 @@ export default {
             });
             fd.append("title", this.postForm.title);
             fd.append("content", this.postForm.content);
-            fd.append("category", this.postForm.category);
-            fd.append("authorId", this.postForm.authorId);
+            fd.append("userId", this.postForm.userId);
             fd.append("communityId", this.postForm.communityId);
-            fd.append("isPrivate", this.postForm.isPrivate);
+            fd.append("type", this.postForm.type);
             this.$axios({
-                url: "admin/mobile/article/publishMsg",
+                url: "admin/mobile/carport/save",
                 method: "post",
                 headers: {
                     Authorization: sessionStorage.getItem("token")
@@ -141,9 +148,7 @@ export default {
                 data: fd
             })
                 .then(result => {
-                    console.log(result.data);
-                    if (result.data.respCode == 1000) {
-                        // this.$router.push("/familyD");
+                    if (result.data.respCode == '1000') {
                         this.$router.goBack();
                     } else if (result.data.respCode === "1001") {
                         this.$toast.warning(result.data.errorMsg);
@@ -161,6 +166,7 @@ export default {
             }
         },
         deleteImg(file) {
+            console.log(file.file.lastModified);
             this.imgData.push(file);
         },
         close(index) {
@@ -176,7 +182,7 @@ export default {
 }
 .flex-demo {
     width: 100%;
-    height: 16px;
+    height: 0.6rem;
     background-color: #f8f8f8;
 }
 .ret-btn {

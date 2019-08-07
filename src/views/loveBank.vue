@@ -22,7 +22,7 @@
                                     <span style="font-size: 18px;margin-right: 15px;font-style:italic">{{index + 1}}</span>
                                     <mu-list-item-action>
                                         <mu-avatar>
-                                            <img src="../assets/images/1000046.jpg" />
+                                            <img :src="item.headUrl" />
                                         </mu-avatar>
                                     </mu-list-item-action>
                                     <mu-list-item-title>{{item.realName}}</mu-list-item-title>
@@ -44,7 +44,7 @@
                                 <mu-list-item avatar :ripple="false" button @click="loveProgress(item.serviceId)">
                                     <mu-list-item-action>
                                         <mu-avatar>
-                                            <img src="../assets/images/1000046.jpg" />
+                                            <img :src="item.headUrl" />
                                         </mu-avatar>
                                     </mu-list-item-action>
                                     <mu-list-item-content>
@@ -57,7 +57,7 @@
                                             >爱心币{{item.points}}/次</div>
                                             <div class="public">
                                                 <span v-if="item.status == '未领取'" class="receive">做公益</span>
-                                                <span v-else class="notreceivereceive">做公益</span>
+                                                <span v-else class="notreceive">做公益</span>
                                             </div>
                                         </mu-list-item-sub-title>
                                     </mu-list-item-content>
@@ -214,8 +214,8 @@ export default {
 .receive {
     display: inline-block;
     width: 4rem;
-    height: 1.5rem;
-    line-height: 1.5rem;
+    height: 1.3rem;
+    line-height: 1.3rem;
     cursor: pointer;
     color: #fff;
     border-radius: 5px;
@@ -225,8 +225,8 @@ export default {
 .notreceive {
     display: inline-block;
     width: 4rem;
-    height: 1.5rem;
-    line-height: 1.5rem;
+    height: 1.3rem;
+    line-height: 1.3rem;
     cursor: pointer;
     color: #fff;
     border-radius: 5px;

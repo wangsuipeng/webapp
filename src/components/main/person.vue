@@ -57,11 +57,12 @@
                         button
                         :ripple="true"
                         class="word-list muse-list"
+                        @click.native="myApplication"
                     >
                         <mu-list-item-action>
                             <img class="picture-img" src="../../assets/images/apply.png" />
                         </mu-list-item-action>
-                        <mu-list-item-title>报修申请</mu-list-item-title>
+                        <mu-list-item-title>我的申请</mu-list-item-title>
                         <mu-list-item-action>
                             <mu-icon size="25" value="chevron_right"></mu-icon>
                         </mu-list-item-action>
@@ -182,6 +183,9 @@ export default {
         myLove() {
             this.$router.push("/myLove");
         },
+        myApplication() {
+            this.$router.push("/myApplication");
+        }
         // myApply() {
         //     this.$router.push("/myApply");
         // }

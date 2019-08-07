@@ -21,17 +21,23 @@
                     @load="load"
                 >
                     <mu-list>
-                        <template v-for="item in communData">
-                            <mu-list-item v-ripple @click.native="myCommunity">
+                        <div v-for="(item,index) in communData" :key="index">
+                            <mu-list-item v-ripple @click.native="myCommunity(item.name,item.id)" class="muse-list">
                                 <mu-list-item-title>{{item.name}}</mu-list-item-title>
                             </mu-list-item>
-                            <mu-divider />
-                        </template>
+                        </div>
                     </mu-list>
                 </mu-load-more>
             </mu-container>
         </mu-paper>
-        <mu-button v-ripple fab color="red" class="add-commun" @click="createProject" v-show="hidShow">
+        <mu-button
+            v-ripple
+            fab
+            color="red"
+            class="add-commun"
+            @click="createProject"
+            v-show="hidShow"
+        >
             <mu-icon value="add"></mu-icon>
         </mu-button>
         <div class="flex-wrapper footer-bottom" justify-content="center" v-show="hidShow">
@@ -539,20 +545,16 @@ export default {
         showHeight: function() {
             if (this.docmHeight > this.showHeight) {
                 this.hidShow = false;
-                console.log(this.hidShow)
+                console.log(this.hidShow);
             } else {
                 this.hidShow = true;
             }
         }
     },
     methods: {
-        myCommunity(e) {
-            localStorage.setItem("myCommunity", e.target.innerText);
-            for (let i = 0; i < this.communData.length; i++) {
-                if (e.target.innerText == this.communData[i].name) {
-                    localStorage.setItem("communityId", this.communData[i].id);
-                }
-            }
+        myCommunity(name,id) {
+            localStorage.setItem("myCommunity", name);
+            localStorage.setItem("communityId", id);
             this.$store.dispatch("CHANGE_NAV", "widgets");
             this.$router.push("/layout/widgets");
         },
@@ -637,7 +639,7 @@ export default {
 <style lang="less" scoped>
 .demo-loadmore-wrap {
     width: 100%;
-    height: 68vh;
+    height: 70vh;
     display: flex;
     flex-direction: column;
     .mu-appbar {
@@ -708,5 +710,26 @@ export default {
     position: absolute;
     top: 12px;
     right: 17px;
+}
+.muse-list {
+    position: relative;
+}
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+    .muse-list:before {
+        content: "";
+        pointer-events: none; /* 防止点击触发 */
+        box-sizing: border-box;
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        left: 0;
+        top: 0;
+        /* border-radius: 8px; */
+        border-bottom: 1px solid #dcdcdc;
+        -webkit-transform: scale(0.5);
+        -webkit-transform-origin: 0 0;
+        transform: scale(0.5);
+        transform-origin: 0 0;
+    }
 }
 </style>

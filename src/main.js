@@ -9,7 +9,7 @@ import 'muse-ui/dist/muse-ui.css'
 import axios from 'axios'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
-import Toast from 'muse-ui-toast';
+// import Toast from 'muse-ui-toast';
 import Message from 'muse-ui-message';
 import 'muse-ui-message/dist/muse-ui-message.css';
 import store from './store'
@@ -19,7 +19,15 @@ import Loading from 'muse-ui-loading';
 import { Uploader } from 'vant';
 import { Cell, CellGroup } from 'vant';
 import { Dialog } from 'vant';
+import { Swipe, SwipeItem } from 'vant';
+import { RadioGroup, Radio } from 'vant';
+import { Toast } from 'vant';
+import { Checkbox, CheckboxGroup } from 'vant';
 
+Vue.use(Checkbox).use(CheckboxGroup);
+Vue.use(RadioGroup);
+Vue.use(Radio);
+Vue.use(Swipe).use(SwipeItem);
 // 全局注册
 Vue.use(Dialog);
 Vue.use(Cell).use(CellGroup);

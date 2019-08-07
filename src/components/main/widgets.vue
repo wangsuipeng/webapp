@@ -1,7 +1,16 @@
 <template>
     <div class="header">
-        <mu-appbar color="#ff5242" style="text-align: center">
+        <!-- <mu-appbar color="#ff5242" style="text-align: center">
             <div>{{community}}</div>
+        </mu-appbar>-->
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 56px">
+            <mu-button icon slot="left" @click="openBotttomSheet">
+                <mu-icon value="menu" @click="open = !open"></mu-icon>
+            </mu-button>
+            {{community}}
+            <mu-button icon slot="right">
+                <!-- <mu-icon size="30" value="control_point"></mu-icon> -->
+            </mu-button>
         </mu-appbar>
         <div class="container-main">
             <div class="content">
@@ -37,7 +46,7 @@
                     <mu-icon size="50" value="local_parking" color="#ff5242"></mu-icon>
                     <div class="text">车位分享</div>
                 </div>
-                <div class="flex-box" v-ripple  @click="share">
+                <div class="flex-box" v-ripple @click="share">
                     <mu-icon size="50" value="local_see" color="#ff5242"></mu-icon>
                     <div class="text">闲置分享</div>
                 </div>
@@ -63,43 +72,97 @@
             </div>
             <div class="hot-info">
                 <ul>
-                    <li class="muse-list ">
+                    <li class="muse-list">
                         <span>通知：</span>
                         <span>今日海尚菊园小区20：30~明日01：30停水检修。</span>
                     </li>
-                    <li class="muse-list ">
+                    <li class="muse-list">
                         <span>信息：</span>
                         <span>今日海尚菊园小区20：30~明日01：30停水检修。</span>
                     </li>
-                    <li class="muse-list ">
+                    <li class="muse-list">
                         <span>提醒：</span>
                         <span>今日海尚菊园小区20：30~明日01：30停水检修。</span>
                     </li>
                 </ul>
             </div>
+            <mu-bottom-sheet :open.sync="open" style="height: 250px;overflow: auto">
+                <mu-list @item-click="closeBottomSheet">
+                    <mu-sub-header>选择社区</mu-sub-header>
+                    <mu-list-item button v-for="(item,index) in communData" :key="index" @click.native="selectComm(item.name,item.id)">
+                        <mu-list-item-action>
+                            <mu-icon value="grade" color="orange"></mu-icon>
+                        </mu-list-item-action>
+                        <mu-list-item-title>{{item.name}}</mu-list-item-title>
+                    </mu-list-item>
+                </mu-list>
+            </mu-bottom-sheet>
         </div>
     </div>
 </template>
 <script>
+import Qs from "qs";
 import carouselImg1 from "../../assets/images/325453.jpg";
 import carouselImg2 from "../../assets/images/325453.jpg";
 import carouselImg3 from "../../assets/images/325453.jpg";
 import carouselImg4 from "../../assets/images/325453.jpg";
-import '../../assets/js/mui.js';
+import "../../assets/js/mui.js";
 export default {
     data() {
         return {
+            docked: false,
+            open: false,
+            position: "left",
             carouselImg1,
             carouselImg2,
             carouselImg3,
             carouselImg4,
-            community: localStorage.getItem("myCommunity")
+            community: localStorage.getItem("myCommunity"),
+            communData: [], // 所有社区的集合
+            pageSize: 10,
+            currentPage: 1,
         };
     },
-    mounted () {
-        document.addEventListener("plusready", this.plusReady());    
+    created () {
+        this.getCommunity();  
+    },
+    mounted() {
+        document.addEventListener("plusready", this.plusReady());
     },
     methods: {
+        selectComm(name,id) {
+            this.community = name;
+            localStorage.setItem("myCommunity", name);
+            localStorage.setItem("communityId", id);
+        },
+        closeBottomSheet() {
+            this.open = false;
+        },
+        openBotttomSheet() {
+            this.open = true;
+        },
+        // 获取所有社区
+        getCommunity() {
+            this.$axios({
+                url: "admin/mobile/communityMessage/list",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    page: this.currentPage,
+                    limit: this.pageSize,
+                    name: "",
+                    cityName: ""
+                })
+            })
+                .then(result => {
+                    this.communData = result.data.data.list;
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
         plusReady() {
             // 监听“返回”按钮事件
             var first = null;
@@ -140,13 +203,13 @@ export default {
             this.$router.push("/loveBank");
         },
         share() {
-            this.$router.push("/share")
+            this.$router.push("/share");
         },
         applyRepair() {
-            this.$router.push("/applyRepair")
+            this.$router.push("/applyRepair");
         },
         parkingLot() {
-            this.$router.push("/parkingLot")
+            this.$router.push("/parkingLot");
         }
     }
 };
@@ -160,7 +223,7 @@ export default {
 }
 .flex-demo {
     width: 100%;
-    background-color: #F7F7F9;
+    background-color: #f7f7f9;
 }
 .header {
     position: fixed;

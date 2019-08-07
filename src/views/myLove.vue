@@ -58,7 +58,7 @@
                         <mu-list textline="three-line">
                             <mu-sub-header>待审核</mu-sub-header>
                             <div v-for="(item,index) in allunReviewTask" :key="index">
-                                <mu-list-item avatar v-ripple button @click.native="auditContents(item.serviceId)" class="muse-list">
+                                <mu-list-item avatar v-ripple button @click.native="auditProgress(item.serviceId)" class="muse-list">
                                     <mu-list-item-action>
                                         <mu-avatar>
                                             <img :src="item.headUrl" />
@@ -96,7 +96,6 @@
                                         </mu-list-item-sub-title>
                                     </mu-list-item-content>
                                 </mu-list-item>
-                                <!-- <mu-divider></mu-divider> -->
                             </div>
                         </mu-list>
                     </mu-paper>
@@ -122,7 +121,6 @@
                                         </mu-list-item-sub-title>
                                     </mu-list-item-content>
                                 </mu-list-item>
-                                <mu-divider></mu-divider>
                             </div>
                         </mu-list>
                     </mu-paper>
@@ -152,8 +150,13 @@ export default {
     },
     methods: {
         auditContents(id) {
+            localStorage.setItem("active2",this.active2)
             localStorage.setItem("applyId",id)
             this.$router.push('/auditContents');
+        },
+        auditProgress() {
+            localStorage.setItem("applyId",id)
+            this.$router.push('/auditProgress');
         },
         outPage() {
             this.$router.push('/layout/person');
@@ -245,13 +248,12 @@ export default {
                     Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
-                    userId: localStorage.getItem("userId")
+                    publishUserId: sessionStorage.getItem("userId")
                 })
             })
                 .then(result => {
                     if (result.data.respCode == 1000) {
                         this.allunReviewTask = result.data.data;
-                        console.log(result.data)
                     }
                 })
                 .catch(err => {

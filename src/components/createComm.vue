@@ -1,11 +1,13 @@
 <template>
     <div class="create-comm">
         <div class="content">
-            <mu-appbar
-                style="width: 100%; text-align: center;background-color: #FF5242;"
-                color="primary"
-            >
-                <span>我的社区</span>
+            <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 56px">
+                <mu-button icon slot="left" @click="outPage">
+                    <i class="iconfont icon-fanhui ret-btn"></i>
+                </mu-button>创建社区
+                <mu-button icon slot="right">
+                    <!-- <mu-icon size="30" value="control_point"></mu-icon> -->
+                </mu-button>
             </mu-appbar>
             <mu-container class="content-header">
                 <mu-form
@@ -493,7 +495,7 @@ export default {
         showHeight: function() {
             if (this.docmHeight > this.showHeight) {
                 this.hidShow = false;
-                console.log(this.hidShow)
+                console.log(this.hidShow);
             } else {
                 this.hidShow = true;
             }
@@ -501,6 +503,9 @@ export default {
     },
 
     methods: {
+        outPage() {
+            this.$router.goBack();
+        },
         searchVague() {},
         addCommunity() {
             let commmData = {
@@ -516,7 +521,7 @@ export default {
                 url: "admin/mobile/communityMessage/addCommunityCheckInfo",
                 method: "post",
                 headers: {
-                    'Authorization': sessionStorage.getItem('token')
+                    Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify(commmData)
             })
@@ -550,6 +555,11 @@ export default {
     top: 0;
     bottom: 0;
 }
+.ret-btn {
+    display: inline-block;
+    color: #fff;
+    font-size: 30px;
+}
 .footer-bottom {
     position: fixed;
     bottom: 0;
@@ -562,7 +572,7 @@ export default {
 }
 .step-next {
     width: 100%;
-    height: 2.8rem;
+    height: 2.2rem;
     margin-top: 5vh;
 }
 .placeholder-text {

@@ -4,78 +4,89 @@
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>家事讨论
-            <mu-button icon slot="right">
-                <!-- <mu-icon size="30" value="more_horiz"></mu-icon> -->
-                <mu-menu>
-                    <mu-icon size="30" value="more_horiz"></mu-icon>
-                    <mu-list slot="content">
-                        <mu-list-item button @click="editPost">
-                            <mu-list-item-title>编辑</mu-list-item-title>
-                        </mu-list-item>
-                        <mu-list-item button @click="deleteArticle">
-                            <mu-list-item-title>删除</mu-list-item-title>
-                        </mu-list-item>
-                        <mu-list-item button>
-                            <mu-list-item-title>投诉</mu-list-item-title>
-                        </mu-list-item>
-                    </mu-list>
-                </mu-menu>
+            <mu-button icon slot="right" @click="openBotttomSheet">
+                <mu-icon size="30" value="more_horiz"></mu-icon>
             </mu-button>
         </mu-appbar>
-
         <div class="container-main">
             <div class="content-browse">
-                <h1 class="title">{{articleTitle}}</h1>
-                <textarea
-                    readonly
-                    name="text"
-                    id
-                    v-model="postContent"
-                    class="textarea-text"
-                ></textarea>
+                <h1 class="title">{{postContent.title}}</h1>
+                <p class="textarea-text">{{postContent.content}}</p>
                 <div class="images" v-for="(item,index) in imageUrls" :key="index">
                     <img :src="item" alt />
                 </div>
             </div>
             <mu-flex class="flex-wrapper" align-items="center">
-                <mu-flex class="flex-demo reading-volume" justify-content="start" fill></mu-flex>
+                <mu-flex class="flex-demo reading-volume" fill></mu-flex>
                 <mu-flex class="flex-demo" justify-content="center" fill>
                     <ul class="share">
                         <li @click="giveThumbs">
-                            <!-- <mu-icon
-                                v-show="loveBool"
-                                :size="size"
-                                value="thumb_up_alt"
-                                color="#ff5242"
-                            ></mu-icon> -->
+                            <mu-icon :size="size" value="favorite_border" color="#B9B9B9"></mu-icon>
+                            <p style="display: inline-block">{{praiseNum}}</p>
+                        </li>
+                        <li>
                             <mu-icon
                                 :size="size"
-                                value="thumb_up_alt"
-                                color="#ff5242"
+                                value="chat_bubble_outline"
+                                color="#B9B9B9"
+                                @click="comment"
                             ></mu-icon>
-                            <p>{{praiseNum}}</p>
+                            <p style="display: inline-block">90</p>
                         </li>
-                        <li>
-                            <!-- <mu-icon :size="size" value="textsms" color="#ff5242"></mu-icon> -->
-                            <mu-icon :size="size" value="textsms" color="#ff5242" @click="comment"></mu-icon>
-                            <p>90</p>
-                        </li>
-                        <li>
-                            <mu-icon :size="size" value="share" color="#ff5242"></mu-icon>
+                        <!-- <li>
+                            <mu-icon :size="size" value="share" color="#B9B9B9"></mu-icon>
                             <p>105</p>
-                        </li>
+                        </li>-->
                     </ul>
                 </mu-flex>
             </mu-flex>
+            <mu-flex class="content-line" justify-content="start">
+                <mu-flex class="flex-demo" justify-content="center"></mu-flex>
+            </mu-flex>
+            <div class="commentList">
+                <ul>
+                    <li v-for="(item,index) in commData" :key="index">
+                        <div class="avat-img">
+                            <img :src="item.headUrl" alt />
+                        </div>
+                        <div class="content-comm">
+                            <p>{{item.name}}</p>
+                            <p>{{item.content}}</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
             <div class="comment">
                 <div class="avatia">
-                    <img src="../assets/images/325571.jpg" alt />
+                    <img :src="avatarImag" alt />
                 </div>
                 <div class="comment-text">
-                    <input type="text" placeholder="评论" id="inputText"/>
-                    <span>发送</span>
+                    <input type="text" placeholder="评论" v-model="commeText" id="inputText" />
+                    <span @click="addComment">发送</span>
                 </div>
             </div>
+            <mu-bottom-sheet :open.sync="open" overlay-close>
+                <mu-list @close="closeBottomSheet">
+                    <mu-list-item button>
+                        <mu-list-item-action>
+                            <mu-icon value="create" color="orange"></mu-icon>
+                        </mu-list-item-action>
+                        <mu-list-item-title @click="editPost">编辑</mu-list-item-title>
+                    </mu-list-item>
+                    <mu-list-item button @click.native="deleteArticle">
+                        <mu-list-item-action>
+                            <mu-icon value="delete" color="blue"></mu-icon>
+                        </mu-list-item-action>
+                        <mu-list-item-title>删除</mu-list-item-title>
+                    </mu-list-item>
+                    <mu-list-item button>
+                        <mu-list-item-action>
+                            <mu-icon value="phone_in_talk" color="green"></mu-icon>
+                        </mu-list-item-action>
+                        <mu-list-item-title>投诉</mu-list-item-title>
+                    </mu-list-item>
+                </mu-list>
+            </mu-bottom-sheet>
         </div>
     </div>
 </template>
@@ -84,82 +95,57 @@ import Qs from "qs";
 export default {
     data() {
         return {
+            open: false,
             number: "9999",
             size: "25",
-            articleTitle: "", // 发帖标题
-            postContent: "", // 帖子内容
+            postContent: {},
             articleId: "", // 文章id
             loveBool: true,
             isloveBool: false,
-            open: true,
             praiseNum: "0",
-            imageUrls: [],// 发帖图片
+            imageUrls: [], // 发帖图片
+            avatarImag: "",
+            commeText: "", // 评论内容
+            commData: [],
         };
     },
     created() {
-        this.articleTitle = this.$store.getters.articleTitle;
-        this.praiseNum = localStorage.getItem('praiseNum') || 0;
-        this.articleQueryAll();
+        this.avatarImag = JSON.parse(
+            localStorage.getItem("familyDiscussion")
+        ).headUrl;
+        var obj = JSON.parse(
+            JSON.parse(localStorage.getItem("familyDiscussion")).imageUrls
+        );
+        for (var key in obj) {
+            this.imageUrls.push(obj[key]);
+        }
+        this.postContent = JSON.parse(localStorage.getItem("familyDiscussion"));
+        this.praiseNum =
+            JSON.parse(localStorage.getItem("familyDiscussion")).praiseNum || 0;
+        this.queryComment();
     },
-    mounted() {},
+    mounted() {
+        
+    },
     methods: {
+        closeBottomSheet() {
+            this.open = false;
+        },
+        openBotttomSheet() {
+            this.open = true;
+        },
         comment() {
             document.getElementById("inputText").focus();
         },
         editPost() {
             this.$router.push("/editPost");
-            console.log(this.postContent);
             this.$store.dispatch("ARTICLE_CONTENT", this.postContent);
         },
         outPage() {
             this.$router.goBack();
         },
-        //查询所有新闻或公告
-        articleQueryAll() {
-            this.$axios({
-                url: "admin/mobile/article/queryAll",
-                method: "post",
-                headers: {
-                    Authorization: sessionStorage.getItem("token")
-                },
-                data: {}
-            })
-                .then(result => {
-                    if (result.status === 200) {
-                        if (result.data.respCode == 1000) {
-                            let content = result.data.data; 
-                            let imgData = {};
-                            for (var i = 0; i < content.length; i++) {
-                                if (content[i].title == this.articleTitle) {
-                                    this.postContent = content[i].content;
-                                    this.articleId = content[i].articleId;
-                                    imgData = JSON.parse(content[i].imageUrls)
-                                    localStorage.setItem(
-                                        "articleId",
-                                        this.articleId
-                                    );
-                                }
-                            }
-                            for (var i in imgData) {
-                                this.imageUrls.push(imgData[i])
-                            }
-                        }
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        },
         // 点赞文章
         giveThumbs() {
-            if (!this.isloveBool && this.loveBool) {
-                this.isloveBool = true;
-                this.loveBool = false;
-            } else {
-                this.isloveBool = false;
-                this.loveBool = true;
-            }
-            
             this.$axios({
                 url: "admin/mobile/article/addPraiseNum",
                 method: "post",
@@ -168,13 +154,60 @@ export default {
                 },
                 data: Qs.stringify({
                     userId: sessionStorage.getItem("userId"),
-                    articleId: this.articleId
+                    articleId: this.postContent.articleId
                 })
             })
                 .then(result => {
-                    if (result.status === 200) {
+                    if (result.data.respCode === "1000") {
                         this.praiseNum = result.data.data.praiseNum;
-                        console.log(result);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        // 发表评论
+        addComment() {
+            this.$axios({
+                url: "admin/mobile/article/addComment",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token"),
+                    "Content-Type": "application/json;charset=utf8"
+                },
+                data: {
+                    content: this.commeText,
+                    userId: sessionStorage.getItem("userId"),
+                    articleId: this.postContent.articleId,
+                    communityId: localStorage.getItem("communityId"),
+                }
+            })
+                .then(result => {
+                    if (result.data.respCode === "1000") {
+                        this.commeText = "";
+                        // this.commData = result.data.data;
+                        this.queryComment();
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        // 查询评论
+        queryComment() {
+            this.$axios({
+                url: "admin/mobile/article/queryComment",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token"),
+                },
+                data: Qs.stringify({
+                    articleId: this.postContent.articleId,
+                })
+            })
+                .then(result => {
+                    if (result.data.respCode === "1000") {
+                        this.commData = result.data.data;
                     }
                 })
                 .catch(err => {
@@ -194,13 +227,13 @@ export default {
                             Authorization: sessionStorage.getItem("token")
                         },
                         data: Qs.stringify({
-                            articleId: this.articleId
+                            articleId: this.postContent.articleId
                         })
                     })
                         .then(result => {
                             if (result.status === 200) {
                                 if (result.data.respCode == 1000) {
-                                    this.$router.push("/familyD")
+                                    this.$router.goBack();
                                 }
                             }
                         })
@@ -214,9 +247,12 @@ export default {
 };
 </script>
 <style scoped>
+.browse {
+    background-color: #fff;
+}
 .container-main {
     width: 100%;
-    height: calc(100vh - 56px);
+    height: calc(100vh - 126px);
     overflow-y: auto;
 }
 .flex-wrapper {
@@ -232,7 +268,7 @@ export default {
 }
 .flex-demo {
     width: 200px;
-    height: 52px;
+    height: 32px;
     text-align: center;
     margin-left: 8px;
 }
@@ -249,9 +285,9 @@ export default {
 }
 .title {
     width: 100%;
-    padding: 15px 0;
-    background-color: rgb(204, 204, 204,0.3);
-    text-align: center;
+    padding: 15px 5px;
+    background-color: rgb(204, 204, 204, 0.3);
+    text-align: left;
     margin: 0 !important;
 }
 .text {
@@ -261,23 +297,47 @@ export default {
     margin: 10px;
 }
 .images {
+    position: relative;
     width: 100%;
     height: 100%;
-    padding: 0 0.5rem;
+    margin-bottom: 15px;
+    /* overflow: hidden; */
+    padding: 0 0.6rem;
 }
 .images img {
-    display: inline-block;
+    /* position: absolute; */
+    max-width:100%;
     width: 100%;
     height: 100%;
+    /* left: 0;
+    right: 0; */
+    /* top: 150px; */
+    /* bottom: 0; */
+    /* margin: auto; */
+    /* border: 1px solid red; */
     background-size: 100% 100%;
+    background-repeat: no-repeat;
 }
 .share li {
+    position: relative;
     float: left;
-    margin-left: 15px;
+    margin-left: 1.8rem;
+}
+.share li:nth-child(1) p {
+    display: inline-blick;
+    position: absolute;
+    top: 3px;
+    left: 30px;
+}
+.share li:nth-child(2) p {
+    display: inline-blick;
+    position: absolute;
+    top: 3px;
+    left: 30px;
 }
 .textarea-text {
     width: 100%;
-    min-height: 15rem;
+    /* min-height: 15rem; */
     text-indent: 20px;
     outline: none;
     padding: 5px 10px;
@@ -302,8 +362,8 @@ export default {
 }
 .comment img {
     display: block;
-    width: 2.0rem;
-    height: 2.0rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: 50%;
 }
 .comment input {
@@ -339,7 +399,53 @@ export default {
     display: inline-block;
     position: absolute;
     color: red;
-    top: 1.5rem;
+    top: 1.6rem;
     right: 1.6rem;
+    font-weight: 600;
+}
+.content-line {
+    margin-bottom: 10px;
+}
+.content-line .flex-demo {
+    width: 100%;
+    background-color: #f9f9f9;
+    height: 0.5rem;
+}
+.avat-img {
+    display: inline-block;
+    width: 15%;
+    vertical-align: top;
+}
+.avat-img img {
+    margin-top: 3px;
+    margin-left: 10px;
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+
+    border-radius: 50%;
+}
+.content-comm {
+    padding: 8px;
+    display: inline-block;
+    width: 82%;
+    border-radius: 1rem;
+    background-color: #f1f1f1;
+}
+.content-comm p {
+    margin-bottom: 0 !important;
+}
+.content-comm p:nth-child(1) {
+    color: #474747;
+    font-weight: bold;
+}
+.content-comm p:nth-child(2) {
+    color: #474747;
+}
+.commentList ul {
+    padding-left: 0!important;
+}
+.commentList ul li {
+    margin-bottom: 8px;
 }
 </style>
