@@ -57,7 +57,7 @@
                     <mu-paper :z-depth="0" class="demo-list-wrap">
                         <mu-list textline="three-line">
                             <mu-sub-header>待审核</mu-sub-header>
-                            <div v-for="(item,index) in allunReviewTask" :key="index">
+                            <div v-for="(item,index) in allunReviewTask" :key="item.serviceId">
                                 <mu-list-item avatar v-ripple button @click.native="auditProgress(item.serviceId)" class="muse-list">
                                     <mu-list-item-action>
                                         <mu-avatar>
@@ -75,7 +75,6 @@
                                         </mu-list-item-sub-title>
                                     </mu-list-item-content>
                                 </mu-list-item>
-                                <mu-divider></mu-divider>
                             </div>
                             <mu-sub-header>审核中</mu-sub-header>
                             <div v-for="(item,index) in queryAllSubmitData" :key="index">
@@ -143,6 +142,7 @@ export default {
         };
     },
     created() {
+        this.active2 = parseInt(localStorage.getItem("active2"));
         this.queryAllCompleteTask();
         this.queryAllRuningTask();
         this.queryAllunReviewTask();
@@ -154,7 +154,8 @@ export default {
             localStorage.setItem("applyId",id)
             this.$router.push('/auditContents');
         },
-        auditProgress() {
+        auditProgress(id) {
+            localStorage.setItem("active2",this.active2)
             localStorage.setItem("applyId",id)
             this.$router.push('/auditProgress');
         },
@@ -172,6 +173,7 @@ export default {
             });
         },
         submitAudit(id) {
+            localStorage.setItem("active2",this.active2)
             localStorage.setItem('serviceIds',id)
             this.$router.push('/submitAudit');
         },

@@ -3,7 +3,7 @@
         <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 56px">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
-            </mu-button>我的申请
+            </mu-button>报修申请
             <mu-button icon slot="right">
                 <!-- <mu-icon size="30" value="control_point"></mu-icon> -->
             </mu-button>
@@ -11,7 +11,7 @@
         <div class="container-main">
             <mu-list>
                 <mu-sub-header>我的申请</mu-sub-header>
-                <mu-list-item avatar button :ripple="false" class="muse-list" v-for="(item,index) in postContent" :key="index">
+                <mu-list-item avatar button v-ripple class="muse-list" v-for="(item,index) in postContent" :key="index" @click.native="contentApplication(item.id)">
                     <!-- <mu-list-item-action>
                         <mu-avatar>
                             <img src="../../assets/images/avatar1.jpg" />
@@ -26,7 +26,7 @@
             </mu-list>
             <mu-list>
                 <mu-sub-header>我的处理</mu-sub-header>
-                <mu-list-item avatar button :ripple="false" class="muse-list" v-for="(item,index) in postContent" :key="index">
+                <mu-list-item avatar button v-ripple class="muse-list" v-for="(item,index) in detailWorkflowData" :key="index" @click.native="workApply(item.id)">
                     <!-- <mu-list-item-action>
                         <mu-avatar>
                             <img src="../../assets/images/avatar1.jpg" />
@@ -34,7 +34,8 @@
                     </mu-list-item-action> -->
                     <mu-list-item-title>{{item.location}}</mu-list-item-title>
                     <mu-list-item-action>
-                        <mu-icon value="chat_bubble"></mu-icon>
+                        <span v-if="item.type === '0'">待处理</span>
+                        <span v-else>已完成</span>
                     </mu-list-item-action>
                 </mu-list-item>
             </mu-list>
@@ -46,16 +47,27 @@ import Qs from "qs";
 export default {
     data() {
         return {
-            postContent: []
+            postContent: [],
+            detailWorkflowData: []
         };
     },
     created() {
         this.getUserApplyWorkflowInfo();
+        this.getUserDetailWorkflow();
     },
     methods: {
         outPage() {
             this.$router.goBack();
         },
+        contentApplication(id) {
+            localStorage.setItem('processId',id)
+            this.$router.push("/contentApplication")
+        },
+        workApply(id) {
+            localStorage.setItem('processId',id)
+            this.$router.push("/workApply")
+        },
+        //获取用户申请流程信息
         getUserApplyWorkflowInfo() {
             this.$axios({
                 url: "admin/mobile/processCheck/getUserApplyWorkflowInfo",
@@ -72,6 +84,30 @@ export default {
                     if (result.status === 200) {
                         if (result.data.respCode == "1000") {
                             this.postContent = result.data.data;
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        // 获取工作人员处理的流程
+        getUserDetailWorkflow() {
+            this.$axios({
+                url: "admin/mobile/processCheck/getUserDetailWorkflow",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    userId: sessionStorage.getItem("userId"),
+                    communityId: localStorage.getItem("communityId")
+                })
+            })
+                .then(result => {
+                    if (result.status === 200) {
+                        if (result.data.respCode == "1000") {
+                            this.detailWorkflowData = result.data.data;
                         }
                     }
                 })

@@ -11,11 +11,11 @@
         <div class="container-main">
             <div class="box-list">
                 当前版本
-                <span style="margin-left: 40px">1.3.5</span>
+                <span style="margin-left: 40px" id="version">1.3.7</span>
             </div>
             <div class="box-list">
                 最新版本
-                <span style="margin-left: 40px">1.3.6</span>
+                <span style="margin-left: 40px">1.3.8</span>
             </div>
             <div class="upgrade" @click="downloadApk">
                 <button>在线升级</button>
@@ -29,26 +29,18 @@ export default {
     data() {
         return {
             appVersion: "",
-            version: "1.3.4"
+            version: "1.3.6"
         };
     },
     created() {
-        // if (this.$store.getters.versionNum == "") {
-        //     this.version = "1.3.4";
-        // } else {
-        //     this.version = this.$store.getters.versionNum;
-        // }
+
     },
     methods: {
         outPage() {
             this.$router.goBack();
         },
         downloadApk() {
-            // if (this.$store.getters.versionNum == "") {
-            //     this.version = "1.3.4";
-            // } else {
-            //     this.version = this.$store.getters.versionNum;
-            // }
+            let version = document.getElementById("version").innerText;
             this.$axios({
                 url: "admin/mobile/isNeedUpdate",
                 method: "post",
@@ -56,18 +48,13 @@ export default {
                     Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
-                    version: this.version,
+                    version: version,
                     clientType: "a"
                 })
             })
                 .then(result => {
                     if (result.data.respCode == "1000") {
                         if (result.data.isNeedUpdate == "1") {
-                            this.version = "1.3.5";
-                            // this.$store.dispatch(
-                            //     "VERSION_NUM",
-                            //     result.data.appVersion
-                            // );
                             this.version = result.data.appVersion;
                             let url = result.data.appUrl;
                             plus.nativeUI.showWaiting("下载中...");

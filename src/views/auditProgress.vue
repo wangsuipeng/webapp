@@ -10,10 +10,10 @@
         </mu-appbar>
         <div class="container-main">
             <h3 class="title">{{title}}</h3>
-            <textarea readonly name="text" id v-model="content" class="textarea-text"></textarea>
-            <div style="text-align: right;padding: 0 15px">
-                <mu-button style="width: 100px" round color="#ff5242" @click="reviewSuccess">通过</mu-button>
-                <mu-button style="width: 100px" round color="#ff5242" @click="reviewFail">不通过</mu-button>
+            <p class="textarea-text">{{content}}</p>
+            <div style="padding: 0 15px" class="btn">
+                <button class="examineBtn" @click="reviewSuccess">通过</button>
+                <button class="examineBtn" @click="reviewFail">不通过</button>
             </div>
         </div>
     </div>
@@ -148,6 +148,7 @@ export default {
 .audit-Contents {
     width: 100%;
     height: 100%;
+    background-color: #F8F8F8;
 }
 .ret-btn {
     display: inline-block;
@@ -169,7 +170,6 @@ export default {
 }
 .textarea-text {
     width: 100%;
-    min-height: 15rem;
     text-indent: 20px;
     outline: none;
     padding: 5px 10px;
@@ -180,5 +180,22 @@ export default {
     background-color: rgb(204, 204, 204, 0.3);
     text-align: center;
     margin: 0 !important;
+}
+.btn button:nth-child(2) {
+    background-color: #fff;
+    border: 1px solid #F4F4F4;
+    box-shadow: #F8F8F8;
+    color: black;
+}
+.btn button:nth-child(1) {
+    background-color: #ff5242;
+    color: #fff;
+}
+.examineBtn {
+    width: 100%;
+    height: 2.3rem;
+    line-height: 2.3rem;
+    border-radius: 2px;
+    margin-bottom: 0.5rem;
 }
 </style>

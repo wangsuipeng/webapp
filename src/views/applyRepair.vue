@@ -1,6 +1,6 @@
 <template>
     <div class="applyRepair">
-        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 56px">
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 2.8rem">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>报修申请
@@ -47,11 +47,7 @@
                 >
                     <template slot-scope="scope">
                         <td class="is-center">
-                            <span v-if="scope.row.workflowType == '2'">电力报修</span>
-                            <span v-else-if="scope.row.workflowType == '1'">供水维修</span>
-                            <span v-else-if="scope.row.workflowType == '3'">煤气维修</span>
-                            <span v-else-if="scope.row.workflowType == '4'">房屋报修</span>
-                            <span v-else></span>
+                            {{scope.row.processName}}
                         </td>
                         <td class="is-center">{{scope.row.detail}}</td>
                         <td class="is-center">
@@ -82,11 +78,7 @@
                 >
                     <template slot-scope="scope">
                         <td class="is-center">
-                            <span v-if="scope.row.workflowType == '2'">电力报修</span>
-                            <span v-else-if="scope.row.workflowType == '1'">供水维修</span>
-                            <span v-else-if="scope.row.workflowType == '3'">煤气维修</span>
-                            <span v-else-if="scope.row.workflowType == '4'">房屋报修</span>
-                            <span v-else></span>
+                            {{scope.row.processName}}
                         </td>
                         <td class="is-center">{{scope.row.detail}}</td>
                         <td class="is-center">{{scope.row.type}}</td>
@@ -110,7 +102,7 @@ export default {
             columns: [
                 {
                     title: "事项",
-                    name: "workflowType",
+                    name: "processName",
                     width: 150,
                     align: "center"
                 },
@@ -135,7 +127,7 @@ export default {
                 {
                     title: "处理时间",
                     name: "detailOneDate",
-                    width: 126,
+                    width: 170,
                     align: "center",
                 }
             ],

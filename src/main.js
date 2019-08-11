@@ -23,7 +23,11 @@ import { Swipe, SwipeItem } from 'vant';
 import { RadioGroup, Radio } from 'vant';
 import { Toast } from 'vant';
 import { Checkbox, CheckboxGroup } from 'vant';
+import { Rate } from 'vant';
+import { Panel } from 'vant';
 
+Vue.use(Panel);
+Vue.use(Rate);
 Vue.use(Checkbox).use(CheckboxGroup);
 Vue.use(RadioGroup);
 Vue.use(Radio);

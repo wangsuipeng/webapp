@@ -113,7 +113,6 @@ export default {
                 .then(result => {
                     if (result.data.respCode === "1000") {
                         this.commeText = "",
-                        this.commData = result.data.data;
                         this.queryComment();
                     }
                 })

@@ -206,6 +206,14 @@ export default new Router({
     {
       path: '/myApplication',
       component: () => import('@/views/myApplication.vue')
+    },
+    {
+      path: '/contentApplication',
+      component: () => import('@/views/contentApplication.vue')
+    },
+    {
+      path: '/workApply',
+      component: () => import('@/views/workApply.vue')
     }
   ]
 })
