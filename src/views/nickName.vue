@@ -1,6 +1,6 @@
 <template>
     <div class="nickName">
-        <mu-appbar style="width: 100%;" color="#ff5242">
+        <mu-appbar style="width: 100%;height: 2.8rem" color="#ff5242">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>昵称

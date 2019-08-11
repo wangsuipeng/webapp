@@ -12,9 +12,6 @@
                 >{{nickName}}</p>
             </mu-container>
         </div>
-        <!-- <mu-flex class="flex-wrapper" justify-content="start">
-            <mu-flex class="flex-demo" justify-content="center"></mu-flex>
-        </mu-flex>-->
         <div class="container-main">
             <mu-paper :z-depth="0" class="demo-list-wrap">
                 <mu-list>

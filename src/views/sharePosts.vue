@@ -1,7 +1,7 @@
 <template>
     <div class="container-main">
         <div :style="{height: `${height}px`}" class="top-nav"></div>
-        <mu-appbar style="width: 100%;" color="#ff5242" z-depth="0">
+        <mu-appbar style="width: 100%;height: 2.8rem" color="#ff5242" z-depth="0">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>

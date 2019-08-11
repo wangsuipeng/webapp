@@ -1,9 +1,6 @@
 <template>
     <div class="header">
-        <!-- <mu-appbar color="#ff5242" style="text-align: center">
-            <div>{{community}}</div>
-        </mu-appbar>-->
-        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 56px">
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 2.8rem">
             <mu-button icon slot="left" @click="openBotttomSheet">
                 <mu-icon value="menu" @click="open = !open"></mu-icon>
             </mu-button>

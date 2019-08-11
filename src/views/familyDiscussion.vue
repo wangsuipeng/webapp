@@ -1,6 +1,6 @@
 <template>
     <div class="family-D">
-        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 56px">
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 2.8rem">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>家事讨论

@@ -1,6 +1,6 @@
 <template>
     <div class="notice">
-        <mu-paper :z-depth="0" class="demo-list-wrap">
+        <mu-paper :z-depth="0" class="demo-list-wrap" style="height: 2.8rem">
             <mu-appbar color="#ff5242">
                 <mu-button icon slot="left">
                     <mu-icon value="menu"></mu-icon>
