@@ -133,10 +133,9 @@ export default {
                 .then(result => {
                     console.log(result.data);
                     if (result.data.respCode == 1000) {
-                        // this.$router.push("/loveBank");
                         this.$router.goBack();
                     } else {
-
+                        this.$toast.warning(result.data.errorMsg);
                     }
                 })
                 .catch(err => {

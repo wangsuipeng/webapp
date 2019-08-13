@@ -46,9 +46,7 @@
                     :data="listTable"
                 >
                     <template slot-scope="scope">
-                        <td class="is-center">
-                            {{scope.row.processName}}
-                        </td>
+                        <td class="is-center">{{scope.row.processName}}</td>
                         <td class="is-center">{{scope.row.detail}}</td>
                         <td class="is-center">
                             <span v-if="scope.row.type == '4'">处理完成</span>
@@ -56,6 +54,7 @@
                         </td>
                         <td class="is-center">{{scope.row.detailPhoneOneName}}</td>
                         <td class="is-center">{{scope.row.detailOneDate}}</td>
+                        <td class="is-center">{{scope.row.endTime}}</td>
                     </template>
                 </mu-data-table>
             </mu-paper>
@@ -77,13 +76,11 @@
                     :data="listTableHis"
                 >
                     <template slot-scope="scope">
-                        <td class="is-center">
-                            {{scope.row.processName}}
-                        </td>
+                        <td class="is-center">{{scope.row.processName}}</td>
                         <td class="is-center">{{scope.row.detail}}</td>
                         <td class="is-center">{{scope.row.type}}</td>
                         <td class="is-center">{{scope.row.userId}}</td>
-                        <td class="is-center">{{scope.row.detailOneDate}}</td>
+                        <td class="is-center">{{timer}}</td>
                     </template>
                 </mu-data-table>
             </mu-paper>
@@ -110,29 +107,36 @@ export default {
                     title: "描述",
                     name: "detail",
                     width: 226,
-                    align: "center",
+                    align: "center"
                 },
                 {
                     title: "阶段",
                     name: "type",
                     width: 126,
-                    align: "center",
+                    align: "center"
                 },
                 {
                     title: "当前处理人",
                     name: "userId",
                     width: 126,
-                    align: "center",
+                    align: "center"
                 },
                 {
                     title: "处理时间",
                     name: "detailOneDate",
                     width: 170,
-                    align: "center",
+                    align: "center"
+                },
+                {
+                    title: "逗留时间",
+                    name: "endTime",
+                    width: 170,
+                    align: "center"
                 }
             ],
             listTable: [], // 申请中的数据
-            listTableHis: [] // 历史申请的数据
+            listTableHis: [], // 历史申请的数据
+            timer: "",
         };
     },
     created() {
@@ -175,10 +179,17 @@ export default {
                 })
             })
                 .then(result => {
-                    if (result.data.respCode === '1000') {
+                    if (result.data.respCode === "1000") {
                         this.listTable = result.data.data;
+                        setInterval(() => {
+                            this.nowTimeStr()
+                            for (var i = 0;i < this.listTable.length;i++) {
+                                let minutes = this.GetDateDiff(this.listTable[i].createTime, this.timer, "minute");
+                                this.$set(this.listTable[i],'endTime',Math.floor(minutes/60) + "小时" + (minutes%60) + "分")
+                                
+                            }
+                        }, 1000);
                     }
-                    console.log(result);
                 })
                 .catch(err => {
                     console.log(err);
@@ -199,13 +210,52 @@ export default {
                 })
             })
                 .then(result => {
-                    if (result.data.respCode === '1000') {
+                    if (result.data.respCode === "1000") {
                         this.listTableHis = result.data.data;
                     }
                 })
                 .catch(err => {
                     console.log(err);
                 });
+        },
+        nowTimeStr() {
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            var h = date.getHours();
+            var m = date.getMinutes();
+            var s = date.getSeconds();
+            var timestr = year + "-" + month + "-" + day + "- "+h+":"+m+":"+s;
+            this.timer =  timestr;
+        },
+        GetDateDiff(startTime, endTime, diffType) {
+            //将xxxx-xx-xx的时间格式，转换为 xxxx/xx/xx的格式
+            startTime = startTime.replace(/\-/g, "/");
+            endTime = endTime.replace(/\-/g, "/");
+            //将计算间隔类性字符转换为小写
+            diffType = diffType.toLowerCase();
+            var sTime =new Date(startTime); //开始时间
+            var eTime =new Date(endTime); //结束时间
+            //作为除数的数字
+            var timeType =1;
+            switch (diffType) {
+                case"second":
+                    timeType =1000;
+                    break;
+                case"minute":
+                    timeType =1000*60;
+                    break;
+                case"hour":
+                    timeType =1000*3600;
+                    break;
+                case"day":
+                    timeType =1000*3600*24;
+                    break;
+                default:
+                    break;
+            }
+            return parseInt((eTime.getTime() - sTime.getTime()) / parseInt(timeType));
         }
     }
 };

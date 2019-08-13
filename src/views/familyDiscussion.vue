@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </mu-list>
-            <mu-button fab color="#FF5242" class="create-articles" @click="postWord">
+            <mu-button fab round color="#FF5242" class="create-articles" @click="postWord">
                 <mu-icon size="28" value="edit"></mu-icon>
             </mu-button>
         </div>
@@ -68,6 +68,7 @@ import Qs from "qs";
 export default {
     data() {
         return {
+            fab: true,
             samll: "30",
             size: "36",
             open: false,

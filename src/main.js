@@ -25,7 +25,11 @@ import { Toast } from 'vant';
 import { Checkbox, CheckboxGroup } from 'vant';
 import { Rate } from 'vant';
 import { Panel } from 'vant';
+import { Button } from 'vant';
+import { NoticeBar } from 'vant';
 
+Vue.use(NoticeBar);
+Vue.use(Button);
 Vue.use(Panel);
 Vue.use(Rate);
 Vue.use(Checkbox).use(CheckboxGroup);

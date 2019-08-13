@@ -22,6 +22,9 @@
                     </mu-list>
                 </mu-menu>
             </mu-appbar>
+        </mu-paper>
+        <div class="container-main">
+            <van-notice-bar text="通知内容通知内容通知内容通知内容通知内容通知内容通知内容通知内容通知内容" left-icon="volume-o" />
             <mu-list>
                 <mu-sub-header>今日热点</mu-sub-header>
                 <mu-list-item avatar button :ripple="true" class="word-list muse-list" v-ripple>
@@ -66,7 +69,7 @@
                 </mu-list-item>
                 <!-- <mu-divider></mu-divider> -->
             </mu-list>
-        </mu-paper>
+        </div>
     </div>
 </template>
 <script>
@@ -78,8 +81,8 @@ export default {
             community: localStorage.getItem("myCommunity")
         };
     },
-    mounted () {
-        document.addEventListener("plusready", this.plusReady());  
+    mounted() {
+        document.addEventListener("plusready", this.plusReady());
     },
     methods: {
         plusReady() {
@@ -144,5 +147,9 @@ export default {
         transform: scale(0.5);
         transform-origin: 0 0;
     }
+}
+.container-main {
+    width: 100%;
+    height: calc(100vh - 56px);
 }
 </style>

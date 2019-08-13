@@ -1,94 +1,172 @@
 <template>
     <div class="contentApplication">
-        <mu-appbar style="width: 100%;height: 2.8rem" color="#ff5242" z-depth="0">
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 2.8rem">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
+            </mu-button>报修内容
+            <mu-button icon slot="right">
+                <!-- <mu-icon size="30" value="control_point"></mu-icon> -->
             </mu-button>
-            <span style="color: #fff">报修评价</span>
-            <mu-button
-                flat
-                slot="right"
-                @click="updateUserWorkflowInfo"
-                style="display: inline-block;color: #fff;font-size: 18px"
-            >发表</mu-button>
         </mu-appbar>
         <div class="container-main">
-            <div>
-                <ul>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                </ul>
-            </div>
-            <div class="partition-line"></div>
-            <div class="evaluate">
-                <div class="evaluate-title">报修评价</div>
-                <div style="margin-top: 20px">
-                    <mu-container>
-                        <mu-form
-                            :model="form"
-                            class="mu-demo-form"
-                            label-width="100"
-                        >
-                            <mu-form-item prop="textarea">
-                                <mu-text-field
-                                    placeholder="用户意见"
-                                    multi-line
-                                    :rows="1"
-                                    :rows-max="6"
-                                    v-model="form.userOpinion"
-                                ></mu-text-field>
-                            </mu-form-item>
-                        </mu-form>
-                    </mu-container>
+            <mu-container>
+                <mu-row gutter>
+                    <mu-col span="12">
+                        <mu-paper :z-depth="0">
+                            <mu-list>
+                                <mu-list-item>
+                                    <mu-list-item-content>
+                                        <mu-list-item-title>
+                                            位置：
+                                            <span>{{title}}</span>
+                                        </mu-list-item-title>
+                                    </mu-list-item-content>
+                                </mu-list-item>
+                                <mu-divider shallow-inset></mu-divider>
+                                <mu-list-item>
+                                    <mu-list-item-content>
+                                        <mu-list-item-title>
+                                            事项：
+                                            <span>{{processName}}</span>
+                                        </mu-list-item-title>
+                                    </mu-list-item-content>
+                                </mu-list-item>
+                                <mu-divider shallow-inset></mu-divider>
+                                <mu-list-item>
+                                    <mu-list-item-content>
+                                        <mu-list-item-title>
+                                            描述：
+                                            <span>{{content}}</span>
+                                        </mu-list-item-title>
+                                    </mu-list-item-content>
+                                </mu-list-item>
+                            </mu-list>
+                        </mu-paper>
+                    </mu-col>
+                </mu-row>
+            </mu-container>
+            <mu-flex justify-content="center" class="evaluatebtn">
+                <span v-if="type == 0"></span>
+                <van-button v-else type="danger" @click="openFullscreenDialog">评价</van-button>
+            </mu-flex>
+            <mu-dialog width="360" transition="slide-bottom" fullscreen :open.sync="openFullscreen">
+                <mu-appbar title="报修评价" color="#ff5242">
+                    <mu-button slot="left" icon @click="closeFullscreenDialog">
+                        <mu-icon value="close"></mu-icon>
+                    </mu-button>
+                    <mu-button
+                        slot="right"
+                        style="font-size: 16px"
+                        flat
+                        @click="updateUserWorkflowInfo"
+                    >发表</mu-button>
+                </mu-appbar>
+                <div>
+                    <div class="partition-line"></div>
+                    <div class="evaluate">
+                        <div class="evaluate-title">报修评价</div>
+                        <div style="margin-top: 20px">
+                            <mu-container>
+                                <mu-form :model="form" class="mu-demo-form" label-width="100">
+                                    <mu-form-item prop="textarea">
+                                        <mu-text-field
+                                            placeholder="用户意见"
+                                            multi-line
+                                            :rows="1"
+                                            :rows-max="6"
+                                            v-model="form.userOpinion"
+                                        ></mu-text-field>
+                                    </mu-form-item>
+                                </mu-form>
+                            </mu-container>
+                        </div>
+                        <ul>
+                            <li>
+                                <span style="display: inline-block;float: left;margin-top: 5px">星级评价</span>
+                                <span>
+                                    <van-rate
+                                        style="display: inline-block;margin-left: 20px"
+                                        v-model="form.starType"
+                                        size="25"
+                                        color="#f44"
+                                        void-icon="star"
+                                        void-color="#eee"
+                                    />
+                                </span>
+                                <span
+                                    style="float: right;margin-right: 60px;margin-top: 4px"
+                                    v-if="form.starType == 1"
+                                >非常差</span>
+                                <span
+                                    style="float: right;margin-right: 60px;margin-top: 4px"
+                                    v-else-if="form.starType == 2"
+                                >差</span>
+                                <span
+                                    style="float: right;margin-right: 60px;margin-top: 4px"
+                                    v-else-if="form.starType == 3"
+                                >一般</span>
+                                <span
+                                    style="float: right;margin-right: 60px;margin-top: 4px"
+                                    v-else-if="form.starType == 4"
+                                >好</span>
+                                <span
+                                    style="float: right;margin-right: 60px;margin-top: 4px"
+                                    v-else-if="form.starType == 5"
+                                >非常好</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <ul>
-                    <li>
-                        <span style="display: inline-block;float: left;margin-top: 5px">星级评价</span>
-                        <span>
-                            <van-rate
-                                style="display: inline-block;margin-left: 20px"
-                                v-model="form.starType"
-                                size="25"
-                                color="#f44"
-                                void-icon="star"
-                                void-color="#eee"
-                            />
-                        </span>
-                        <span style="float: right;margin-right: 60px;margin-top: 4px" v-if="form.starType == 1">非常差</span>
-                        <span style="float: right;margin-right: 60px;margin-top: 4px" v-else-if="form.starType == 2">差</span>
-                        <span style="float: right;margin-right: 60px;margin-top: 4px" v-else-if="form.starType == 3">一般</span>
-                        <span style="float: right;margin-right: 60px;margin-top: 4px" v-else-if="form.starType == 4">好</span>
-                        <span style="float: right;margin-right: 60px;margin-top: 4px" v-else-if="form.starType == 5">非常好</span>
-                    </li>
-                </ul>
-            </div>
+            </mu-dialog>
         </div>
     </div>
 </template>
 <script>
 import Qs from "qs";
+import { Dialog } from "vant";
 export default {
     data() {
         return {
             good: "",
+            openFullscreen: false,
+            content: "",
+            title: "",
+            processName: "",
+            type: "",
             form: {
                 userId: sessionStorage.getItem("userId"),
                 communityId: localStorage.getItem("communityId"),
                 userOpinion: "",
                 type: "2",
-                id: localStorage.getItem("processId"),
-                starType: 0,
+                id: JSON.parse(localStorage.getItem("process")).id,
+                starType: 0
             }
         };
+    },
+    components: {
+        [Dialog.Component.name]: Dialog.Component
+    },
+    created() {
+        this.content = JSON.parse(localStorage.getItem("process")).detail;
+        this.title = JSON.parse(localStorage.getItem("process")).location;
+        this.processName = JSON.parse(
+            localStorage.getItem("process")
+        ).processName;
+        this.type = JSON.parse(localStorage.getItem("process")).type;
     },
     methods: {
         outPage() {
             this.$router.goBack();
         },
+        openFullscreenDialog() {
+            this.openFullscreen = true;
+        },
+        closeFullscreenDialog() {
+            this.openFullscreen = false;
+        },
         // 用户评价
         updateUserWorkflowInfo() {
-            console.log(this.form.starType)
+            console.log(this.form.starType);
             this.$axios({
                 url: "admin/mobile/processCheck/updateUserWorkflowInfo",
                 method: "post",
@@ -100,7 +178,8 @@ export default {
                 .then(result => {
                     if (result.status === 200) {
                         if (result.data.respCode == "1000") {
-                            this.$router.goBack();
+                            this.openFullscreen = false;
+                            this.$toast("评论成功");
                         }
                     }
                 })
@@ -143,8 +222,6 @@ export default {
 .evaluate ul li {
     width: 100%;
     height: 40px;
-    /* line-height: 40px; */
-    /* border: 1px solid red; */
 }
 .evaluate ul li:nth-child(1) {
     margin-top: 0.8rem;
@@ -154,6 +231,10 @@ export default {
     border-bottom: 1px solid #333;
 }
 .container {
-    padding: 0!important;
+    padding: 0 !important;
+}
+.evaluatebtn {
+    padding: 0 0.5rem;
+    margin-top: 0.6rem;
 }
 </style>

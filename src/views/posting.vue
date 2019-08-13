@@ -35,6 +35,8 @@
                 ></textarea>
                 <div class="content-img">
                     <van-uploader
+                        :after-read="onRead"
+                        @delete="deleteImg"
                         v-model="fileList"
                         accept="image/*"
                         preview-size="60px"
@@ -117,10 +119,7 @@ export default {
                 this.postForm.isPrivate = 0;
             }
             let imgData = this.postData.filter(
-                item =>
-                    !this.imgData.some(
-                        ele => ele.file.lastModified === item.file.lastModified
-                    )
+                item => !this.imgData.some(ele => ele.file.lastModified === item.file.lastModified)
             );
             let fd = new FormData();
             imgData.forEach((item, index) => {
@@ -141,9 +140,7 @@ export default {
                 data: fd
             })
                 .then(result => {
-                    console.log(result.data);
-                    if (result.data.respCode == 1000) {
-                        // this.$router.push("/familyD");
+                    if (result.data.respCode == '1000') {
                         this.$router.goBack();
                     } else if (result.data.respCode === "1001") {
                         this.$toast.warning(result.data.errorMsg);

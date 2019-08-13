@@ -11,27 +11,17 @@
         <div class="container-main">
             <mu-list>
                 <mu-sub-header>我的申请</mu-sub-header>
-                <mu-list-item avatar button v-ripple class="muse-list" v-for="(item,index) in postContent" :key="index" @click.native="contentApplication(item.id)">
-                    <!-- <mu-list-item-action>
-                        <mu-avatar>
-                            <img src="../../assets/images/avatar1.jpg" />
-                        </mu-avatar>
-                    </mu-list-item-action> -->
+                <mu-list-item avatar button v-ripple class="muse-list" v-for="(item,index) in postContent" :key="index" @click.native="contentApplication(item)">
                     <mu-list-item-title>{{item.location}}</mu-list-item-title>
                     <mu-list-item-action>
-                        <span v-if="item.type === '0'">待处理</span>
-                        <span v-else>已完成</span>
+                        <span v-if="item.type === '0'">状态：待处理</span>
+                        <span v-else>状态：已完成</span>
                     </mu-list-item-action>
                 </mu-list-item>
             </mu-list>
             <mu-list>
                 <mu-sub-header>我的处理</mu-sub-header>
                 <mu-list-item avatar button v-ripple class="muse-list" v-for="(item,index) in detailWorkflowData" :key="index" @click.native="workApply(item.id)">
-                    <!-- <mu-list-item-action>
-                        <mu-avatar>
-                            <img src="../../assets/images/avatar1.jpg" />
-                        </mu-avatar>
-                    </mu-list-item-action> -->
                     <mu-list-item-title>{{item.location}}</mu-list-item-title>
                     <mu-list-item-action>
                         <span v-if="item.type === '0'">待处理</span>
@@ -59,8 +49,8 @@ export default {
         outPage() {
             this.$router.goBack();
         },
-        contentApplication(id) {
-            localStorage.setItem('processId',id)
+        contentApplication(item) {
+            localStorage.setItem('process',JSON.stringify(item))
             this.$router.push("/contentApplication")
         },
         workApply(id) {
@@ -151,3 +141,8 @@ export default {
     }
 }
 </style>
+<style>
+.myApplication .mu-item-action {
+    min-width: 120px;
+}
+</style>   
