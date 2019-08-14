@@ -3,7 +3,7 @@
         <mu-container style="padding: 46px 0;">
             <mu-row justify-content="center">
                 <mu-avatar :size="size">
-                    <img src="../../assets/images/avatar.png" />
+                    <img src="../../assets/images/avatar1.png" />
                 </mu-avatar>
             </mu-row>
         </mu-container>

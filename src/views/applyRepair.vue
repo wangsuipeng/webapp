@@ -128,7 +128,7 @@ export default {
                     align: "center"
                 },
                 {
-                    title: "逗留时间",
+                    title: "逗留时间4",
                     name: "endTime",
                     width: 170,
                     align: "center"
