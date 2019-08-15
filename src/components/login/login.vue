@@ -124,7 +124,7 @@ export default {
                                     this.$store.dispatch("HAND_PORTRAIT", result.data.data.handImgId);
                                     this.$router.push("/community");
                                 } else {
-                                    this.toast(result.data.data);
+                                    this.$toast(result.data.data);
                                 }
                             }
                         })

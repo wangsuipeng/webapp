@@ -27,7 +27,11 @@ import { Rate } from 'vant';
 import { Panel } from 'vant';
 import { Button } from 'vant';
 import { NoticeBar } from 'vant';
+import { Stepper } from 'vant';
+import { Row, Col } from 'vant';
 
+Vue.use(Row).use(Col);
+Vue.use(Stepper);
 Vue.use(NoticeBar);
 Vue.use(Button);
 Vue.use(Panel);

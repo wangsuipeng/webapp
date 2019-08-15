@@ -46,6 +46,12 @@
                     />
                 </div>
             </div>
+            <van-row class="points">
+                <van-col span="6">金币数</van-col>
+                <van-col span="18">
+                    <van-stepper max="10" min="2" style="float: right" v-model="postForm.points" />
+                </van-col>
+            </van-row>
             <mu-flex class="flex-wrapper" justify-content="start">
                 <mu-flex class="flex-demo" justify-content="center"></mu-flex>
             </mu-flex>
@@ -76,10 +82,10 @@ export default {
             height: "",
             labelPosition: "top",
             postForm: {
-                serviceName: "",// 标题
-                seviceDetail: "",// 内容
-                points: "2",// 金币
-                publishUserId: sessionStorage.getItem("userId"),
+                serviceName: "", // 标题
+                seviceDetail: "", // 内容
+                points: "", // 金币
+                publishUserId: sessionStorage.getItem("userId")
             },
             lineBool: false,
             imgsrc: "", //上传的·图片的地址
@@ -95,10 +101,10 @@ export default {
             dialogImageUrl: "",
             dialogVisible: false,
             fileList: [],
-            imgList: [],// 上传的图片集合
-            postData: [],// 上传图片的集合
-            imgData: [],// 删除的图片名称集合
-            formImg: ''
+            imgList: [], // 上传的图片集合
+            postData: [], // 上传图片的集合
+            imgData: [], // 删除的图片名称集合
+            formImg: ""
         };
     },
     mounted() {
@@ -112,10 +118,15 @@ export default {
         },
         // 发布公益任务
         postingLove() {
-            let imgData = this.postData.filter(item => !this.imgData.some(ele=>ele.file.lastModified===item.file.lastModified));
+            let imgData = this.postData.filter(
+                item =>
+                    !this.imgData.some(
+                        ele => ele.file.lastModified === item.file.lastModified
+                    )
+            );
             let fd = new FormData();
-            imgData.forEach((item,index) => {
-                fd.append("file"+index, item.file); //第一个参数字符串可以填任意命名，第二个根据对象属性来找到file
+            imgData.forEach((item, index) => {
+                fd.append("file" + index, item.file); //第一个参数字符串可以填任意命名，第二个根据对象属性来找到file
             });
             fd.append("serviceName", this.postForm.serviceName);
             fd.append("seviceDetail", this.postForm.seviceDetail);
@@ -126,7 +137,7 @@ export default {
                 url: "admin/mobile/welfare/publishTask",
                 method: "post",
                 headers: {
-                    "Authorization": sessionStorage.getItem("token")
+                    Authorization: sessionStorage.getItem("token")
                 },
                 data: fd
             })
@@ -144,14 +155,14 @@ export default {
         },
         onRead(file) {
             if (file.constructor == Object) {
-                this.postData.push(file)
+                this.postData.push(file);
             } else if (file.constructor == Array) {
-                this.postData = this.postData.concat(file)
+                this.postData = this.postData.concat(file);
             }
         },
         deleteImg(file) {
-            console.log(file.file.lastModified)
-            this.imgData.push(file)
+            console.log(file.file.lastModified);
+            this.imgData.push(file);
         },
         close(index) {
             this.list.splice(index, 1);
@@ -206,6 +217,13 @@ export default {
     width: 100%;
     min-height: 16.5rem;
     background-color: #fff;
+}
+.points {
+    width: 100%;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.2rem;
 }
 .textarea-text {
     width: 100%;

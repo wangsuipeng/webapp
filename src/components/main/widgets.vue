@@ -12,17 +12,8 @@
         <div class="container-main">
             <div class="content">
                 <mu-carousel transition="fade" hide-controls style="height: 150px">
-                    <mu-carousel-item>
-                        <img :src="carouselImg1" />
-                    </mu-carousel-item>
-                    <mu-carousel-item>
-                        <img :src="carouselImg2" />
-                    </mu-carousel-item>
-                    <mu-carousel-item>
-                        <img :src="carouselImg3" />
-                    </mu-carousel-item>
-                    <mu-carousel-item>
-                        <img :src="carouselImg4" />
+                    <mu-carousel-item v-for="(item,index) in imagesData" :key="index">
+                        <img :src="item.path" />
                     </mu-carousel-item>
                 </mu-carousel>
                 <div class="flex-box" v-ripple @click="applyRepair">
@@ -110,6 +101,7 @@ export default {
             docked: false,
             open: false,
             position: "left",
+            imagesData: [],
             carouselImg1,
             carouselImg2,
             carouselImg3,
@@ -122,6 +114,7 @@ export default {
     },
     created () {
         this.getCommunity();  
+        this.getAdvertiseByCommunity();
     },
     mounted() {
         document.addEventListener("plusready", this.plusReady());
@@ -155,6 +148,25 @@ export default {
             })
                 .then(result => {
                     this.communData = result.data.data.list;
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        // 获取广告数据
+        getAdvertiseByCommunity() {
+            this.$axios({
+                url: "admin/mobile/advertise/getAdvertiseByCommunity",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    communityId: localStorage.getItem("communityId")
+                })
+            })
+                .then(result => {
+                    this.imagesData = JSON.parse(result.data.data[0].imgs);
                 })
                 .catch(err => {
                     console.log(err);

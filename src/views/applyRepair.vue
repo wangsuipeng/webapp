@@ -49,7 +49,7 @@
                         <td class="is-center">{{scope.row.processName}}</td>
                         <td class="is-center">{{scope.row.detail}}</td>
                         <td class="is-center">
-                            <span v-if="scope.row.type == '4'">处理完成</span>
+                            <span v-if="scope.row.type == '2'">处理完成</span>
                             <span v-else>处理中...</span>
                         </td>
                         <td class="is-center">{{scope.row.detailPhoneOneName}}</td>
@@ -70,7 +70,7 @@
             </mu-row>
             <mu-paper :z-depth="0">
                 <mu-data-table
-                    :columns="columns"
+                    :columns="columns1"
                     :sort.sync="sort"
                     @sort-change="handleSortChange"
                     :data="listTableHis"
@@ -78,9 +78,11 @@
                     <template slot-scope="scope">
                         <td class="is-center">{{scope.row.processName}}</td>
                         <td class="is-center">{{scope.row.detail}}</td>
-                        <td class="is-center">{{scope.row.type}}</td>
-                        <td class="is-center">{{scope.row.userId}}</td>
-                        <td class="is-center">{{timer}}</td>
+                        <td class="is-center">
+                            <span v-if="scope.row.type == '2'">处理完成</span>
+                            <span v-else>处理中...</span>
+                        </td>
+                        <td class="is-center">{{scope.row.detailOneDate}}</td>
                     </template>
                 </mu-data-table>
             </mu-paper>
@@ -128,11 +130,37 @@ export default {
                     align: "center"
                 },
                 {
-                    title: "逗留时间4",
+                    title: "逗留时间",
                     name: "endTime",
                     width: 170,
                     align: "center"
                 }
+            ],
+            columns1: [
+                {
+                    title: "事项",
+                    name: "processName",
+                    width: 150,
+                    align: "center"
+                },
+                {
+                    title: "描述",
+                    name: "detail",
+                    width: 226,
+                    align: "center"
+                },
+                {
+                    title: "阶段",
+                    name: "type",
+                    width: 126,
+                    align: "center"
+                },
+                {
+                    title: "处理时间",
+                    name: "detailOneDate",
+                    width: 170,
+                    align: "center"
+                },
             ],
             listTable: [], // 申请中的数据
             listTableHis: [], // 历史申请的数据
