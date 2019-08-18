@@ -214,6 +214,14 @@ export default new Router({
     {
       path: '/workApply',
       component: () => import('@/views/workApply.vue')
+    },
+    {
+      path: '/noticePage',
+      component: () => import('@/views/noticePage.vue')
+    },
+    {
+      path: '/myPost',
+      component: () => import('@/views/myPost.vue')
     }
   ]
 })

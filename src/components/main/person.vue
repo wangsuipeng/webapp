@@ -46,6 +46,21 @@
                             <mu-icon size="25" value="chevron_right"></mu-icon>
                         </mu-list-item-action>
                     </mu-list-item>
+                    <mu-list-item
+                        avatar
+                        button
+                        :ripple="true"
+                        class="word-list muse-list"
+                        @click.native="myPost"
+                    >
+                        <mu-list-item-action>
+                            <img class="picture-img" src="../../assets/images/tiezi1.png" />
+                        </mu-list-item-action>
+                        <mu-list-item-title>我的帖子</mu-list-item-title>
+                        <mu-list-item-action>
+                            <mu-icon size="25" value="chevron_right"></mu-icon>
+                        </mu-list-item-action>
+                    </mu-list-item>
                     <mu-flex class="flex-wrapper" justify-content="start">
                         <mu-flex class="flex-demo" justify-content="center"></mu-flex>
                     </mu-flex>
@@ -183,10 +198,10 @@ export default {
         },
         myApplication() {
             this.$router.push("/myApplication");
+        },
+        myPost() {
+            this.$router.push("/myPost");
         }
-        // myApply() {
-        //     this.$router.push("/myApply");
-        // }
     }
 };
 </script>

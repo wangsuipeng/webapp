@@ -1,12 +1,15 @@
 <template>
     <div class="notice">
-        <mu-paper :z-depth="0" class="demo-list-wrap" style="height: 2.8rem">
+        <mu-paper :z-depth="0" class="demo-list-wrap" style="height: 2.8rem; text-align: center;">
             <mu-appbar color="#ff5242">
                 <mu-button icon slot="left">
-                    <mu-icon value="menu"></mu-icon>
+                    <!-- <mu-icon value="menu"></mu-icon> -->
                 </mu-button>
                 <div>{{community}}</div>
-                <mu-menu slot="right">
+                <mu-button icon slot="right">
+                <!-- <mu-icon size="30" value="control_point"></mu-icon> -->
+                </mu-button>
+                <!-- <mu-menu slot="right">
                     <mu-button flat>MENU</mu-button>
                     <mu-list slot="content">
                         <mu-list-item button>
@@ -20,66 +23,45 @@
                             </mu-list-item-content>
                         </mu-list-item>
                     </mu-list>
-                </mu-menu>
+                </mu-menu> -->
             </mu-appbar>
         </mu-paper>
         <div class="container-main">
-            <van-notice-bar text="通知内容通知内容通知内容通知内容通知内容通知内容通知内容通知内容通知内容" left-icon="volume-o" />
-            <mu-list>
-                <mu-sub-header>今日热点</mu-sub-header>
-                <mu-list-item avatar button :ripple="true" class="word-list muse-list" v-ripple>
-                    <mu-list-item-action>
-                        <mu-avatar :size="size">
-                            <img src="../../assets/images/1000053.jpg" />
-                        </mu-avatar>
-                    </mu-list-item-action>
-                    <mu-list-item-title>Mike Li</mu-list-item-title>
-                </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list muse-list" v-ripple>
-                    <mu-list-item-action>
-                        <mu-avatar :size="size">
-                            <img src="../../assets/images/325543.jpg" />
-                        </mu-avatar>
-                    </mu-list-item-action>
-                    <mu-list-item-title>Maco Mai</mu-list-item-title>
-                </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list muse-list" v-ripple>
-                    <mu-list-item-action>
-                        <mu-avatar :size="size">
-                            <img src="../../assets/images/325571.jpg" />
-                        </mu-avatar>
-                    </mu-list-item-action>
-                    <mu-list-item-title>Alex Qin</mu-list-item-title>
-                </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list muse-list" v-ripple>
-                    <mu-list-item-action>
-                        <mu-avatar :size="size">
-                            <img src="../../assets/images/325572.jpg" />
-                        </mu-avatar>
-                    </mu-list-item-action>
-                    <mu-list-item-title>Allen Qun</mu-list-item-title>
-                </mu-list-item>
-                <mu-list-item avatar button :ripple="true" class="word-list muse-list" v-ripple>
-                    <mu-list-item-action>
-                        <mu-avatar :size="size">
-                            <img src="../../assets/images/1000046.jpg" />
-                        </mu-avatar>
-                    </mu-list-item-action>
-                    <mu-list-item-title>Myron Liu888</mu-list-item-title>
-                </mu-list-item>
-                <!-- <mu-divider></mu-divider> -->
-            </mu-list>
+            <van-notice-bar :text="content" left-icon="volume-o" />
+            <mu-container ref="container" class="demo-loadmore-content">
+                <mu-load-more
+                    @refresh="refresh"
+                    :refreshing="refreshing"
+                    :loading="loading"
+                    @load="load"
+                >
+                    <mu-list>
+                        <div v-for="(item,index) in notData" :key="index">
+                            <mu-list-item v-ripple class="muse-list" @click.native="noticPage(item)">
+                                <mu-list-item-title>{{item.title}}</mu-list-item-title>
+                            </mu-list-item>
+                        </div>
+                    </mu-list>
+                </mu-load-more>
+            </mu-container>
         </div>
     </div>
 </template>
 <script>
-import "../../assets/js/mui.js";
+import Qs from "qs";
 export default {
     data() {
         return {
             size: "36",
+            notData: [],
+            refreshing: false,
+            content: "",
+            loading: false,
             community: localStorage.getItem("myCommunity")
         };
+    },
+    created () {
+        this.noticeData();
     },
     mounted() {
         document.addEventListener("plusready", this.plusReady());
@@ -114,6 +96,49 @@ export default {
                     }
                 }
             }); // 在这里调用plus api
+        },
+        noticPage(item) {
+            localStorage.setItem("notic",JSON.stringify(item))
+            this.$router.push("/noticePage")
+        },
+        refresh() {
+            this.refreshing = true;
+            this.$refs.container.scrollTop = 0;
+            setTimeout(() => {
+                this.refreshing = false;
+                this.text = this.text === "List" ? "Menu" : "List";
+                this.pageSize = 10;
+                this.currentPage = 1;
+            }, 2000);
+        },
+        load() {
+            this.loading = true;
+            setTimeout(() => {
+                this.loading = false;
+                this.pageSize = 10;
+                this.currentPage++;
+            }, 2000);
+        },
+        noticeData() {
+            this.$axios({
+                url: "admin/mobile/invitation/pageList",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    communityId: localStorage.getItem("communityId")
+                })
+            })
+                .then(result => {
+                    if (result.status === 200) {
+                        this.notData = result.data.page.list;
+                        this.content = result.data.page.list[0].content;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         }
     }
 };
@@ -151,5 +176,8 @@ export default {
 .container-main {
     width: 100%;
     height: calc(100vh - 56px);
+}
+.container {
+    padding: 0!important;
 }
 </style>

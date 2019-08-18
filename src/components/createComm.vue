@@ -526,12 +526,15 @@ export default {
                 data: Qs.stringify(commmData)
             })
                 .then(result => {
-                    console.log(result);
+                    if (result.data.status == 'success') {
+                        this.$router.push("/toExamine");
+                    } else {
+                        this.$toast('创建失败')
+                    }
                 })
                 .catch(err => {
                     console.log(err);
                 });
-            this.$router.push("/toExamine");
         }
     }
 };

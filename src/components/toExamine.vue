@@ -9,7 +9,7 @@
         </mu-appbar>
         <div class="content">
             <mu-flex class="flex-wrapper">
-                <mu-flex class="flex-demo" justify-content="center">请核对您提交的创建社区信息：</mu-flex>
+                <mu-flex class="flex-demo" justify-content="center" style="margin-top: 0.5rem">请核对您提交的创建社区信息：</mu-flex>
             </mu-flex>
             <mu-container>
                 <mu-paper class="demo-paper" :z-depth="1">{{communityName}}</mu-paper>

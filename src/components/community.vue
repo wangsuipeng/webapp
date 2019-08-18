@@ -513,8 +513,8 @@ export default {
                 }
             ],
             address: ["北京", "北京"],
-            addressProvince: "北京",
-            addressCity: "北京",
+            addressProvince: "",
+            addressCity: "",
             open: false,
             num: 10,
             refreshing: false,
@@ -545,7 +545,6 @@ export default {
         showHeight: function() {
             if (this.docmHeight > this.showHeight) {
                 this.hidShow = false;
-                console.log(this.hidShow);
             } else {
                 this.hidShow = true;
             }
@@ -575,7 +574,9 @@ export default {
         confirmCity() {
             this.address = [this.addressProvince, this.addressCity];
             this.open = false;
+            this.getCommunity();
             console.log(this.address);
+            console.log(this.addressCity);
         },
         cancelCity() {
             this.open = false;
@@ -609,6 +610,7 @@ export default {
             this.$router.push("/createComm");
         },
         getCommunity() {
+
             this.$axios({
                 url: "admin/mobile/communityMessage/list",
                 method: "post",
@@ -619,7 +621,7 @@ export default {
                     page: this.currentPage,
                     limit: this.pageSize,
                     name: this.searchValue,
-                    cityName: ""
+                    cityName: this.addressCity
                 })
             })
                 .then(result => {

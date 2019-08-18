@@ -124,6 +124,8 @@ export default {
             this.community = name;
             localStorage.setItem("myCommunity", name);
             localStorage.setItem("communityId", id);
+            this.imagesData = [];
+            this.getAdvertiseByCommunity();
         },
         closeBottomSheet() {
             this.open = false;
