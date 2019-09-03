@@ -1,6 +1,6 @@
 <template>
     <div class="family-D">
-        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 2.8rem">
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>家事讨论
@@ -65,7 +65,11 @@
 </template>
 <script>
 import Qs from "qs";
+import { Dialog } from "vant";
 export default {
+    components: {
+        [Dialog.Component.name]: Dialog.Component
+    },
     data() {
         return {
             fab: true,
@@ -80,7 +84,10 @@ export default {
         this.articleQueryAll();
     },
     mounted() {
-        // this.trigger = this.$refs.button.$el;
+        mui.back = function () {
+            // history.go(-1); //回退到上一页面
+            this.$router.goBack();
+        };
     },
     methods: {
         outPage() {
@@ -102,6 +109,7 @@ export default {
                     Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
+                    userId: sessionStorage.getItem("userId"),
                     communityId: localStorage.getItem("communityId"),
                     category: '2'
                 })
@@ -110,6 +118,14 @@ export default {
                     if (result.status === 200) {
                         if (result.data.respCode == 1000) {
                             this.postContent = result.data.data;
+                        } else {
+                            Dialog.alert({
+                              title: '提示',
+                              message: result.data.errorMsg
+                            }).then(() => {
+                                this.$router.goBack();
+                              // on close
+                            });
                         }
                     }
                 })
@@ -210,7 +226,7 @@ export default {
     position: absolute;
     right: 20px;
     bottom: 28px;
-    z-index: 9999;
+    /* z-index: 9999; */
 }
 option {
     text-align: center;

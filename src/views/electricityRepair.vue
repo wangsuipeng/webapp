@@ -1,6 +1,6 @@
 <template>
     <div class>
-        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;margin-bottom: 10px;height: 2.8rem">
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;margin-bottom: 10px;">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>电力报修
@@ -88,6 +88,7 @@ export default {
             options: [],
             labelPosition: "top",
             languages: [
+                "立即上门",
                 "9:00-11:00",
                 "11:00-13:00",
                 "13:00-15:00",
@@ -159,8 +160,10 @@ export default {
                 .then(result => {
                     if (result.data.respCode === "1000") {
                         this.$router.goBack();
+                    } else {
+                        this.$toast(result.data.errorMsg)
                     }
-                })
+                }) 
                 .catch(err => {
                     console.log(err);
                 });

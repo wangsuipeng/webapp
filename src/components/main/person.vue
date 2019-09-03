@@ -26,6 +26,21 @@
                         <mu-list-item-action>
                             <img class="picture-img" src="../../assets/images/integral.png" />
                         </mu-list-item-action>
+                        <mu-list-item-title>爱心金币</mu-list-item-title>
+                        <mu-list-item-action>
+                            <mu-icon size="25" value="chevron_right"></mu-icon>
+                        </mu-list-item-action>
+                    </mu-list-item>
+                    <mu-list-item
+                        avatar
+                        button
+                        :ripple="true"
+                        class="word-list muse-list"
+                        @click.native="myIntegral"
+                    >
+                        <mu-list-item-action>
+                            <img class="picture-img" src="../../assets/images/jifen.png" />
+                        </mu-list-item-action>
                         <mu-list-item-title>我的积分</mu-list-item-title>
                         <mu-list-item-action>
                             <mu-icon size="25" value="chevron_right"></mu-icon>
@@ -126,13 +141,14 @@
 <script>
 import imgSrc from "../../assets/images/avatar.png";
 import "../../assets/js/mui.js";
+import Qs from "qs";
 export default {
     data() {
         return {
             size: 100,
             avatar: "", // 头像
             nickName: "", // 昵称
-            imgSrc: "../../assets/images/avatar.png"
+            imgSrc: "../../assets/images/avatar.png",
         };
     },
     created() {
@@ -145,9 +161,30 @@ export default {
                 "admin/welfare/sysFile/showPicForMany?id=" +
                 this.$store.getters.headPortrait;
         }
+        console.log(333333)
     },
     mounted() {
-        document.addEventListener("plusready", this.plusReady());
+        //首页返回键处理
+        //处理逻辑：1秒内，连续两次按返回键，则退出应用；
+        var first = null;
+        mui.back = function () {
+            //首次按键，提示 再按一次退出应用
+            if (!first) {
+                first = new Date().getTime(); //记录第一次按下回退键的时间
+                mui.toast("再按一次退出社区"); //给出提示
+                // history.go(-1); //回退到上一页面
+                setTimeout(function () {
+                    //1s中后清除
+                    first = null;
+                }, 1000);
+            } else {
+                if (new Date().getTime() - first < 1000) {
+                    //如果两次按下的时间小于1s，
+                    plus.runtime.quit(); //那么就退出app
+                }
+            }
+        };
+        // document.addEventListener("plusready", this.plusReady());
     },
     methods: {
         plusReady() {
@@ -196,12 +233,16 @@ export default {
             localStorage.setItem("active2",0)
             this.$router.push("/myLove");
         },
+        myIntegral() {
+            this.$router.push("/myIntegral");
+        },
         myApplication() {
             this.$router.push("/myApplication");
         },
         myPost() {
             this.$router.push("/myPost");
-        }
+        },
+        
     }
 };
 </script>

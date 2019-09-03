@@ -1,6 +1,6 @@
 <template>
     <div class="about">
-        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 2.8rem">
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>关于
@@ -11,11 +11,11 @@
         <div class="container-main">
             <div class="box-list">
                 当前版本
-                <span style="margin-left: 40px" id="version">1.4.3</span>
+                <span style="margin-left: 40px" id="version">1.4.8</span>
             </div>
             <div class="box-list">
                 最新版本
-                <span style="margin-left: 40px">1.4.3</span>
+                <span style="margin-left: 40px">1.4.8</span>
             </div>
             <div class="upgrade" @click="downloadApk">
                 <button>在线升级</button>
@@ -29,11 +29,16 @@ export default {
     data() {
         return {
             appVersion: "",
-            version: "1.4.2"
+            version: "1.4.7"
         };
     },
     created() {
 
+    },
+    mounted () {
+        mui.back = function () {
+            history.go(-1); //回退到上一页面
+        };
     },
     methods: {
         outPage() {

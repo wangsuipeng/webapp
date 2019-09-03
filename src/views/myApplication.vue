@@ -1,6 +1,6 @@
 <template>
     <div class="myApplication">
-        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 2.8rem">
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>报修申请
@@ -10,7 +10,9 @@
         </mu-appbar>
         <div class="container-main">
             <mu-list>
-                <mu-sub-header>我的申请</mu-sub-header>
+                <mu-sub-header>
+                    <h3>我的申请</h3>
+                </mu-sub-header>
                 <mu-list-item avatar button v-ripple class="muse-list" v-for="(item,index) in postContent" :key="index" @click.native="contentApplication(item)">
                     <mu-list-item-title>{{item.location}}</mu-list-item-title>
                     <mu-list-item-action>
@@ -20,7 +22,9 @@
                 </mu-list-item>
             </mu-list>
             <mu-list>
-                <mu-sub-header>我的处理</mu-sub-header>
+                <mu-sub-header>
+                    <h3>我的处理</h3>
+                </mu-sub-header>
                 <mu-list-item avatar button v-ripple class="muse-list" v-for="(item,index) in detailWorkflowData" :key="index" @click.native="workApply(item.id)">
                     <mu-list-item-title>{{item.location}}</mu-list-item-title>
                     <mu-list-item-action>

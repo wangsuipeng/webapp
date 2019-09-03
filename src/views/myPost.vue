@@ -1,6 +1,6 @@
 <template>
     <div class="myPost">
-        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 2.8rem">
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>我的帖子
@@ -10,27 +10,67 @@
         </mu-appbar>
         <div class="container-main">
             <mu-list>
-                <mu-list-item avatar button :ripple="false" class="muse-list">
-                    <mu-list-item-action>
-                        <mu-avatar>
-                            <img src="../assets/images/325543.jpg" />
-                        </mu-avatar>
-                    </mu-list-item-action>
-                    <mu-list-item-title>Mike Li</mu-list-item-title>
-                </mu-list-item>
+                <div v-for="(item,index) in postContent" :key="index">
+                    <mu-list-item
+                        avatar
+                        class="word-list muse-list"
+                        v-ripple
+                        @click.native="browsePost(item)"
+                    >
+                        <mu-list-item-action>
+                            <mu-avatar :size="size">
+                                <img :src="item.headUrl" />
+                            </mu-avatar>
+                        </mu-list-item-action>
+                        <mu-list-item-title>{{item.title}}</mu-list-item-title>
+                    </mu-list-item>
+                </div>
             </mu-list>
         </div>
     </div>
 </template>
 
 <script>
+import Qs from "qs";
 export default {
     data() {
-        return {};
+        return {
+            postContent: [],
+            size: "36",
+        };
+    },
+    created() {
+        this.articleQueryAll();
     },
     methods: {
         outPage() {
-            this.$router.push("/layout/person");
+            this.$router.goBack();
+        },
+        browsePost(item) {
+            localStorage.setItem('myPost',JSON.stringify(item))
+            this.$router.push("/postContent")
+        },
+        //查询本人发布的帖子
+        articleQueryAll() {
+            this.$axios({
+                url: "admin/mobile/article/queryByAuthorId",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    authorId: sessionStorage.getItem("userId"),
+                    communityId: localStorage.getItem("communityId")
+                })
+            })
+                .then(result => {
+                    if (result.data.respCode == 1000) {
+                        this.postContent = result.data.data;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         }
     }
 };
@@ -45,6 +85,7 @@ export default {
 .container-main {
     width: 100%;
     height: calc(100vh - 56px);
+    overflow-y: auto;
 }
 .muse-list {
     position: relative;

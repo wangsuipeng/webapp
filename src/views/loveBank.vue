@@ -1,6 +1,6 @@
 <template>
     <div class="loveBank">
-        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 2.8rem">
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>爱心银行
@@ -10,11 +10,11 @@
         </mu-appbar>
         <div class="container-main">
             <mu-container>
-                <mu-tabs :value.sync="active2" color="#F8F8F8" indicator-color="#ff5242" full-width>
+                <mu-tabs :value.sync="active3" color="#F8F8F8" indicator-color="#ff5242" full-width @change="changeTask">
                     <mu-tab style="color: #898989">爱心榜</mu-tab>
                     <mu-tab style="color: #898989">爱心大厅</mu-tab>
                 </mu-tabs>
-                <div class="demo-text" v-if="active2 === 0">
+                <div class="demo-text" v-if="active3 === 0">
                     <mu-paper :z-depth="0" class="demo-list-wrap">
                         <mu-list>
                             <div v-for="(item,index) in rankByGoldData" :key="index">
@@ -37,7 +37,7 @@
                         </mu-list>
                     </mu-paper>
                 </div>
-                <div class="demo-text" v-if="active2 === 1">
+                <div class="demo-text" v-if="active3 === 1">
                     <mu-paper :z-depth="0" class="demo-list-wrap">
                         <mu-list textline="three-line">
                             <div v-for="(item,index) in queryAllTaskData" :key="index">
@@ -49,7 +49,7 @@
                                     </mu-list-item-action>
                                     <mu-list-item-content>
                                         <mu-list-item-title id="text"
-                                            style="font-size: 18px;font-weight: 600;color: #000;margin-bottom: 10px"
+                                            style="font-size: 16px;font-weight: 600;color: #000;margin-bottom: 10px"
                                         >{{item.serviceName}}</mu-list-item-title>
                                         <mu-list-item-sub-title>
                                             <div
@@ -73,10 +73,14 @@
 </template>
 <script>
 import Qs from "qs";
+import { Dialog } from "vant";
 export default {
+    components: {
+        [Dialog.Component.name]: Dialog.Component
+    },
     data() {
         return {
-            active2: 0,
+            active3: 0,
             rankByGoldData: [], // 爱心榜数据
             queryAllTaskData: [] // 爱心大厅数据
         };
@@ -84,7 +88,7 @@ export default {
     created() {
         this.queryAllCreatedTask();
         this.rankByGold();
-        this.queryAllTask();
+        this.active3 = parseInt(localStorage.getItem('active3'));
     },
     methods: {
         outPage() {
@@ -94,10 +98,14 @@ export default {
             this.$router.push("/releasePublic");
         },
         loveProgress(serviceId) {
-            // let text = document.getElementById("text");
+            localStorage.setItem("active3",this.active3)
             sessionStorage.setItem("serviceId",serviceId)
-            console.log(serviceId)
             this.$router.push("/loveProgress");
+        },
+        changeTask() {
+            if (this.active3 == 1) {
+                this.queryAllTask();
+            }
         },
         alert() {
             this.$alert("恭喜您提交成功", "提示", {
@@ -135,13 +143,21 @@ export default {
                     Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
+                    userId: sessionStorage.getItem("userId"),
                     communityId: localStorage.getItem("communityId")
                 })
             })
                 .then(result => {
                     if (result.data.respCode == 1000) {
                         this.queryAllTaskData = result.data.data;
-                        console.log(result.data.data);
+                    } else {
+                        Dialog.alert({
+                          title: '提示',
+                          message: result.data.errorMsg
+                        }).then(() => {
+                            this.$router.goBack();
+                          // on close
+                        });
                     }
                 })
                 .catch(err => {

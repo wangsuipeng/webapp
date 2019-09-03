@@ -1,7 +1,7 @@
 <template>
     <div class="community">
         <mu-paper :z-depth="0" class="demo-loadmore-wrap">
-            <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 2.8rem">
+            <mu-appbar color="#ff5242" style="width: 100%; text-align: center;">
                 <mu-button icon slot="left" @click="openBotttomSheet">
                     <mu-icon value="menu"></mu-icon>
                 </mu-button>我的社区

@@ -222,6 +222,18 @@ export default new Router({
     {
       path: '/myPost',
       component: () => import('@/views/myPost.vue')
+    },
+    {
+      path: '/advertisement',
+      component: () => import('@/views/advertisement.vue')
+    },
+    {
+      path: '/postContent',
+      component: () => import('@/views/postContent.vue')
+    },
+    {
+      path: '/myIntegral',
+      component: () => import('@/views/myIntegral.vue')
     }
   ]
 })

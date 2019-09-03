@@ -12,6 +12,7 @@ import 'vuetify/dist/vuetify.min.css'
 // import Toast from 'muse-ui-toast';
 import Message from 'muse-ui-message';
 import 'muse-ui-message/dist/muse-ui-message.css';
+import Mui from 'vue-awesome-mui'
 import store from './store'
 import { SwitchCell } from 'vant';
 import 'muse-ui-loading/dist/muse-ui-loading.css'; // load css
@@ -30,6 +31,7 @@ import { NoticeBar } from 'vant';
 import { Stepper } from 'vant';
 import { Row, Col } from 'vant';
 
+
 Vue.use(Row).use(Col);
 Vue.use(Stepper);
 Vue.use(NoticeBar);
@@ -46,6 +48,7 @@ Vue.use(Cell).use(CellGroup);
 Vue.use(Uploader);
 Vue.use(Loading);
 Vue.use(SwitchCell);
+Vue.use(Mui);
 
 Vue.prototype.$axios = axios
 

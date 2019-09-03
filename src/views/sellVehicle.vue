@@ -1,6 +1,6 @@
 <template>
     <div class="leasePark">
-        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 2.8rem">
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>出售车位
@@ -38,7 +38,7 @@
                             color="#B9B9B9"
                             @click="comment"
                         ></mu-icon>
-                        <p style="display: inline-block">900</p>
+                        <p style="display: inline-block">{{numberComments}}</p>
                     </li>
                 </ul>
             </div>
@@ -50,7 +50,7 @@
                             <img :src="handImg" alt />
                         </div>
                         <div class="content-comm">
-                            <p>科比</p>
+                            <p>{{item.name}}</p>
                             <p>{{item.content}}</p>
                         </div>
                     </li>
@@ -79,6 +79,7 @@ export default {
             commData: [],
             commeText: '',
             browsePerson: '',// 浏览人数
+            numberComments: '',
         };
     },
     created() {
@@ -135,6 +136,7 @@ export default {
                 .then(result => {
                     if (result.data.respCode === "1000") {
                         this.commData = result.data.data;
+                        this.numberComments = result.data.data.length;
                     }
                 })
                 .catch(err => {

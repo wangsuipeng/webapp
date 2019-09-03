@@ -14,6 +14,9 @@ export default {
             transitionName: "slide-right" // 默认动态路由变化为slide-right
         }
     },
+    created () {
+        console.log(this.$route)  
+    },
     computed: {
         key() {
             return this.$router.pathPull;

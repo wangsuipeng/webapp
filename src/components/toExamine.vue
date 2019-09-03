@@ -1,7 +1,7 @@
 <template>
     <div class="toExamine">
         <mu-appbar
-            style="width: 100%; text-align: center;background-color: #FF5242;height: 2.8rem"
+            style="width: 100%; text-align: center;background-color: #FF5242;"
             color="primary"
         >
             <i class="iconfont icon-fanhui ret-btn" @click="outPage"></i>

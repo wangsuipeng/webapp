@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 2.8rem">
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;">
             <mu-button icon slot="left" @click="openBotttomSheet">
                 <mu-icon value="menu" @click="open = !open"></mu-icon>
             </mu-button>
@@ -11,11 +11,11 @@
         </mu-appbar>
         <div class="container-main">
             <div class="content">
-                <mu-carousel transition="fade" hide-controls style="height: 150px">
-                    <mu-carousel-item v-for="(item,index) in imagesData" :key="index">
+                <van-swipe :autoplay="3000" indicator-color="white">
+                    <van-swipe-item class="swipe" @click="swipeImg(item)" v-for="(item,index) in imagesData" :key="index">
                         <img :src="item.path" />
-                    </mu-carousel-item>
-                </mu-carousel>
+                    </van-swipe-item>
+                </van-swipe>
                 <div class="flex-box" v-ripple @click="applyRepair">
                     <mu-icon size="50" value="build" color="#ff5242"></mu-icon>
                     <div class="text">报修申请</div>
@@ -77,7 +77,12 @@
             <mu-bottom-sheet :open.sync="open" style="height: 250px;overflow: auto">
                 <mu-list @item-click="closeBottomSheet">
                     <mu-sub-header>选择社区</mu-sub-header>
-                    <mu-list-item button v-for="(item,index) in communData" :key="index" @click.native="selectComm(item.name,item.id)">
+                    <mu-list-item
+                        button
+                        v-for="(item,index) in communData"
+                        :key="index"
+                        @click.native="selectComm(item.name,item.id)"
+                    >
                         <mu-list-item-action>
                             <mu-icon value="grade" color="orange"></mu-icon>
                         </mu-list-item-action>
@@ -90,11 +95,6 @@
 </template>
 <script>
 import Qs from "qs";
-import carouselImg1 from "../../assets/images/325453.jpg";
-import carouselImg2 from "../../assets/images/325453.jpg";
-import carouselImg3 from "../../assets/images/325453.jpg";
-import carouselImg4 from "../../assets/images/325453.jpg";
-import "../../assets/js/mui.js";
 export default {
     data() {
         return {
@@ -102,25 +102,53 @@ export default {
             open: false,
             position: "left",
             imagesData: [],
-            carouselImg1,
-            carouselImg2,
-            carouselImg3,
-            carouselImg4,
+            advertisement: [],
             community: localStorage.getItem("myCommunity"),
             communData: [], // 所有社区的集合
             pageSize: 10,
-            currentPage: 1,
+            currentPage: 1
         };
     },
-    created () {
-        this.getCommunity();  
+    created() {
+        console.log(222222)
+        this.getCommunity();
         this.getAdvertiseByCommunity();
     },
     mounted() {
-        document.addEventListener("plusready", this.plusReady());
+        // document.addEventListener("plusready", this.plusReady());
+        //首页返回键处理
+        //处理逻辑：1秒内，连续两次按返回键，则退出应用；
+        var first = null;
+        mui.back = function () {
+            //首次按键，提示 再按一次退出应用
+            if (!first) {
+                first = new Date().getTime(); //记录第一次按下回退键的时间
+                mui.toast("再按一次退出社区"); //给出提示
+                // history.go(-1); //回退到上一页面
+                setTimeout(function () {
+                    //1s中后清除
+                    first = null;
+                }, 1000);
+            } else {
+                if (new Date().getTime() - first < 1000) {
+                    //如果两次按下的时间小于1s，
+                    plus.runtime.quit(); //那么就退出app
+                }
+            }
+        };
     },
     methods: {
-        selectComm(name,id) {
+        swipeImg(item) {
+            for (let i = 0;i < this.advertisement.length;i++) {
+                for (let j = 0;j < JSON.parse(this.advertisement[i].imgs).length;j++) {
+                    if (item.name == JSON.parse(this.advertisement[i].imgs)[j].name) {
+                        localStorage.setItem("advertisement",JSON.stringify(this.advertisement[i]))
+                    }
+                }
+            }
+            this.$router.push("/advertisement");
+        },
+        selectComm(name, id) {
             this.community = name;
             localStorage.setItem("myCommunity", name);
             localStorage.setItem("communityId", id);
@@ -168,7 +196,12 @@ export default {
                 })
             })
                 .then(result => {
-                    this.imagesData = JSON.parse(result.data.data[0].imgs);
+                    this.advertisement = result.data.data;
+                    for (let i = 0;i < result.data.data.length;i++) {
+                        for (let j = 0;j < JSON.parse(result.data.data[i].imgs).length;j++) {
+                            this.imagesData.push(JSON.parse(result.data.data[i].imgs)[j])
+                        }
+                    }
                 })
                 .catch(err => {
                     console.log(err);
@@ -211,6 +244,7 @@ export default {
             this.$router.push("/propertyPay");
         },
         loveBank() {
+            localStorage.setItem("active3",0)
             this.$router.push("/loveBank");
         },
         share() {
@@ -220,6 +254,7 @@ export default {
             this.$router.push("/applyRepair");
         },
         parkingLot() {
+            localStorage.setItem("active4",0)
             this.$router.push("/parkingLot");
         }
     }
@@ -347,5 +382,10 @@ export default {
         transform: scale(0.5);
         transform-origin: 0 0;
     }
+}
+.swipe img {
+    display: inline-block;
+    width: 100%;
+    height: 9.5rem;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div class="parking-lot">
-        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 2.8rem">
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>车位分享
@@ -11,16 +11,17 @@
         <div class="container-main">
             <mu-container>
                 <mu-tabs
-                    :value.sync="active2"
+                    :value.sync="active4"
                     color="#F8F8F8"
+                    full-width
                     indicator-color="#ff5242"
-                    @change="tabChange(active2)"
+                    @change="tabChange(active4)"
                 >
                     <mu-tab style="color: #898989">出租车位</mu-tab>
                     <mu-tab style="color: #898989">求租车位</mu-tab>
                     <mu-tab style="color: #898989">车位出售</mu-tab>
                 </mu-tabs>
-                <div class="demo-text" v-if="active2 === 0">
+                <div class="demo-text" v-if="active4 === 0">
                     <mu-paper :z-depth="0" class="demo-list-wrap">
                         <mu-list>
                             <div v-for="(item,index) in leaseParking" :key="index">
@@ -39,7 +40,7 @@
                         </mu-list>
                     </mu-paper>
                 </div>
-                <div class="demo-text" v-if="active2 === 1">
+                <div class="demo-text" v-if="active4 === 1">
                     <mu-list>
                         <div v-for="(item,index) in seekGroup" :key="index">
                             <mu-list-item avatar button v-ripple class="muse-list" @click="rentSeeking(item)">
@@ -56,7 +57,7 @@
                         </div>
                     </mu-list>
                 </div>
-                <div class="demo-text" v-if="active2 === 2">
+                <div class="demo-text" v-if="active4 === 2">
                     <mu-list>
                         <div v-for="(item,index) in sellvehicle" :key="index">
                             <mu-list-item avatar button v-ripple class="muse-list" @click="sellVehicle(item)">
@@ -85,7 +86,7 @@ import Qs from "qs";
 export default {
     data() {
         return {
-            active2: 0,
+            active4: 0,
             leaseParking: [], // 出租车位
             seekGroup: [], // 求租车位
             sellvehicle: []
@@ -95,6 +96,7 @@ export default {
         this.getAll();
         this.seekGetAll();
         this.sellvehicleGetAll();
+        this.active4 = parseInt(localStorage.getItem("active4"))
     },
     methods: {
         outPage() {
@@ -107,15 +109,17 @@ export default {
             console.log();
         },
         leasePark(item) {
-            console.log(item)
+            localStorage.setItem("active4",this.active4)
             localStorage.setItem("parkingLot",JSON.stringify(item))
             this.$router.push('/leasePark')
         },
         rentSeeking(item) {
+            localStorage.setItem("active4",this.active4)
             localStorage.setItem("parkingLot",JSON.stringify(item))
             this.$router.push('/rentSeeking')
         },
         sellVehicle(item) {
+            localStorage.setItem("active4",this.active4)
             localStorage.setItem("parkingLot",JSON.stringify(item))
             this.$router.push('/sellVehicle')
         },

@@ -1,6 +1,6 @@
 <template>
     <div class="browse">
-        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 2.8rem">
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>家事讨论
@@ -21,7 +21,8 @@
                 <mu-flex class="flex-demo" justify-content="center" fill>
                     <ul class="share">
                         <li @click="giveThumbs">
-                            <mu-icon :size="size" value="favorite_border" color="#B9B9B9"></mu-icon>
+                            <mu-icon v-if="!giveThumbsup" :size="size" value="favorite_border" color="#B9B9B9"></mu-icon>
+                            <mu-icon v-else :size="size" value="favorite" color="#ff5242"></mu-icon>
                             <p style="display: inline-block">{{praiseNum}}</p>
                         </li>
                         <li>
@@ -31,7 +32,7 @@
                                 color="#B9B9B9"
                                 @click="comment"
                             ></mu-icon>
-                            <p style="display: inline-block">90</p>
+                            <p style="display: inline-block">{{numberComments}}</p>
                         </li>
                         <!-- <li>
                             <mu-icon :size="size" value="share" color="#B9B9B9"></mu-icon>
@@ -67,7 +68,7 @@
             </div>
             <mu-bottom-sheet :open.sync="open" overlay-close>
                 <mu-list @close="closeBottomSheet">
-                    <mu-list-item button>
+                    <!-- <mu-list-item button>
                         <mu-list-item-action>
                             <mu-icon value="create" color="orange"></mu-icon>
                         </mu-list-item-action>
@@ -78,7 +79,7 @@
                             <mu-icon value="delete" color="blue"></mu-icon>
                         </mu-list-item-action>
                         <mu-list-item-title>删除</mu-list-item-title>
-                    </mu-list-item>
+                    </mu-list-item> -->
                     <mu-list-item button>
                         <mu-list-item-action>
                             <mu-icon value="phone_in_talk" color="green"></mu-icon>
@@ -107,6 +108,8 @@ export default {
             avatarImag: "",
             commeText: "", // 评论内容
             commData: [],
+            numberComments: "",// 评论数
+            giveThumbsup: false
         };
     },
     created() {
@@ -159,6 +162,7 @@ export default {
             })
                 .then(result => {
                     if (result.data.respCode === "1000") {
+                        this.giveThumbsup = true;
                         this.praiseNum = result.data.data.praiseNum;
                     }
                 })
@@ -185,6 +189,7 @@ export default {
                 .then(result => {
                     if (result.data.respCode === "1000") {
                         this.commeText = "";
+                        this.$toast("评论成功");
                         // this.commData = result.data.data;
                         this.queryComment();
                     }
@@ -208,6 +213,7 @@ export default {
                 .then(result => {
                     if (result.data.respCode === "1000") {
                         this.commData = result.data.data;
+                        this.numberComments = result.data.data.length;
                     }
                 })
                 .catch(err => {
@@ -302,19 +308,13 @@ export default {
     height: 100%;
     margin-bottom: 15px;
     /* overflow: hidden; */
-    padding: 0 0.6rem;
+    padding: 0 0.36rem;
 }
 .images img {
     /* position: absolute; */
     max-width:100%;
     width: 100%;
     height: 100%;
-    /* left: 0;
-    right: 0; */
-    /* top: 150px; */
-    /* bottom: 0; */
-    /* margin: auto; */
-    /* border: 1px solid red; */
     background-size: 100% 100%;
     background-repeat: no-repeat;
 }

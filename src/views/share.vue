@@ -1,6 +1,6 @@
 <template>
     <div class="share">
-        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;height: 2.8rem">
+        <mu-appbar color="#ff5242" style="width: 100%; text-align: center;">
             <mu-button icon slot="left" @click="outPage">
                 <i class="iconfont icon-fanhui ret-btn"></i>
             </mu-button>闲置分享
@@ -34,7 +34,11 @@
 </template>
 <script>
 import Qs from "qs";
+import { Dialog } from "vant";
 export default {
+    components: {
+        [Dialog.Component.name]: Dialog.Component
+    },
     data() {
         return {
             size: "36",
@@ -66,15 +70,22 @@ export default {
                     Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
+                    userId: sessionStorage.getItem("userId"),
                     communityId: localStorage.getItem("communityId"),
                     category: "3"
                 })
             })
                 .then(result => {
-                    if (result.status === 200) {
-                        if (result.data.respCode == 1000) {
-                            this.postContent = result.data.data;
-                        }
+                    if (result.data.respCode == 1000) {
+                        this.postContent = result.data.data;
+                    } else {
+                        Dialog.alert({
+                          title: '提示',
+                          message: result.data.errorMsg
+                        }).then(() => {
+                            this.$router.goBack();
+                          // on close
+                        });
                     }
                 })
                 .catch(err => {
@@ -109,7 +120,7 @@ export default {
     position: absolute;
     right: 1rem;
     bottom: 2rem;
-    z-index: 9999;
+    /* z-index: 9999; */
 }
 .muse-list {
     position: relative;

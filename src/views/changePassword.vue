@@ -1,6 +1,6 @@
 <template>
     <div class="changePass">
-        <mu-appbar style="width: 100%;height: 2.8rem" color="#ff5242">
+        <mu-appbar style="width: 100%;" color="#ff5242">
             <mu-button icon slot="left" @click="outPage">
                 <mu-icon value="keyboard_arrow_left" size="40"></mu-icon>
             </mu-button>修改密码

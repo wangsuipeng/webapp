@@ -1,10 +1,10 @@
 <template>
     <div style="height:calc(100vh - 56px);overflow-y: scroll;">
-        <transition :name="transitionName">
-            <keep-alive>
+        <!-- <transition :name="transitionName"> -->
+            <!-- <keep-alive> -->
                 <router-view :key="key" class="Router"/>
-            </keep-alive>
-        </transition>
+            <!-- </keep-alive> -->
+        <!-- </transition> -->
     </div>
 </template>
 <script>

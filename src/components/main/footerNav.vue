@@ -18,7 +18,7 @@ export default {
         };
     },
     created() {
-        console.log(this.bottomNav)
+        // console.log(this.bottomNav)
     },
     mounted () {
         this.bottomNav = this.$store.getters.bottomNav; 
