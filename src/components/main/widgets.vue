@@ -110,7 +110,6 @@ export default {
         };
     },
     created() {
-        console.log(222222)
         this.getCommunity();
         this.getAdvertiseByCommunity();
     },

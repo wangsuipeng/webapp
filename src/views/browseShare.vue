@@ -10,7 +10,7 @@
         </mu-appbar>
         <div class="container-main">
             <div class="content-browse">
-                <h1 class="title">{{postContent.title}}</h1>
+                <h2 class="title-text">{{postContent.title}}</h2>
                 <p class="textarea-text">{{postContent.content}}</p>
                 <div class="images" v-for="(item,index) in imageUrls" :key="index">
                     <img :src="item" alt />
@@ -53,12 +53,13 @@
                             <p>科比</p>
                             <p>{{item.content}}</p>
                         </div>
+                        <div class="time">{{item.createdAt}}</div>
                     </li>
                 </ul>
             </div>
             <div class="comment">
                 <div class="avatia">
-                    <img :src="avatarImag" alt />
+                    <img :src="imgName" alt />
                 </div>
                 <div class="comment-text">
                     <input type="text" placeholder="评论" v-model="commeText" id="inputText" />
@@ -92,6 +93,7 @@
 </template>
 <script>
 import Qs from "qs";
+import imgSrc from "../assets/images/avatar.png";
 export default {
     data() {
         return {
@@ -107,6 +109,7 @@ export default {
             avatarImag: "",
             commeText: "", // 评论内容
             commData: [],
+            imgName: '',
         };
     },
     created() {
@@ -128,6 +131,13 @@ export default {
         this.praiseNum =
             JSON.parse(localStorage.getItem("browseShare")).praiseNum || 0;
         this.queryComment();
+        if (localStorage.getItem("handImgId") == "" || localStorage.getItem("handImgId") == null) {
+            this.imgName = imgSrc;
+        } else {
+            this.imgName =
+                "http://103.26.76.116:9999/" +
+                "admin/welfare/sysFile/showPicForMany?id=" + localStorage.getItem("handImgId")
+        }
     },
     mounted() {},
     methods: {
@@ -285,9 +295,9 @@ export default {
     color: #fff;
     font-size: 30px;
 }
-.title {
+.title-text {
     width: 100%;
-    padding: 15px 5px;
+    padding: 15px 15px;
     background-color: rgb(204, 204, 204, 0.3);
     text-align: left;
     margin: 0 !important;
@@ -445,5 +455,9 @@ export default {
 }
 .commentList ul li {
     margin-bottom: 8px;
+}
+.time {
+    margin-left: 3.5rem;
+    margin-top: 0.2rem;
 }
 </style>

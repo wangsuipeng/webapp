@@ -10,7 +10,13 @@
         </mu-appbar>
         <div class="container-main">
             <mu-container>
-                <mu-tabs :value.sync="active3" color="#F8F8F8" indicator-color="#ff5242" full-width @change="changeTask">
+                <mu-tabs
+                    :value.sync="active3"
+                    color="#F8F8F8"
+                    indicator-color="#ff5242"
+                    full-width
+                    @change="changeTask"
+                >
                     <mu-tab style="color: #898989">爱心榜</mu-tab>
                     <mu-tab style="color: #898989">爱心大厅</mu-tab>
                 </mu-tabs>
@@ -19,7 +25,9 @@
                         <mu-list>
                             <div v-for="(item,index) in rankByGoldData" :key="index">
                                 <mu-list-item avatar button :ripple="false">
-                                    <span style="font-size: 18px;margin-right: 15px;font-style:italic">{{index + 1}}</span>
+                                    <span
+                                        style="font-size: 18px;margin-right: 15px;font-style:italic"
+                                    >{{index + 1}}</span>
                                     <mu-list-item-action>
                                         <mu-avatar>
                                             <img :src="item.headUrl" />
@@ -41,14 +49,20 @@
                     <mu-paper :z-depth="0" class="demo-list-wrap">
                         <mu-list textline="three-line">
                             <div v-for="(item,index) in queryAllTaskData" :key="index">
-                                <mu-list-item avatar :ripple="false" button @click="loveProgress(item.serviceId)">
+                                <mu-list-item
+                                    avatar
+                                    :ripple="false"
+                                    button
+                                    @click="loveProgress(item.serviceId)"
+                                >
                                     <mu-list-item-action>
                                         <mu-avatar>
                                             <img :src="item.headUrl" />
                                         </mu-avatar>
                                     </mu-list-item-action>
                                     <mu-list-item-content>
-                                        <mu-list-item-title id="text"
+                                        <mu-list-item-title
+                                            id="text"
                                             style="font-size: 16px;font-weight: 600;color: #000;margin-bottom: 10px"
                                         >{{item.serviceName}}</mu-list-item-title>
                                         <mu-list-item-sub-title>
@@ -56,7 +70,10 @@
                                                 style="color: #ff5242;display: inline-block"
                                             >爱心币{{item.points}}/次</div>
                                             <div class="public">
-                                                <span v-if="item.status == '未领取'" class="receive">做公益</span>
+                                                <span
+                                                    v-if="item.status == '未领取'"
+                                                    class="receive"
+                                                >做公益</span>
                                                 <span v-else class="notreceive">做公益</span>
                                             </div>
                                         </mu-list-item-sub-title>
@@ -68,6 +85,9 @@
                     </mu-paper>
                 </div>
             </mu-container>
+            <!-- <mu-button fab color="#FF5242" class="create-articles" @click="release">
+                <mu-icon size="28" value="add"></mu-icon>
+            </mu-button>-->
         </div>
     </div>
 </template>
@@ -88,7 +108,7 @@ export default {
     created() {
         this.queryAllCreatedTask();
         this.rankByGold();
-        this.active3 = parseInt(localStorage.getItem('active3'));
+        this.active3 = parseInt(localStorage.getItem("active3"));
     },
     methods: {
         outPage() {
@@ -98,8 +118,8 @@ export default {
             this.$router.push("/releasePublic");
         },
         loveProgress(serviceId) {
-            localStorage.setItem("active3",this.active3)
-            sessionStorage.setItem("serviceId",serviceId)
+            localStorage.setItem("active3", this.active3);
+            sessionStorage.setItem("serviceId", serviceId);
             this.$router.push("/loveProgress");
         },
         changeTask() {
@@ -152,11 +172,11 @@ export default {
                         this.queryAllTaskData = result.data.data;
                     } else {
                         Dialog.alert({
-                          title: '提示',
-                          message: result.data.errorMsg
+                            title: "提示",
+                            message: result.data.errorMsg
                         }).then(() => {
                             this.$router.goBack();
-                          // on close
+                            // on close
                         });
                     }
                 })
@@ -255,5 +275,11 @@ export default {
     height: 20px;
     /* border: 1px solid #ff5242; */
     margin-left: 10px;
+}
+.create-articles {
+    position: absolute;
+    right: 20px;
+    bottom: 28px;
+    /* z-index: 9999; */
 }
 </style>

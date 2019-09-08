@@ -11,11 +11,11 @@
         <div class="container-main">
             <div class="box-list">
                 当前版本
-                <span style="margin-left: 40px" id="version">1.4.8</span>
+                <span style="margin-left: 40px" id="version">1.5.0</span>
             </div>
             <div class="box-list">
                 最新版本
-                <span style="margin-left: 40px">1.4.8</span>
+                <span style="margin-left: 40px">1.5.0</span>
             </div>
             <div class="upgrade" @click="downloadApk">
                 <button>在线升级</button>
@@ -29,7 +29,7 @@ export default {
     data() {
         return {
             appVersion: "",
-            version: "1.4.7"
+            version: "1.4.9"
         };
     },
     created() {

@@ -53,12 +53,13 @@
                             <p>{{item.name}}</p>
                             <p>{{item.content}}</p>
                         </div>
+                        <div class="time">{{item.createdAt}}</div>
                     </li>
                 </ul>
             </div>
             <div class="comment">
                 <div class="avatia">
-                    <img :src="handImg" alt />
+                    <img :src="imgName" alt />
                 </div>
                 <div class="comment-text">
                     <input type="text" placeholder="评论" v-model="commeText" id="inputText" />
@@ -70,6 +71,7 @@
 </template>
 <script>
 import Qs from "qs";
+import imgSrc from "../assets/images/avatar.png";
 export default {
     data() {
         return {
@@ -80,6 +82,7 @@ export default {
             commeText: '',
             browsePerson: '',// 浏览人数
             numberComments: '',// 评论数
+            imgName: '',
         };
     },
     created() {
@@ -87,6 +90,13 @@ export default {
         this.handImg = JSON.parse(localStorage.getItem("parkingLot")).handImg;
         this.browsePerson = JSON.parse(localStorage.getItem("parkingLot")).browsePerson || 0;
         this.queryComment();
+        if (localStorage.getItem("handImgId") == "" || localStorage.getItem("handImgId") == null) {
+            this.imgName = imgSrc;
+        } else {
+            this.imgName =
+                "http://103.26.76.116:9999/" +
+                "admin/welfare/sysFile/showPicForMany?id=" + localStorage.getItem("handImgId")
+        }
     },
     methods: {
         outPage() {
@@ -290,6 +300,10 @@ export default {
     height: 0.6rem;
     margin-bottom: 0.5rem;
     background-color: #F9F9F9;
+}
+.time {
+    margin-left: 3.5rem;
+    margin-top: 0.2rem;
 }
 </style>
 <style>

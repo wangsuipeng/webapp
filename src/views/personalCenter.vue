@@ -70,8 +70,8 @@
                                 </mu-list-item-action>
                             </mu-list-item>
                             <mu-divider shallow-inset></mu-divider>
-                            <mu-list-item v-ripple>
-                                <mu-list-item-content @click="outLogin">
+                            <mu-list-item v-ripple @click.native="outLogin">
+                                <mu-list-item-content>
                                     <mu-list-item-title style="color: #ff5242;font-size: 14px">退出登录</mu-list-item-title>
                                 </mu-list-item-content>
                                 <mu-list-item-action>
@@ -113,7 +113,7 @@ export default {
         return {
             size: 56,
             open: false,
-            imgName: "",
+            imgName: "",// 头像
             nickName: "", // 昵称
             sex: "", // 性别
             phone: "", // 手机
@@ -178,7 +178,6 @@ export default {
         handleFile(e) {
             let target = e.target || e.srcElement;
             let file = target.files[0];
-            console.log(file);
             let formImg = new FormData(); //创建form对象
             formImg.append("file", file); //通过append向form对象添加数据
             this.$axios({
@@ -215,7 +214,7 @@ export default {
                 })
             })
                 .then(result => {
-                    i;
+                    
                 })
                 .catch(err => {
                     console.log(err);

@@ -89,7 +89,7 @@ export default {
             active4: 0,
             leaseParking: [], // 出租车位
             seekGroup: [], // 求租车位
-            sellvehicle: []
+            sellvehicle: [],
         };
     },
     created() {
@@ -224,7 +224,7 @@ export default {
     position: absolute;
     right: 20px;
     bottom: 28px;
-    z-index: 9999;
+    /* z-index: 9999; */
 }
 .muse-list {
     position: relative;

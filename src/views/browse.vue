@@ -10,7 +10,7 @@
         </mu-appbar>
         <div class="container-main">
             <div class="content-browse">
-                <h1 class="title">{{postContent.title}}</h1>
+                <p class="title-text">{{postContent.title}}</p>
                 <p class="textarea-text">{{postContent.content}}</p>
                 <div class="images" v-for="(item,index) in imageUrls" :key="index">
                     <img :src="item" alt />
@@ -54,12 +54,13 @@
                             <p>{{item.name}}</p>
                             <p>{{item.content}}</p>
                         </div>
+                        <div class="time">{{item.createdAt}}</div>
                     </li>
                 </ul>
             </div>
             <div class="comment">
                 <div class="avatia">
-                    <img :src="avatarImag" alt />
+                    <img :src="imgName" alt />
                 </div>
                 <div class="comment-text">
                     <input type="text" placeholder="评论" v-model="commeText" id="inputText" />
@@ -93,6 +94,7 @@
 </template>
 <script>
 import Qs from "qs";
+import imgSrc from "../assets/images/avatar.png";
 export default {
     data() {
         return {
@@ -109,7 +111,8 @@ export default {
             commeText: "", // 评论内容
             commData: [],
             numberComments: "",// 评论数
-            giveThumbsup: false
+            giveThumbsup: false,
+            imgName: '',
         };
     },
     created() {
@@ -126,6 +129,13 @@ export default {
         this.praiseNum =
             JSON.parse(localStorage.getItem("familyDiscussion")).praiseNum || 0;
         this.queryComment();
+        if (localStorage.getItem("handImgId") == "" || localStorage.getItem("handImgId") == null) {
+            this.imgName = imgSrc;
+        } else {
+            this.imgName =
+                "http://103.26.76.116:9999/" +
+                "admin/welfare/sysFile/showPicForMany?id=" + localStorage.getItem("handImgId")
+        }
     },
     mounted() {
         
@@ -289,10 +299,13 @@ export default {
     color: #fff;
     font-size: 30px;
 }
-.title {
+.title-text {
     width: 100%;
-    padding: 15px 5px;
-    background-color: rgb(204, 204, 204, 0.3);
+    padding: 15px 15px;
+    font-size: 20px;
+    color: #808080;
+    font-weight: 500;
+    background-color: #F1F1F1;
     text-align: left;
     margin: 0 !important;
 }
@@ -307,11 +320,9 @@ export default {
     width: 100%;
     height: 100%;
     margin-bottom: 15px;
-    /* overflow: hidden; */
     padding: 0 0.36rem;
 }
 .images img {
-    /* position: absolute; */
     max-width:100%;
     width: 100%;
     height: 100%;
@@ -337,7 +348,6 @@ export default {
 }
 .textarea-text {
     width: 100%;
-    /* min-height: 15rem; */
     text-indent: 20px;
     outline: none;
     padding: 5px 10px;
@@ -374,11 +384,7 @@ export default {
     margin-left: 0.4rem;
     background-color: #fefbfa;
     border: 1px solid #e9e9e9;
-    /* box-shadow:inset 0 0 2px 2px #E9E9E9; */
     border-color: #e9e9e9;
-    /* outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #e9e9e9;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #e9e9e9; */
     padding-left: 0.5rem;
     padding-right: 2.7rem;
     position: relative;
@@ -429,7 +435,7 @@ export default {
     padding: 8px;
     display: inline-block;
     width: 82%;
-    border-radius: 1rem;
+    border-radius: 0.7rem;
     background-color: #f1f1f1;
 }
 .content-comm p {
@@ -447,5 +453,9 @@ export default {
 }
 .commentList ul li {
     margin-bottom: 8px;
+}
+.time {
+    margin-left: 3.5rem;
+    margin-top: 0.2rem;
 }
 </style>

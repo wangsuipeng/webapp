@@ -40,7 +40,7 @@ export default {
         };
     },
     created() {
-        this.nickName = localStorage.getItem("nickName");
+        this.nickName = localStorage.getItem("nickName") || '';
         this.statisticGold();
     },
     methods: {

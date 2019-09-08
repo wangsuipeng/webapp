@@ -161,7 +161,6 @@ export default {
                 "admin/welfare/sysFile/showPicForMany?id=" +
                 this.$store.getters.headPortrait;
         }
-        console.log(333333)
     },
     mounted() {
         //首页返回键处理

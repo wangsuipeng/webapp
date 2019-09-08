@@ -61,12 +61,10 @@ export default {
         };
     },
     created() {
-        console.log(11111)
         this.noticeData();
         this.community = localStorage.getItem("myCommunity");
     },
     mounted() {
-        console.log(122)
         this.noticeData();
         this.community = localStorage.getItem("myCommunity");
         //首页返回键处理
@@ -90,9 +88,6 @@ export default {
             }
         };
         // document.addEventListener("plusready", this.plusReady());
-    },
-    updated () {
-        console.log("2222222222222")
     },
     methods: {
         plusReady() {
@@ -161,7 +156,9 @@ export default {
                 .then(result => {
                     if (result.status === 200) {
                         this.notData = result.data.page.list;
-                        this.content = result.data.page.list[0].content;
+                        if (result.data.page.list.length !== 0) {
+                            this.content = result.data.page.list[0].content;
+                        }
                     }
                 })
                 .catch(err => {

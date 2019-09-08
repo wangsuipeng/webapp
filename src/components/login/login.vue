@@ -29,7 +29,7 @@
                     </mu-form-item>
                     <span class="forget-pass">忘记密码</span>
                     <mu-form-item prop="isAgree" :rules="argeeRules">
-                        <mu-checkbox label="同意用户协议" v-model="validateForm.isAgree"></mu-checkbox>
+                        <mu-checkbox color="#ff5242" label="同意用户协议" v-model="validateForm.isAgree"></mu-checkbox>
                     </mu-form-item>
                 </mu-form>
             </mu-container>
@@ -55,7 +55,7 @@
                         </mu-text-field>
                     </mu-form-item>
                     <mu-form-item prop="isAgree" :rules="argeeRules">
-                        <mu-checkbox label="同意用户协议" v-model="validateForm.isAgree"></mu-checkbox>
+                        <mu-checkbox color="#ff5242" label="同意用户协议" v-model="validateForm.isAgree"></mu-checkbox>
                     </mu-form-item>
                 </mu-form>
             </mu-container>

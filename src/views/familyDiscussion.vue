@@ -77,14 +77,14 @@ export default {
             size: "36",
             open: false,
             postContent: [],
-            articleTitle: "", // 文章标题
+            articleTitle: "" // 文章标题
         };
     },
     created() {
         this.articleQueryAll();
     },
     mounted() {
-        mui.back = function () {
+        mui.back = function() {
             // history.go(-1); //回退到上一页面
             this.$router.goBack();
         };
@@ -97,7 +97,7 @@ export default {
             this.$router.push("./post");
         },
         browsePost(item) {
-            localStorage.setItem('familyDiscussion',JSON.stringify(item))
+            localStorage.setItem("familyDiscussion", JSON.stringify(item));
             this.$router.push("/browse");
         },
         //查询所有新闻或公告
@@ -111,7 +111,7 @@ export default {
                 data: Qs.stringify({
                     userId: sessionStorage.getItem("userId"),
                     communityId: localStorage.getItem("communityId"),
-                    category: '2'
+                    category: "2"
                 })
             })
                 .then(result => {
@@ -119,12 +119,24 @@ export default {
                         if (result.data.respCode == 1000) {
                             this.postContent = result.data.data;
                         } else {
+                            // Dialog.confirm({
+                            //     title: "提示",
+                            //     message: result.data.errorMsg
+                            // })
+                            //     .then(() => {
+                            //         // on confirm
+                            //         this.$router.push('/authentication')
+                            //     })
+                            //     .catch(() => {
+                            //         this.$router.goBack();
+                            //         // on cancel
+                            //     });
                             Dialog.alert({
-                              title: '提示',
-                              message: result.data.errorMsg
+                                title: "提示",
+                                message: result.data.errorMsg
                             }).then(() => {
                                 this.$router.goBack();
-                              // on close
+                                // on close
                             });
                         }
                     }
