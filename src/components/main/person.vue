@@ -152,7 +152,11 @@ export default {
         };
     },
     created() {
-        this.nickName = localStorage.getItem("nickName");
+        if (localStorage.getItem("nickName") == 'null') {
+            this.nickName = "";
+        } else {
+            this.nickName = localStorage.getItem("nickName")
+        }
         if (this.$store.getters.headPortrait == "") {
             this.avatar = imgSrc;
         } else {

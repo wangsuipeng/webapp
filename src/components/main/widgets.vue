@@ -95,7 +95,11 @@
 </template>
 <script>
 import Qs from "qs";
+import { Dialog } from "vant";
 export default {
+    components: {
+        [Dialog.Component.name]: Dialog.Component
+    },
     data() {
         return {
             docked: false,
@@ -159,6 +163,126 @@ export default {
         },
         openBotttomSheet() {
             this.open = true;
+        },
+        //查询所有新闻或公告
+        articleFamilyQueryAll() {
+            this.$axios({
+                url: "admin/mobile/article/queryAllByCommunityIdAndCategary",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    userId: sessionStorage.getItem("userId"),
+                    communityId: localStorage.getItem("communityId"),
+                    category: "2"
+                })
+            })
+                .then(result => {
+                    if (result.data.respCode == 1000) {
+                        this.$router.push("/familyD");
+                        // this.postContent = result.data.data;
+                    } else {
+                        Dialog.alert({
+                            title: "提示",
+                            message: result.data.errorMsg
+                        }).then(() => {
+                            // this.$router.goBack();
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        //查询所有新闻或公告
+        articleQueryAll() {
+            this.$axios({
+                url: "admin/mobile/article/queryAllByCommunityIdAndCategary",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    userId: sessionStorage.getItem("userId"),
+                    communityId: localStorage.getItem("communityId"),
+                    category: "3"
+                })
+            })
+                .then(result => {
+                    if (result.data.respCode == 1000) {
+                        this.$router.push("/share");
+                    } else {
+                        Dialog.alert({
+                          title: '提示',
+                          message: result.data.errorMsg
+                        }).then(() => {
+                            // this.$router.goBack();
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        // 爱心大厅
+        queryAllTask() {
+            this.$axios({
+                url: "admin/mobile/welfare/queryAllTask",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    userId: sessionStorage.getItem("userId"),
+                    communityId: localStorage.getItem("communityId")
+                })
+            })
+                .then(result => {
+                    if (result.data.respCode == 1000) {
+                        this.$router.push("/loveBank");
+                    } else {
+                        Dialog.alert({
+                            title: "提示",
+                            message: result.data.errorMsg
+                        }).then(() => {
+                            // this.$router.goBack();
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
+        // 获取出租车位信息
+        getAll() {
+            this.$axios({
+                url: "admin/mobile/carport/getAll",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    userId: sessionStorage.getItem("userId"),
+                    communityId: localStorage.getItem("communityId"),
+                    type: "1"
+                })
+            })
+                .then(result => {
+                    if (result.data.respCode == "1000") {
+                        this.$router.push("/parkingLot");
+                    } else {
+                        Dialog.alert({
+                            title: "提示",
+                            message: result.data.errorMsg
+                        }).then(() => {
+                            // this.$router.goBack();
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         },
         // 获取所有社区
         getCommunity() {
@@ -236,25 +360,55 @@ export default {
                 }
             }); // 在这里调用plus api
         },
+        //获取用户申请中的
+        getUserApplyWorkflowInfo() {
+            this.$axios({
+                url: "admin/mobile/processCheck/getUserApplyWorkflowInfo",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    communityId: localStorage.getItem("communityId"),
+                    status: "0",
+                    userId: sessionStorage.getItem("userId")
+                })
+            })
+                .then(result => {
+                    if (result.data.respCode === "1000") {
+                        this.$router.push("/applyRepair");                        
+                    } else {
+                        Dialog.alert({
+                            title: "提示",
+                            message: result.data.errorMsg
+                        }).then(() => {
+                            // this.$router.goBack();
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        },
         familyDiscussion() {
-            this.$router.push("/familyD");
+            this.articleFamilyQueryAll();
         },
         propertyPay() {
             this.$router.push("/propertyPay");
         },
         loveBank() {
             localStorage.setItem("active3",0)
-            this.$router.push("/loveBank");
+            this.queryAllTask()
         },
         share() {
-            this.$router.push("/share");
+            this.articleQueryAll();
         },
         applyRepair() {
-            this.$router.push("/applyRepair");
+            this.getUserApplyWorkflowInfo();
         },
         parkingLot() {
             localStorage.setItem("active4",0)
-            this.$router.push("/parkingLot");
+            this.getAll();
         }
     }
 };

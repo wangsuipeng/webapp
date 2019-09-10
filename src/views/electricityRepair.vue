@@ -161,7 +161,7 @@ export default {
                     if (result.data.respCode === "1000") {
                         this.$router.goBack();
                     } else {
-                        this.$toast(result.data.errorMsg)
+                        this.$toast(result.data.respMsg)
                     }
                 }) 
                 .catch(err => {

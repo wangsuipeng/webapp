@@ -39,7 +39,7 @@
                         </mu-container>
                     </div>
                 </mu-sub-header>
-                <div class="list-content">
+                <div class="list-content" id="content">
                     <div v-for="(item,index) in postContent" :key="index">
                         <mu-list-item
                             avatar
@@ -77,7 +77,8 @@ export default {
             size: "36",
             open: false,
             postContent: [],
-            articleTitle: "" // 文章标题
+            articleTitle: "", // 文章标题
+            scrollTop: ""
         };
     },
     created() {
@@ -89,6 +90,19 @@ export default {
             this.$router.goBack();
         };
     },
+    // //在页面离开时记录滚动位置
+    // beforeRouteLeave (to, from, next) {
+    //     this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+    //     next()
+    // },
+    // //进入该页面时，用之前保存的滚动位置赋值
+    // beforeRouteEnter (to, from, next) {
+    //     next(vm => {
+    //         console.log(vm.scrollTop)
+    //         document.body.scrollTop = 500 + 'px'
+            
+    //     })
+    // },
     methods: {
         outPage() {
             this.$router.goBack();
@@ -97,7 +111,7 @@ export default {
             this.$router.push("./post");
         },
         browsePost(item) {
-            localStorage.setItem("familyDiscussion", JSON.stringify(item));
+            localStorage.setItem("familyDiscussion",JSON.stringify(item))
             this.$router.push("/browse");
         },
         //查询所有新闻或公告
@@ -119,24 +133,11 @@ export default {
                         if (result.data.respCode == 1000) {
                             this.postContent = result.data.data;
                         } else {
-                            // Dialog.confirm({
-                            //     title: "提示",
-                            //     message: result.data.errorMsg
-                            // })
-                            //     .then(() => {
-                            //         // on confirm
-                            //         this.$router.push('/authentication')
-                            //     })
-                            //     .catch(() => {
-                            //         this.$router.goBack();
-                            //         // on cancel
-                            //     });
                             Dialog.alert({
                                 title: "提示",
                                 message: result.data.errorMsg
                             }).then(() => {
                                 this.$router.goBack();
-                                // on close
                             });
                         }
                     }

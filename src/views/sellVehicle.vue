@@ -9,18 +9,6 @@
             </mu-button>
         </mu-appbar>
         <div class="container-main">
-            <!-- <mu-list textline="three-line">
-                <mu-list-item avatar :ripple="false" button>
-                    <mu-list-item-action>
-                        <mu-avatar>
-                            <img :src="parkingLot.handImg" />
-                        </mu-avatar>
-                    </mu-list-item-action>
-                    <mu-list-item-content>
-                        <mu-list-item-title>{{parkingLot.title}}</mu-list-item-title>
-                    </mu-list-item-content>
-                </mu-list-item>
-            </mu-list> -->
             <div class="content-sell">
                 <div class="title-text">
                     <div class="avats-img">
@@ -28,7 +16,6 @@
                     </div>
                     <div class="title-content">{{parkingLot.title}}</div>
                 </div>
-                <!-- <p class="title-text">{{parkingLot.title}}</p> -->
                 <p class="textarea-text">{{parkingLot.content}}</p>
                 <div class="images" v-for="(item,index) in imageUrls" :key="index">
                     <img :src="item" alt />
@@ -61,8 +48,8 @@
                         <div class="content-comm">
                             <p>{{item.name}}</p>
                             <p>{{item.content}}</p>
+                            <div class="time">{{(item.createdAt).substr(0,19)}}</div>
                         </div>
-                        <div class="time">{{item.createdAt}}</div>
                     </li>
                 </ul>
             </div>
@@ -366,8 +353,9 @@ export default {
     background-color: #F9F9F9;
 }
 .time {
-    margin-left: 3.5rem;
+    float: right;
     margin-top: 0.2rem;
+    margin-right: 0.2rem;
 }
 </style>
 <style>

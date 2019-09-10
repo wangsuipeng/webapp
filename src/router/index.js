@@ -61,7 +61,8 @@ export default new Router({
     },
     {
       path: '/familyD',
-      component: () => import('@/views/familyDiscussion.vue')
+      component: () => import('@/views/familyDiscussion.vue'),
+      meta: { keepAlive: true }
     },
     {
       path: '/post',

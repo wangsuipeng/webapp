@@ -2,7 +2,11 @@
     <div style="height:calc(100vh - 56px);overflow-y: scroll;">
         <!-- <transition :name="transitionName"> -->
             <!-- <keep-alive> -->
-                <router-view :key="key" class="Router"/>
+                <keep-alive>
+                  <router-view v-if="$route.meta.keepAlive" class="Router"></router-view>
+                </keep-alive>
+                <router-view v-if="!$route.meta.keepAlive" class="Router"></router-view>
+                <!-- <router-view :key="key" class="Router"/> -->
             <!-- </keep-alive> -->
         <!-- </transition> -->
     </div>

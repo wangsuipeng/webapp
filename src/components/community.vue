@@ -4,7 +4,7 @@
             <mu-appbar color="#ff5242" style="width: 100%; text-align: center;">
                 <mu-button icon slot="left" @click="openBotttomSheet">
                     <mu-icon value="menu"></mu-icon>
-                </mu-button>我的社区
+                </mu-button>签约社区
                 <mu-button icon slot="right" @click="refresh()">
                     <mu-icon value="refresh"></mu-icon>
                 </mu-button>

@@ -9,22 +9,18 @@
             </mu-button>
         </mu-appbar>
         <div class="container-main">
-            <mu-list textline="three-line">
-                <mu-list-item avatar :ripple="false" button>
-                    <mu-list-item-action>
-                        <mu-avatar>
-                            <img :src="parkingLot.handImg" />
-                        </mu-avatar>
-                    </mu-list-item-action>
-                    <mu-list-item-content>
-                        <mu-list-item-title>{{parkingLot.title}}</mu-list-item-title>
-                        <mu-list-item-sub-title>
-                            <!-- <span style="color: rgba(0, 0, 0, .87)">Myron Liu -</span>  -->
-                        </mu-list-item-sub-title>
-                    </mu-list-item-content>
-                </mu-list-item>
-            </mu-list>
-            <p class="text-context">{{parkingLot.content}}</p>
+            <div class="content-sell">
+                <div class="title-text">
+                    <div class="avats-img">
+                        <img :src="handImg" alt="">
+                    </div>
+                    <div class="title-content">{{parkingLot.title}}</div>
+                </div>
+                <p class="textarea-text">{{parkingLot.content}}</p>
+                <div class="images" v-for="(item,index) in imageUrls" :key="index">
+                    <img :src="item" alt />
+                </div>
+            </div>
             <div class="comment-number">
                 <ul class="share">
                     <li>
@@ -52,8 +48,8 @@
                         <div class="content-comm">
                             <p>{{item.name}}</p>
                             <p>{{item.content}}</p>
+                            <div class="time">{{(item.createdAt).substr(0,19)}}</div>
                         </div>
-                        <div class="time">{{item.createdAt}}</div>
                     </li>
                 </ul>
             </div>
@@ -83,10 +79,17 @@ export default {
             browsePerson: '',// 浏览人数
             numberComments: '',
             imgName: '',
+            imageUrls: [],
         };
     },
     created() {
         this.parkingLot = JSON.parse(localStorage.getItem("parkingLot"));
+        var obj = JSON.parse(
+            JSON.parse(localStorage.getItem("parkingLot")).imgPath
+        );
+        for (var key in obj) {
+            this.imageUrls.push(obj[key]);
+        }
         this.handImg = JSON.parse(localStorage.getItem("parkingLot")).handImg;
         this.browsePerson = JSON.parse(localStorage.getItem("parkingLot")).browsePerson || 0;
         this.queryComment();
@@ -254,6 +257,54 @@ export default {
 
     border-radius: 50%;
 }
+.title-text {
+    clear: both;
+    overflow: hidden;
+    width: 100%;
+    padding: 15px 15px;
+    font-size: 20px;
+    color: #808080;
+    font-weight: 500;
+    text-align: left;
+    margin: 0 !important;
+}
+.images {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 15px;
+    padding: 0 0.36rem;
+}
+.images img {
+    max-width:100%;
+    width: 100%;
+    height: 100%;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+.textarea-text {
+    width: 100%;
+    text-indent: 20px;
+    outline: none;
+    padding: 5px 10px;
+}
+.avats-img {
+    float: left;
+    width: 20%;
+}
+.avats-img img {
+    display: inline-block;
+    width: 3rem;
+    height: 3rem;
+    background-size: cover;
+    border-radius: 50%;
+}
+.title-content {
+    float: left;
+    width: 80%;
+    font-size: 18px;
+    margin-top: 0.6rem;
+}
 .content-comm {
     padding: 8px;
     display: inline-block;
@@ -302,7 +353,8 @@ export default {
     background-color: #F9F9F9;
 }
 .time {
-    margin-left: 3.5rem;
+    float: right;
+    margin-right: 0.2rem;
     margin-top: 0.2rem;
 }
 </style>

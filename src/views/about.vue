@@ -11,11 +11,11 @@
         <div class="container-main">
             <div class="box-list">
                 当前版本
-                <span style="margin-left: 40px" id="version">1.5.0</span>
+                <span style="margin-left: 40px" id="version">1.5.2</span>
             </div>
             <div class="box-list">
                 最新版本
-                <span style="margin-left: 40px">1.5.0</span>
+                <span style="margin-left: 40px">{{newVersions}}</span>
             </div>
             <div class="upgrade" @click="downloadApk">
                 <button>在线升级</button>
@@ -29,11 +29,12 @@ export default {
     data() {
         return {
             appVersion: "",
-            version: "1.4.9"
+            version: "1.5.1",
+            newVersions: ''
         };
     },
     created() {
-
+        this.newVersion();
     },
     mounted () {
         mui.back = function () {
@@ -43,6 +44,24 @@ export default {
     methods: {
         outPage() {
             this.$router.goBack();
+        },
+        newVersion() {
+            // let version = document.getElementById("version").innerText;
+            this.$axios({
+                url: "admin/mobile/isNeedUpdate",
+                method: "post",
+                headers: {
+                    Authorization: sessionStorage.getItem("token")
+                },
+                data: Qs.stringify({
+                    version: '1.5.1',
+                    clientType: "a"
+                })
+            }).then((result) => {
+                this.newVersions = result.data.appVersion;
+            }).catch((err) => {
+                console.log(err)
+            });
         },
         downloadApk() {
             let version = document.getElementById("version").innerText;

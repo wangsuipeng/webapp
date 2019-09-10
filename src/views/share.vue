@@ -57,7 +57,6 @@ export default {
             this.$router.push("/sharePosts");
         },
         browseShare(item) {
-            console.log(item);      console.log(item);
             localStorage.setItem('browseShare',JSON.stringify(item))
             this.$router.push('/browseShare')
         },

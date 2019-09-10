@@ -53,8 +53,8 @@
                         <div class="content-comm">
                             <p>{{item.name}}</p>
                             <p>{{item.content}}</p>
+                            <div class="time">{{(item.createdAt).substr(0,19)}}</div>
                         </div>
-                        <div class="time">{{item.createdAt}}</div>
                     </li>
                 </ul>
             </div>
@@ -455,7 +455,8 @@ export default {
     margin-bottom: 8px;
 }
 .time {
-    margin-left: 3.5rem;
+    float: right;
+    margin-right: 0.2rem;
     margin-top: 0.2rem;
 }
 </style>
