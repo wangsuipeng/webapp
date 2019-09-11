@@ -18,12 +18,12 @@
             </div>
             <mu-bottom-sheet :open.sync="open" overlay-close>
                 <mu-list @close="closeBottomSheet">
-                    <!-- <mu-list-item button>
+                    <mu-list-item button>
                         <mu-list-item-action>
                             <mu-icon value="create" color="orange"></mu-icon>
                         </mu-list-item-action>
                         <mu-list-item-title @click="editPost">编辑</mu-list-item-title>
-                    </mu-list-item> -->
+                    </mu-list-item>
                     <mu-list-item button @click.native="deleteArticle">
                         <mu-list-item-action>
                             <mu-icon value="delete" color="blue"></mu-icon>

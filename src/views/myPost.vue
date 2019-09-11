@@ -9,23 +9,30 @@
             </mu-button>
         </mu-appbar>
         <div class="container-main">
-            <mu-list>
-                <div v-for="(item,index) in postContent" :key="index">
-                    <mu-list-item
-                        avatar
-                        class="word-list muse-list"
-                        v-ripple
-                        @click.native="browsePost(item)"
-                    >
-                        <mu-list-item-action>
-                            <mu-avatar :size="size">
-                                <img :src="item.headUrl" />
-                            </mu-avatar>
-                        </mu-list-item-action>
-                        <mu-list-item-title>{{item.title}}</mu-list-item-title>
-                    </mu-list-item>
-                </div>
-            </mu-list>
+            <van-tabs v-model="activeName">
+              <van-tab title="家事讨论" name="a">
+                <mu-list>
+                    <div v-for="(item,index) in postContent" :key="index">
+                        <mu-list-item
+                            avatar
+                            class="word-list muse-list"
+                            v-ripple
+                            @click.native="browsePost(item)"
+                        >
+                            <mu-list-item-action>
+                                <mu-avatar :size="size">
+                                    <img :src="item.headUrl" />
+                                </mu-avatar>
+                            </mu-list-item-action>
+                            <mu-list-item-title>{{item.title}}</mu-list-item-title>
+                        </mu-list-item>
+                    </div>
+                </mu-list>
+              </van-tab>
+              <van-tab title="车位分享" name="b">内容 2</van-tab>
+              <van-tab title="闲置分享" name="c">内容 3</van-tab>
+            </van-tabs>
+            
         </div>
     </div>
 </template>
@@ -37,6 +44,7 @@ export default {
         return {
             postContent: [],
             size: "36",
+            activeName: 'a'
         };
     },
     created() {
@@ -71,7 +79,29 @@ export default {
                 .catch(err => {
                     console.log(err);
                 });
-        }
+        },
+        //查询本人发布的闲置分享
+        // articleQueryAll() {
+        //     this.$axios({
+        //         url: "admin/mobile/article/queryByAuthorId",
+        //         method: "post",
+        //         headers: {
+        //             Authorization: sessionStorage.getItem("token")
+        //         },
+        //         data: Qs.stringify({
+        //             authorId: sessionStorage.getItem("userId"),
+        //             communityId: localStorage.getItem("communityId")
+        //         })
+        //     })
+        //         .then(result => {
+        //             if (result.data.respCode == 1000) {
+        //                 this.postContent = result.data.data;
+        //             }
+        //         })
+        //         .catch(err => {
+        //             console.log(err);
+        //         });
+        // }
     }
 };
 </script>

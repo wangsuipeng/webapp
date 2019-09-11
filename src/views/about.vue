@@ -29,7 +29,7 @@ export default {
     data() {
         return {
             appVersion: "",
-            version: "1.5.1",
+            version: "1.5.2",
             newVersions: ''
         };
     },
@@ -54,7 +54,7 @@ export default {
                     Authorization: sessionStorage.getItem("token")
                 },
                 data: Qs.stringify({
-                    version: '1.5.1',
+                    version: '1.5.2',
                     clientType: "a"
                 })
             }).then((result) => {

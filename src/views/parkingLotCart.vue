@@ -84,11 +84,11 @@ export default {
             height: "",
             labelPosition: "top",
             postForm: {
-                title: "",// 标题
-                content: "",// 内容
+                title: "", // 标题
+                content: "", // 内容
                 userId: sessionStorage.getItem("userId"),
                 communityId: localStorage.getItem("communityId"),
-                type: "",// 类型
+                type: "" // 类型
             },
             lineBool: false,
             imgsrc: "", //上传的·图片的地址
@@ -110,9 +110,7 @@ export default {
             formImg: ""
         };
     },
-    created() {
-        
-    },
+    created() {},
     mounted() {
         // if (window.plus) {
         //     this.height = plus.navigator.getStatusbarHeight();
@@ -139,24 +137,29 @@ export default {
             fd.append("userId", this.postForm.userId);
             fd.append("communityId", this.postForm.communityId);
             fd.append("type", this.postForm.type);
-            this.$axios({
-                url: "admin/mobile/carport/save",
-                method: "post",
-                headers: {
-                    Authorization: sessionStorage.getItem("token")
-                },
-                data: fd
-            })
-                .then(result => {
-                    if (result.data.respCode == '1000') {
-                        this.$router.goBack();
-                    } else if (result.data.respCode === "1001") {
-                        this.$toast.warning(result.data.errorMsg);
-                    }
+            console.log(this.postForm.type);
+            if (this.postForm.type == "") {
+                this.$toast("请选择发布类型");
+            } else {
+                this.$axios({
+                    url: "admin/mobile/carport/save",
+                    method: "post",
+                    headers: {
+                        Authorization: sessionStorage.getItem("token")
+                    },
+                    data: fd
                 })
-                .catch(err => {
-                    console.log(err);
-                });
+                    .then(result => {
+                        if (result.data.respCode == "1000") {
+                            this.$router.goBack();
+                        } else if (result.data.respCode === "1001") {
+                            this.$toast.warning(result.data.errorMsg);
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            }
         },
         onRead(file) {
             if (file.constructor == Object) {
