@@ -243,6 +243,7 @@ export default {
             this.$router.push("/myApplication");
         },
         myPost() {
+            localStorage.setItem("activeName",0)
             this.$router.push("/myPost");
         },
         

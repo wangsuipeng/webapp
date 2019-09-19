@@ -11,7 +11,7 @@
         <div class="container-main">
             <div class="box-list">
                 当前版本
-                <span style="margin-left: 40px" id="version">1.5.2</span>
+                <span style="margin-left: 40px" id="version">1.5.4</span>
             </div>
             <div class="box-list">
                 最新版本
@@ -29,7 +29,7 @@ export default {
     data() {
         return {
             appVersion: "",
-            version: "1.5.2",
+            version: "1.5.3",
             newVersions: ''
         };
     },
