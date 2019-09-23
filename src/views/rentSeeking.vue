@@ -15,6 +15,7 @@
             <img :src="handImg" alt />
           </div>
           <div class="title-content">{{parkingLot.title}}</div>
+          <div class="post-time">{{postTime}}</div>
         </div>
         <p class="textarea-text">{{parkingLot.content}}</p>
         <div class="images" v-for="(item,index) in imageUrls" :key="index">
@@ -74,11 +75,15 @@ export default {
       browsePerson: "", // 浏览人数
       numberComments: "",
       imgName: "",
-      imageUrls: []
+      imageUrls: [],
+      postTime: "",
+      postId: ""
     };
   },
   created() {
     this.parkingLot = JSON.parse(localStorage.getItem("parkingLot"));
+    this.postId = JSON.parse(localStorage.getItem("parkingLot")).id;
+    this.postTime = JSON.parse(localStorage.getItem("parkingLot")).createTime.substr(0, 10)
     var obj = JSON.parse(
       JSON.parse(localStorage.getItem("parkingLot")).imgPath
     );
@@ -100,6 +105,7 @@ export default {
         "admin/welfare/sysFile/showPicForMany?id=" +
         localStorage.getItem("handImgId");
     }
+    this.getCarportNum()
   },
   mounted() {
     mui.back = function() {
@@ -154,6 +160,27 @@ export default {
           if (result.data.respCode === "1000") {
             this.commData = result.data.data;
             this.numberComments = result.data.data.length;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 查询浏览量
+    getCarportNum() {
+      this.$axios({
+        url: "admin/mobile/carport/getCarportById",
+        method: "post",
+        headers: {
+          Authorization: sessionStorage.getItem("token")
+        },
+        data: Qs.stringify({
+          id: this.postId
+        })
+      })
+        .then(result => {
+          if (result.data.respCode === "1000") {
+            this.browsePerson = result.data.data.browsePerson
           }
         })
         .catch(err => {
@@ -360,6 +387,13 @@ export default {
   float: right;
   margin-right: 0.2rem;
   margin-top: 0.2rem;
+}
+.post-time {
+  float: right;
+  font-weight: normal;
+  font-size: 14px;
+  margin-top: 0.5rem;
+  color: #a4a4a4;
 }
 </style>
 <style>

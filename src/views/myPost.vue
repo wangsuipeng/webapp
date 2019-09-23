@@ -62,7 +62,7 @@
                     <img :src="item.handImg" />
                   </mu-avatar>
                 </mu-list-item-action>
-                <mu-list-item-title>{{item.title}}</mu-list-item-title>
+                <mu-list-item-title>{{item.serviceName}}</mu-list-item-title>
               </mu-list-item>
             </div>
           </mu-list>
@@ -114,7 +114,8 @@ export default {
         },
         data: Qs.stringify({
           authorId: sessionStorage.getItem("userId"),
-          communityId: localStorage.getItem("communityId")
+          communityId: localStorage.getItem("communityId"),
+          category: '2'
         })
       })
         .then(result => {
@@ -129,13 +130,13 @@ export default {
     // 查询本人发布的闲置分享
     getIdleShare() {
       this.$axios({
-        url: "admin/mobile/article/queryAllByCommunityIdAndCategary",
+        url: "admin/mobile/welfare/queryAllCreatedTask",
         method: "post",
         headers: {
           Authorization: sessionStorage.getItem("token")
         },
         data: Qs.stringify({
-          userId: sessionStorage.getItem("userId"),
+          publishUserId: sessionStorage.getItem("userId"),
           communityId: localStorage.getItem("communityId")
         })
       })
@@ -159,7 +160,6 @@ export default {
         data: Qs.stringify({
           userId: sessionStorage.getItem("userId"),
           communityId: localStorage.getItem("communityId")
-          //   type: "1"
         })
       })
         .then(result => {
@@ -171,28 +171,6 @@ export default {
           console.log(err);
         });
     }
-    //查询本人发布的闲置分享
-    // articleQueryAll() {
-    //     this.$axios({
-    //         url: "admin/mobile/article/queryByAuthorId",
-    //         method: "post",
-    //         headers: {
-    //             Authorization: sessionStorage.getItem("token")
-    //         },
-    //         data: Qs.stringify({
-    //             authorId: sessionStorage.getItem("userId"),
-    //             communityId: localStorage.getItem("communityId")
-    //         })
-    //     })
-    //         .then(result => {
-    //             if (result.data.respCode == 1000) {
-    //                 this.postContent = result.data.data;
-    //             }
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
-    //         });
-    // }
   }
 };
 </script>

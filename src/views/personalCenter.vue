@@ -191,7 +191,6 @@ export default {
     async onRead(e) {
       let target = e.target || e.srcElement;
       let file = target.files[0];
-      console.log(file.name);
       this.files.name = file.name; // 获取文件名
       this.files.type = file.type; // 获取类型
       this.picValue = file; // 文件流

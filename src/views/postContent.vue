@@ -9,11 +9,20 @@
       </mu-button>
     </mu-appbar>
     <div class="container-main">
-      <div class="content-browse">
-        <h1 class="title">{{postContent.title}}</h1>
-        <p class="textarea-text">{{postContent.content}}</p>
-        <div class="images" v-for="(item,index) in imageUrls" :key="index">
-          <img :src="item" alt />
+      <div>
+        <div class="content-browse" v-if="activeName == 2">
+          <h1 class="title">{{postContent.serviceName}}</h1>
+          <p class="textarea-text">{{postContent.seviceDetail}}</p>
+          <div class="images" v-for="(item,index) in imageUrls" :key="index">
+            <img :src="item" alt />
+          </div>
+        </div>
+        <div class="content-browse" v-else>
+          <h1 class="title">{{postContent.title}}</h1>
+          <p class="textarea-text">{{postContent.content}}</p>
+          <div class="images" v-for="(item,index) in imageUrls" :key="index">
+            <img :src="item" alt />
+          </div>
         </div>
       </div>
       <mu-bottom-sheet :open.sync="open" overlay-close>
@@ -49,15 +58,23 @@ export default {
     return {
       open: false,
       imageUrls: [], // 发帖图片
-      postContent: {}
+      postContent: {},
+      activeName: ""
     };
   },
   created() {
-    if (
-      localStorage.getItem("activeName") == 1 ||
-      localStorage.getItem("activeName") == 2
-    ) {
+    this.activeName = localStorage.getItem("activeName");
+    console.log(this.activeName)
+    if (localStorage.getItem("activeName") == 1) {
       var obj = JSON.parse(JSON.parse(localStorage.getItem("myPost")).imgPath);
+      for (var key in obj) {
+        this.imageUrls.push(obj[key]);
+      }
+      this.postContent = JSON.parse(localStorage.getItem("myPost"));
+    } else if (localStorage.getItem("activeName") == 2) {
+      var obj = JSON.parse(
+        JSON.parse(localStorage.getItem("myPost")).imageUrls
+      );
       for (var key in obj) {
         this.imageUrls.push(obj[key]);
       }

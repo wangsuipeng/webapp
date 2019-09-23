@@ -10,7 +10,13 @@
     </mu-appbar>
     <div class="container-main">
       <div class="content-browse">
-        <h2 class="title-text">{{postContent.title}}</h2>
+        <div class="title-text clearfix">
+          <div>{{postContent.title}}</div>
+          <div class="posting-time">
+            <span style="margin-left: 10px">{{postTime}}</span>
+            <span>阅读<span style="margin-left: 10px">2999</span></span>
+          </div>
+        </div>
         <p class="textarea-text">{{postContent.content}}</p>
         <div class="images" v-for="(item,index) in imageUrls" :key="index">
           <img :src="item" alt />
@@ -104,7 +110,8 @@ export default {
       avatarImag: "",
       commeText: "", // 评论内容
       commData: [],
-      imgName: ""
+      imgName: "",
+      postTime: ''
     };
   },
   created() {
@@ -121,6 +128,7 @@ export default {
       this.imageUrls.push(obj[key]);
     }
     this.postContent = JSON.parse(localStorage.getItem("browseShare"));
+    this.postTime = (JSON.parse(localStorage.getItem("browseShare")).createdAt).substr(0,10)
     this.praiseNum =
       JSON.parse(localStorage.getItem("browseShare")).praiseNum || 0;
     this.queryComment();
@@ -298,8 +306,10 @@ export default {
 }
 .title-text {
   width: 100%;
-  padding: 15px 15px;
-  background-color: rgb(204, 204, 204, 0.3);
+  padding: 15px 15px 0 15px;
+  font-size: 18px;
+  color: #202022;
+  font-weight: 550;
   text-align: left;
   margin: 0 !important;
 }
@@ -346,7 +356,6 @@ export default {
 }
 .textarea-text {
   width: 100%;
-  /* min-height: 15rem; */
   text-indent: 20px;
   outline: none;
   padding: 5px 10px;
@@ -461,5 +470,24 @@ export default {
   float: right;
   margin-right: 0.2rem;
   margin-top: 0.2rem;
+}
+.posting-time {
+  float: right;
+  font-weight: normal;
+  font-size: 14px;
+  margin-top: 0.5rem;
+  color: #A4A4A4;
+}
+.clearfix:after {
+  content: ".";
+  clear: both;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  display: block;
+}
+
+.clearfix {
+  zoom: 1;
 }
 </style>

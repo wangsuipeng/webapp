@@ -10,8 +10,25 @@
     </mu-appbar>
     <div class="container-main">
       <div class="content-browse">
-        <p class="title-text">{{postContent.title}}</p>
-        <p class="textarea-text">{{postContent.content}}</p>
+        <div class="title-text clearfix">
+          <div>{{postContent.title}}</div>
+          <div class="posting-time">
+            <div class="portrait">
+              <img :src="avatarImag" alt="">
+            </div>
+            <div class="nickName">
+              <div style="margin-left: 1rem">{{postName}}</div>
+              <div style="color: #8A8A8A">
+                <span>{{postTime}}</span>
+                <span>
+                  阅读
+                  <span>2999</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="textarea-text">{{postContent.content}}</div>
         <div class="images" v-for="(item,index) in imageUrls" :key="index">
           <img :src="item" alt />
         </div>
@@ -107,13 +124,19 @@ export default {
       commData: [],
       numberComments: "", // 评论数
       giveThumbsup: false,
-      imgName: ""
+      imgName: "",
+      postTime: "",
+      postImg: "",
+      postName: ""
     };
   },
   created() {
     this.avatarImag = JSON.parse(
       localStorage.getItem("familyDiscussion")
     ).headUrl;
+    this.postName = JSON.parse(
+      localStorage.getItem("familyDiscussion")
+    ).nickName;
     var obj = JSON.parse(
       JSON.parse(localStorage.getItem("familyDiscussion")).imageUrls
     );
@@ -121,6 +144,9 @@ export default {
       this.imageUrls.push(obj[key]);
     }
     this.postContent = JSON.parse(localStorage.getItem("familyDiscussion"));
+    this.postTime = JSON.parse(
+      localStorage.getItem("familyDiscussion")
+    ).createdAt.substr(0, 19);
     this.praiseNum =
       JSON.parse(localStorage.getItem("familyDiscussion")).praiseNum || 0;
     this.queryComment();
@@ -302,11 +328,10 @@ export default {
 }
 .title-text {
   width: 100%;
-  padding: 15px 15px;
-  font-size: 20px;
-  color: #808080;
-  font-weight: 500;
-  background-color: #f1f1f1;
+  padding: 15px 15px 0 15px;
+  font-size: 18px;
+  color: #202022;
+  font-weight: 550;
   text-align: left;
   margin: 0 !important;
 }
@@ -459,5 +484,36 @@ export default {
   float: right;
   margin-right: 0.2rem;
   margin-top: 0.2rem;
+}
+.posting-time {
+  font-weight: normal;
+  font-size: 14px;
+  margin-top: 0.5rem;
+  color: #a4a4a4;
+}
+.portrait {
+  float: left;
+  color: #575759;
+  margin-right: 0.8rem;
+}
+
+.portrait img {
+  display: inline-block;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+}
+
+.clearfix:after {
+  content: ".";
+  clear: both;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  display: block;
+}
+
+.clearfix {
+  zoom: 1;
 }
 </style>
