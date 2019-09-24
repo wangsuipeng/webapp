@@ -13,8 +13,19 @@
         <div class="title-text clearfix">
           <div>{{postContent.title}}</div>
           <div class="posting-time">
-            <span style="margin-left: 10px">{{postTime}}</span>
-            <span>阅读<span style="margin-left: 10px">2999</span></span>
+            <div class="portrait">
+              <img :src="avatarImag" alt="">
+            </div>
+            <div class="nickName">
+              <div style="margin-left: 1rem">{{postName}}</div>
+              <div style="color: #8A8A8A">
+                <span>{{postTime}}</span>
+                <span>
+                  阅读
+                  <span>2999</span>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
         <p class="textarea-text">{{postContent.content}}</p>
@@ -32,7 +43,7 @@
             </li>
             <li>
               <mu-icon :size="size" value="chat_bubble_outline" color="#B9B9B9" @click="comment"></mu-icon>
-              <p style="display: inline-block">90</p>
+              <p style="display: inline-block">{{commentNumber}}</p>
             </li>
             <!-- <li>
                             <mu-icon :size="size" value="share" color="#B9B9B9"></mu-icon>
@@ -48,10 +59,10 @@
         <ul>
           <li v-for="(item,index) in commData" :key="index">
             <div class="avat-img">
-              <img :src="avatarImag" alt />
+              <img :src="item.headUrl" alt />
             </div>
             <div class="content-comm">
-              <p>科比</p>
+              <p>{{item.name}}</p>
               <p>{{item.content}}</p>
               <div class="time">{{(item.createdAt).substr(0,19)}}</div>
             </div>
@@ -111,7 +122,9 @@ export default {
       commeText: "", // 评论内容
       commData: [],
       imgName: "",
-      postTime: ''
+      postTime: '',
+      postName: "",
+      commentNumber: ""
     };
   },
   created() {
@@ -120,6 +133,9 @@ export default {
     // for (var key in obj) {
     //     this.imageUrls.push(obj[key])
     // }
+    this.postName = JSON.parse(
+      localStorage.getItem("browseShare")
+    ).nickName;
     this.avatarImag = JSON.parse(localStorage.getItem("browseShare")).headUrl;
     var obj = JSON.parse(
       JSON.parse(localStorage.getItem("browseShare")).imageUrls
@@ -207,6 +223,8 @@ export default {
         .then(result => {
           if (result.data.respCode === "1000") {
             this.commData = result.data.data;
+            console.log(result.data.data.length)
+            this.commentNumber = result.data.data.length;
           }
         })
         .catch(err => {
@@ -326,12 +344,6 @@ export default {
   padding: 0 0.5rem;
 }
 .images img {
-  /* position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    margin: auto; */
   max-width: 100%;
   width: 100%;
   height: 100%;
@@ -471,8 +483,7 @@ export default {
   margin-right: 0.2rem;
   margin-top: 0.2rem;
 }
-.posting-time {
-  float: right;
+.posting-time { 
   font-weight: normal;
   font-size: 14px;
   margin-top: 0.5rem;
@@ -489,5 +500,17 @@ export default {
 
 .clearfix {
   zoom: 1;
+}
+.portrait {
+  float: left;
+  color: #575759;
+  margin-right: 0.8rem;
+}
+
+.portrait img {
+  display: inline-block;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
 }
 </style>
