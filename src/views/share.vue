@@ -15,7 +15,8 @@
             <mu-list-item avatar button v-ripple class="muse-list" @click="browseShare(item)">
               <mu-list-item-action>
                 <mu-avatar>
-                  <img :src="item.headUrl" />
+                  <img v-if="item.headUrl" :src="item.headUrl" />
+                  <img v-else src="../assets/images/avatar.png" />
                 </mu-avatar>
               </mu-list-item-action>
               <mu-list-item-title>{{item.title}}</mu-list-item-title>

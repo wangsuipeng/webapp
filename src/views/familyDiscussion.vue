@@ -49,7 +49,8 @@
             >
               <mu-list-item-action>
                 <mu-avatar :size="size">
-                  <img :src="item.headUrl" />
+                  <img v-if="item.headUrl" :src="item.headUrl" />
+                  <img v-else src="../assets/images/avatar.png" />
                 </mu-avatar>
               </mu-list-item-action>
               <mu-list-item-title>{{item.title}}</mu-list-item-title>
@@ -78,7 +79,8 @@ export default {
       open: false,
       postContent: [],
       articleTitle: "", // 文章标题
-      scrollTop: ""
+      scrollTop: "",
+      img: '../assets/images/325543.jpg'
     };
   },
   created() {

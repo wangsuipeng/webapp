@@ -18,7 +18,7 @@
       </mu-list>
       <mu-list>
         <mu-list-item :ripple="false">
-          <mu-list-item-title style="width: 100px">用户积分</mu-list-item-title>
+          <mu-list-item-title style="width: 100px">用户金币</mu-list-item-title>
           <div>{{points}}</div>
         </mu-list-item>
         <mu-divider></mu-divider>
