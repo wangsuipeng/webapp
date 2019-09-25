@@ -60,7 +60,7 @@ export default {
 }
 .content-img {
   width: 100%;
-  height: 12rem;
+  height: 100%;
   margin-bottom: 0.5rem;
 }
 .content-img img {

@@ -54,6 +54,16 @@ Vue.use(Mui);
 Vue.prototype.$axios = axios
 
 axios.defaults.baseURL = process.env.API_ROOT
+Vue.prototype.validForbid = function (value, number = 255) {
+  value = value.replace(/[`~!@#$%^&*()_\-+=<>?:"{}|,./;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]/g, '').replace(/\s/g, "");
+  if (value.length >= number) {
+    this.$message({
+      type: "warning",
+      message: `输入内容不能超过${number}个字符`
+    });
+  }
+  return value;
+}
 // 设置post请求头
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 // axios.interceptors.request.use((response) =>

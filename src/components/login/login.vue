@@ -98,6 +98,7 @@ export default {
     },
     created () {
         this.validateForm.phone = this.$store.getters.phoneNumber 
+        this.validateForm.password = this.$store.getters.password 
     },
     methods: {
         toast(msg) {
@@ -117,10 +118,12 @@ export default {
                                     sessionStorage.setItem("token",result.data.data.sessionId);
                                     sessionStorage.setItem("userId",result.data.data.userId);
                                     localStorage.setItem('phone',this.validateForm.phone)
+                                    localStorage.setItem('password',this.validateForm.password)
                                     localStorage.setItem('nickName',result.data.data.nickName)
                                     localStorage.setItem('sex',result.data.data.sex)
                                     localStorage.setItem('handImgId',result.data.data.handImgId)
                                     this.$store.dispatch("REMEMBER_PHONE",this.validateForm.phone)
+                                    this.$store.dispatch("REMEMBER_PASSWORD",this.validateForm.password)
                                     this.$store.dispatch("HAND_PORTRAIT", result.data.data.handImgId);
                                     this.$router.push("/community");
                                 } else {
@@ -146,7 +149,6 @@ export default {
             this.$router.push("/login/register");
         },
         signCode() {
-            // this.loginMode = false;
             if (this.loginMode) {
                 this.loginMode = false;
                 this.signText = "用户名登录";

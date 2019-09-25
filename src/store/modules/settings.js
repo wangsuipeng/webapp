@@ -5,6 +5,7 @@ const state = {
     phoneNumber: localStorage.getItem("phone"),
     headPortrait: "",
     versionNum: "",
+    password: ""
 }
 const mutations = {
     // 修改token，并将token存入localStorage 
@@ -26,6 +27,9 @@ const mutations = {
     },
     VERSION_NUM(state,num) {
         state.versionNum = num;
+    },
+    REMEMBER_PASSWORD(state,pass) {
+        state.password = pass
     }
 }
 const actions = {
@@ -46,6 +50,9 @@ const actions = {
     },
     VERSION_NUM({commit},version) {
         commit('VERSION_NUM',version)
+    },
+    REMEMBER_PASSWORD({commit},pass) {
+        commit('REMEMBER_PASSWORD',pass)
     }
 }
 export default {
