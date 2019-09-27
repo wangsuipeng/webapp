@@ -18,7 +18,14 @@
         <mu-flex class="flex-demo" justify-content="center"></mu-flex>
       </mu-flex>
       <div class="content-text">
-        <input type="text" v-model="postForm.title" placeholder="请输入标题..." class="input-text" />
+        <input
+          type="text"
+          @keyup="btKeyUp"
+          @keydown="btKeyDown"
+          v-model="postForm.title"
+          placeholder="请输入标题..."
+          class="input-text"
+        />
         <textarea
           name
           id
@@ -106,6 +113,20 @@ export default {
     };
   },
   methods: {
+    //限制输入特殊字符
+    btKeyUp(e) {
+      e.target.value = e.target.value.replace(
+        /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]/g,
+        ""
+      );
+    },
+    // 只能输入汉字、英文、数字
+    btKeyDown(e) {
+      e.target.value = e.target.value.replace(
+        /[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,
+        ""
+      );
+    },
     outPage() {
       this.$router.goBack();
     },

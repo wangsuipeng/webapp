@@ -62,7 +62,8 @@ export default {
         .then(result => {
           if (result.data.status == "success") {
             localStorage.setItem("phone", this.userForm.userPhone);
-            this.$router.push("/personalCenter");
+            // this.$router.push("/personalCenter");
+            this.$router.goBack();
           } else {
             this.$toast.error("修改失败");
           }

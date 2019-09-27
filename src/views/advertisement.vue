@@ -28,7 +28,6 @@ export default {
   },
   created() {
     this.content = JSON.parse(localStorage.getItem("advertisement"));
-    console.log(JSON.parse(localStorage.getItem("advertisement")));
     this.imgUrl = JSON.parse(
       JSON.parse(localStorage.getItem("advertisement")).imgs
     );
@@ -64,7 +63,7 @@ export default {
   margin-bottom: 0.5rem;
 }
 .content-img img {
-  display: inline-block;
+  display: inline-block;                                                 
   width: 100%;
   height: 100%;
   background-size: cover;

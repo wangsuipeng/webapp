@@ -67,7 +67,8 @@ export default {
       })
         .then(result => {
           if (result.data.status == "success") {
-            this.$router.push("/personalCenter");
+            // this.$router.push("/personalCenter");
+            this.$router.goBack();
           } else {
             this.$toast.error("修改失败");
           }

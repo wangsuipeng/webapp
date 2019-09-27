@@ -73,7 +73,6 @@ export default {
         },
         submit() {
             this.$refs.form.validate().then(result => {
-                console.log("form valid: ", result);
                 if (result) {
                     this.$axios({
                         url: "admin/mobile/user/register",

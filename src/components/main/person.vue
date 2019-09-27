@@ -1,8 +1,8 @@
 <template>
     <div class="person">
-        <div class="avatar">
+        <div class="avatar" @click="personalCenter">
             <mu-container style="padding: 16px 0;">
-                <mu-row justify-content="center" @click="personalCenter">
+                <mu-row justify-content="center">
                     <mu-avatar :size="size">
                         <img :src="avatar" />
                     </mu-avatar>

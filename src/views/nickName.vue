@@ -32,7 +32,7 @@ export default {
     };
   },
   created() {
-    this.nickName = sessionStorage.getItem("nickName");
+    this.nickName = localStorage.getItem("nickName");
   },
   mounted() {
     mui.back = function() {

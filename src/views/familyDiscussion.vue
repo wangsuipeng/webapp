@@ -28,9 +28,9 @@
                 <mu-col span="3">
                   <div class="grid-cell">
                     <select name id class="select-list">
-                      <option value="1">点击最多</option>
-                      <option value="2">最新回复</option>
                       <option value="3">最新发帖</option>
+                      <option value="2">最新回复</option> 
+                      <option value="1">点击最多</option>
                       <option value="3">最多回复</option>
                     </select>
                   </div>

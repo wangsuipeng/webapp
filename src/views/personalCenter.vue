@@ -457,7 +457,7 @@ export default {
             this.nickName = result.data.data.nickName; // 昵称
             this.sex = result.data.data.sex; // 性别
             this.phone = result.data.data.username; // 手机
-            sessionStorage.setItem("nickName", this.nickName);
+            localStorage.setItem("nickName", this.nickName);
             sessionStorage.setItem("sex", this.sex);
             sessionStorage.setItem("phone", this.phone);
           }
