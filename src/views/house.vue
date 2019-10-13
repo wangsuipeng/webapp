@@ -19,21 +19,6 @@
           <mu-form-item prop="location" label="报修位置">
             <mu-text-field v-model="submitForm.location"></mu-text-field>
           </mu-form-item>
-          <mu-form-item prop="workflowId" label="处理流程">
-            <mu-select v-model="submitForm.workflowId" full-width>
-              <mu-option
-                v-for="(item,index) in options"
-                avatar
-                :key="index"
-                :label="item.processName"
-                :value="item.id"
-              >
-                <mu-list-item-content>
-                  <mu-list-item-title>{{item.processName}}</mu-list-item-title>
-                </mu-list-item-content>
-              </mu-option>
-            </mu-select>
-          </mu-form-item>
           <mu-form-item prop="serviceDate" label="可上门时间">
             <mu-select v-model="submitForm.serviceDate" full-width>
               <mu-option
@@ -150,10 +135,10 @@ export default {
       fd.append("detail", this.submitForm.detail);
       fd.append("serviceDate", this.submitForm.serviceDate);
       fd.append("communityId", this.submitForm.communityId);
-      fd.append("workflowId", this.submitForm.workflowId);
+      fd.append("repairsType", '3');
       fd.append("userId", sessionStorage.getItem("userId"));
       this.$axios({
-        url: "admin/mobile/processCheck/saveWorkflowInfo",
+        url: "admin/mobile/repairs/saveRepairs",
         method: "post",
         headers: {
           Authorization: sessionStorage.getItem("token")

@@ -31,7 +31,9 @@ import { NoticeBar } from 'vant';
 import { Stepper } from 'vant';
 import { Row, Col } from 'vant';
 import { Tab, Tabs } from 'vant';
+import { List } from 'vant';
 
+Vue.use(List);
 Vue.use(Tab).use(Tabs);
 Vue.use(Row).use(Col);
 Vue.use(Stepper);

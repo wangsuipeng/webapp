@@ -19,21 +19,6 @@
           <mu-form-item prop="location" label="报修位置">
             <mu-text-field v-model="submitForm.location"></mu-text-field>
           </mu-form-item>
-          <mu-form-item prop="workflowId" label="处理流程">
-            <mu-select v-model="submitForm.workflowId" full-width>
-              <mu-option
-                v-for="(item,index) in options"
-                avatar
-                :key="index"
-                :label="item.processName"
-                :value="item.id"
-              >
-                <mu-list-item-content>
-                  <mu-list-item-title>{{item.processName}}</mu-list-item-title>
-                </mu-list-item-content>
-              </mu-option>
-            </mu-select>
-          </mu-form-item>
           <mu-form-item prop="serviceDate" label="可上门时间">
             <mu-select v-model="submitForm.serviceDate" full-width>
               <mu-option
@@ -78,7 +63,6 @@ import Qs from "qs";
 export default {
   data() {
     return {
-      options: [],
       labelPosition: "top",
       languages: [
         "立即上门",
@@ -107,8 +91,6 @@ export default {
     };
   },
   created() {
-    // this.getUserApplyWorkflowInfo();
-    this.getCompanyCommunityWorkFlowInfo();
   },
   mounted() {
     mui.back = function() {
@@ -145,15 +127,14 @@ export default {
       imgData.forEach((item, index) => {
         fd.append("file" + index, item.file); //第一个参数字符串可以填任意命名，第二个根据对象属性来找到file
       });
-      // fd.append("userId", this.submitForm.userId);
       fd.append("location", this.submitForm.location);
       fd.append("detail", this.submitForm.detail);
       fd.append("serviceDate", this.submitForm.serviceDate);
       fd.append("communityId", this.submitForm.communityId);
-      fd.append("workflowId", this.submitForm.workflowId);
+      fd.append("repairsType", '1');
       fd.append("userId", sessionStorage.getItem("userId"));
       this.$axios({
-        url: "admin/mobile/processCheck/saveWorkflowInfo",
+        url: "admin/mobile/repairs/saveRepairs",
         method: "post",
         headers: {
           Authorization: sessionStorage.getItem("token")
@@ -171,46 +152,6 @@ export default {
           console.log(err);
         });
     },
-    // 获取维修人员
-    getCompanyCommunityWorkFlowInfo() {
-      this.$axios({
-        url: "admin/mobile/processCheck/getCompanyCommunityWorkFlowInfo",
-        method: "post",
-        headers: {
-          Authorization: sessionStorage.getItem("token")
-        },
-        data: Qs.stringify({
-          communityId: localStorage.getItem("communityId"),
-          workflowType: "1",
-          userId: sessionStorage.getItem("userId")
-        })
-      })
-        .then(result => {
-          if (result.data.respCode == 1000) {
-            this.options = result.data.data;
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
-    //获取用户申请流程信息
-    getUserApplyWorkflowInfo() {
-      this.$axios({
-        url: "admin/mobile/processCheck/getUserApplyWorkflowInfo",
-        method: "post",
-        headers: {
-          Authorization: sessionStorage.getItem("token")
-        },
-        data: Qs.stringify(this.processForm)
-      })
-        .then(result => {
-          console.log(result);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
   }
 };
 </script>

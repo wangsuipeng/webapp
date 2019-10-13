@@ -30,14 +30,83 @@
       <mu-flex class="flex-wrapper" justify-content="start">
         <mu-flex class="flex-demo" justify-content="center"></mu-flex>
       </mu-flex>
-      <mu-row>
+      <div class="">
+        <van-tabs v-model="active" sticky>
+          <van-tab title="当前申请">
+            <!-- <mu-data-table
+            stripe
+            :columns="columns"
+            :sort.sync="sort"
+            @sort-change="handleSortChange"
+            :data="listTable"
+          >
+            <template slot-scope="scope">
+              <td class="is-center">{{scope.row.processName}}</td>
+              <td class="is-center">{{scope.row.detail}}</td>
+              <td class="is-center">
+                <span v-if="scope.row.type == '2'">处理完成</span>
+                <span v-else>处理中...</span>
+              </td>
+              <td class="is-center">{{scope.row.detailPhoneOneName}}</td>
+              <td class="is-center">{{scope.row.detailOneDate}}</td>
+              <td class="is-center">{{scope.row.endTime}}</td>
+            </template>
+            </mu-data-table>-->
+            <div class="content-apply">
+              <van-list
+                v-model="loading"
+                :finished="finished"
+                finished-text="暂无更多数据"
+                @load="onLoad"
+              >
+                <van-cell v-for="item in listTable" :key="item.id">
+                  <span>{{item.repairsType}}</span>
+                  <span style="float: right">状态：{{item.status}}</span>
+                </van-cell>
+              </van-list>
+            </div>
+          </van-tab>
+          <van-tab title="历史申请">
+            <!-- <mu-paper :z-depth="0">
+              <mu-data-table
+                :columns="columns1"
+                :sort.sync="sort"
+                @sort-change="handleSortChange"
+                :data="listTableHis"
+              >
+                <template slot-scope="scope">
+                  <td class="is-center">{{scope.row.processName}}</td>
+                  <td class="is-center">{{scope.row.detail}}</td>
+                  <td class="is-center">
+                    <span v-if="scope.row.type == '2'">处理完成</span>
+                    <span v-else>处理中...</span>
+                  </td>
+                  <td class="is-center">{{scope.row.detailOneDate}}</td>
+                </template>
+              </mu-data-table>
+            </mu-paper> -->
+            <van-list
+                v-model="loading"
+                :finished="finished"
+                finished-text="暂无更多数据"
+                @load="onLoad"
+              >
+                <van-cell v-for="item in listTableHis" :key="item.id">
+                  <span>{{item.repairsType}}</span>
+                  <span style="float: right">状态：{{item.status}}</span>
+                </van-cell>
+              </van-list>
+          </van-tab>
+        </van-tabs>
+      </div>
+      <!-- <mu-row>
         <mu-col span="12">
           <div class="grid-cell">
             <span class="current-application">当前申请</span>
           </div>
         </mu-col>
-      </mu-row>
-      <mu-paper :z-depth="0">
+      </mu-row>-->
+      <!-- <mu-paper :z-depth="0">
         <mu-data-table
           stripe
           :columns="columns"
@@ -57,8 +126,8 @@
             <td class="is-center">{{scope.row.endTime}}</td>
           </template>
         </mu-data-table>
-      </mu-paper>
-      <mu-flex class="flex-wrapper" justify-content="start">
+      </mu-paper>-->
+      <!-- <mu-flex class="flex-wrapper" justify-content="start">
         <mu-flex class="flex-demo" justify-content="center"></mu-flex>
       </mu-flex>
       <mu-row>
@@ -67,8 +136,8 @@
             <span class="current-application">历史申请</span>
           </div>
         </mu-col>
-      </mu-row>
-      <mu-paper :z-depth="0">
+      </mu-row>-->
+      <!-- <mu-paper :z-depth="0">
         <mu-data-table
           :columns="columns1"
           :sort.sync="sort"
@@ -85,7 +154,7 @@
             <td class="is-center">{{scope.row.detailOneDate}}</td>
           </template>
         </mu-data-table>
-      </mu-paper>
+      </mu-paper>-->
     </div>
   </div>
 </template>
@@ -164,7 +233,16 @@ export default {
       ],
       listTable: [], // 申请中的数据
       listTableHis: [], // 历史申请的数据
-      timer: ""
+      timer: "",
+      list: [],
+      loading: false,
+      finished: false,
+      total: 0,
+      offset: 0,
+      page: 0,
+      limit: 10,
+      error: false,
+      active: 2
     };
   },
   created() {
@@ -179,6 +257,11 @@ export default {
   methods: {
     outPage() {
       this.$router.goBack();
+    },
+    onLoad() {
+      this.page += 1;
+      this.offset = this.limit * this.page;
+      this.getUserApplyWorkflowInfo();
     },
     electricityRepair() {
       this.$router.push("/electricityRepair");
@@ -200,7 +283,7 @@ export default {
     //获取用户申请中的
     getUserApplyWorkflowInfo() {
       this.$axios({
-        url: "admin/mobile/processCheck/getUserApplyWorkflowInfo",
+        url: "admin/mobile/repairs/findRepairs",
         method: "post",
         headers: {
           Authorization: sessionStorage.getItem("token")
@@ -208,27 +291,37 @@ export default {
         data: Qs.stringify({
           communityId: localStorage.getItem("communityId"),
           status: "0",
-          userId: sessionStorage.getItem("userId")
+          repairsType: "",
+          userId: sessionStorage.getItem("userId"),
+          page: this.page,
+          limit: this.limit
         })
       })
         .then(result => {
           if (result.data.respCode === "1000") {
-            this.listTable = result.data.data;
-            setInterval(() => {
-              this.nowTimeStr();
-              for (var i = 0; i < this.listTable.length; i++) {
-                let minutes = this.GetDateDiff(
-                  this.listTable[i].createTime,
-                  this.timer,
-                  "minute"
-                );
-                this.$set(
-                  this.listTable[i],
-                  "endTime",
-                  Math.floor(minutes / 60) + "小时" + (minutes % 60) + "分"
-                );
-              }
-            }, 1000);
+            this.loading = false;
+            if (this.listTable.length !== result.data.data.totalCount) {
+              this.listTable.push(...result.data.data.list);
+              this.total = result.data.data.totalCount
+            } else {
+               this.finished = true;
+            }
+            
+            // setInterval(() => {
+            //   this.nowTimeStr();
+            //   for (var i = 0; i < this.listTable.length; i++) {
+            //     let minutes = this.GetDateDiff(
+            //       this.listTable[i].createTime,
+            //       this.timer,
+            //       "minute"
+            //     );
+            //     this.$set(
+            //       this.listTable[i],
+            //       "endTime",
+            //       Math.floor(minutes / 60) + "小时" + (minutes % 60) + "分"
+            //     );
+            //   }
+            // }, 1000);
           }
         })
         .catch(err => {
@@ -238,20 +331,45 @@ export default {
     //获取用户历史申请
     getUserApplyInfoHistory() {
       this.$axios({
-        url: "admin/mobile/processCheck/getUserApplyWorkflowInfo",
+        url: "admin/mobile/repairs/findRepairs",
         method: "post",
         headers: {
           Authorization: sessionStorage.getItem("token")
         },
         data: Qs.stringify({
           communityId: localStorage.getItem("communityId"),
-          status: "1",
-          userId: sessionStorage.getItem("userId")
+          status: "2",
+          repairsType: "",
+          userId: sessionStorage.getItem("userId"),
+          page: this.page,
+          limit: this.limit
         })
       })
         .then(result => {
           if (result.data.respCode === "1000") {
-            this.listTableHis = result.data.data;
+            this.loading = false;
+            if (this.listTable.length !== result.data.data.totalCount) {
+              this.listTableHis.push(...result.data.data.list);
+              this.total = result.data.data.totalCount
+            } else {
+               this.finished = true;
+            }
+            
+            // setInterval(() => {
+            //   this.nowTimeStr();
+            //   for (var i = 0; i < this.listTable.length; i++) {
+            //     let minutes = this.GetDateDiff(
+            //       this.listTable[i].createTime,
+            //       this.timer,
+            //       "minute"
+            //     );
+            //     this.$set(
+            //       this.listTable[i],
+            //       "endTime",
+            //       Math.floor(minutes / 60) + "小时" + (minutes % 60) + "分"
+            //     );
+            //   }
+            // }, 1000);
           }
         })
         .catch(err => {
@@ -310,6 +428,10 @@ export default {
 .container-main {
   width: 100%;
   height: calc(100vh - 56px);
+}
+.content-apply {
+  width: 100%;
+  height: calc(100vh - 156px);
   overflow-y: auto;
 }
 .content {
