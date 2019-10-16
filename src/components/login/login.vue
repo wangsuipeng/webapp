@@ -80,8 +80,8 @@ export default {
             passwordRules: [
                 { validate: val => !!val, message: "必须填写密码" },
                 {
-                    validate: val => val.length >= 3 && val.length <= 10,
-                    message: "密码长度大于3小于10"
+                    validate: val => val.length >= 3 && val.length < 11,
+                    message: "密码长度大于3小于11"
                 }
             ],
             argeeRules: [

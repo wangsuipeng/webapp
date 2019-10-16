@@ -235,6 +235,10 @@ export default new Router({
     {
       path: '/myIntegral',
       component: () => import('@/views/myIntegral.vue')
+    },
+    {
+      path: '/complaint',
+      component: () => import('@/views/complaint.vue')
     }
   ]
 })

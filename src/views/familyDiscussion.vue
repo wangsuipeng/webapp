@@ -27,11 +27,11 @@
                 </mu-col>
                 <mu-col span="3">
                   <div class="grid-cell">
-                    <select name id class="select-list">
-                      <option value="3">最新发帖</option>
+                    <select name="testvalue" id class="select-list" @change="selectSort($event.target.value)">
+                      <option value="1">最新发帖</option>
                       <option value="2">最新回复</option> 
-                      <option value="1">点击最多</option>
-                      <option value="3">最多回复</option>
+                      <option value="3">点击最多</option>
+                      <option value="4">最多回复</option>
                     </select>
                   </div>
                 </mu-col>
@@ -80,7 +80,8 @@ export default {
       postContent: [],
       articleTitle: "", // 文章标题
       scrollTop: "",
-      img: '../assets/images/325543.jpg'
+      img: '../assets/images/325543.jpg',
+      queryType: '1',
     };
   },
   created() {
@@ -116,8 +117,12 @@ export default {
       localStorage.setItem("familyDiscussion", JSON.stringify(item));
       this.$router.push("/browse");
     },
+    selectSort(val) {
+      this.articleQueryAll(val)
+    },
     //查询所有新闻或公告
-    articleQueryAll() {
+    articleQueryAll(val) {
+      this.queryType = val;
       this.$axios({
         url: "admin/mobile/article/queryAllByCommunityIdAndCategary",
         method: "post",
@@ -127,7 +132,8 @@ export default {
         data: Qs.stringify({
           userId: sessionStorage.getItem("userId"),
           communityId: localStorage.getItem("communityId"),
-          category: "2"
+          category: "2",
+          queryType: this.queryType
         })
       })
         .then(result => {

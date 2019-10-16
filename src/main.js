@@ -32,7 +32,9 @@ import { Stepper } from 'vant';
 import { Row, Col } from 'vant';
 import { Tab, Tabs } from 'vant';
 import { List } from 'vant';
+import { PullRefresh } from 'vant';
 
+Vue.use(PullRefresh);
 Vue.use(List);
 Vue.use(Tab).use(Tabs);
 Vue.use(Row).use(Col);

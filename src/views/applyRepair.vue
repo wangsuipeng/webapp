@@ -30,7 +30,7 @@
       <mu-flex class="flex-wrapper" justify-content="start">
         <mu-flex class="flex-demo" justify-content="center"></mu-flex>
       </mu-flex>
-      <div class="">
+      <div class>
         <van-tabs v-model="active" sticky>
           <van-tab title="当前申请">
             <!-- <mu-data-table
@@ -52,18 +52,44 @@
               <td class="is-center">{{scope.row.endTime}}</td>
             </template>
             </mu-data-table>-->
-            <div class="content-apply">
-              <van-list
-                v-model="loading"
-                :finished="finished"
-                finished-text="暂无更多数据"
-                @load="onLoad"
-              >
-                <van-cell v-for="item in listTable" :key="item.id">
-                  <span>{{item.repairsType}}</span>
-                  <span style="float: right">状态：{{item.status}}</span>
-                </van-cell>
-              </van-list>
+            <div class="content-apply list-content" id="list-content">
+              <!-- <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+                <van-list
+                  v-model="loading"
+                  :error.sync="error"
+                  error-text="请求失败，点击重新加载"
+                  :finished="finished"
+                  finished-text="暂无更多数据"
+                  :offset="12"
+                  @load="onLoadA"
+                >
+                  <van-cell v-for="item in listTable" :key="item.id">
+                    <span>{{item.repairsType}}</span>
+                    <span style="float: right">状态：{{item.status}}</span>
+                  </van-cell>
+                </van-list>
+              </van-pull-refresh>-->
+              <mu-container ref="container" class="demo-loadmore-content">
+                <mu-load-more
+                  @refresh="refresh"
+                  :refreshing="refreshing"
+                  :loading="loading"
+                  @load="load"
+                >
+                  <mu-list>
+                    <div v-for="(item,index) in listTable" :key="index">
+                      <mu-list-item
+                        class="muse-list"
+                      >
+                        <mu-list-item-title>
+                          <span class="repairs">{{item.repairsType}}</span>
+                          <span class="repairs" style="float: right">状态：{{item.status}}</span>
+                        </mu-list-item-title>
+                      </mu-list-item>
+                    </div>
+                  </mu-list>
+                </mu-load-more>
+              </mu-container>
             </div>
           </van-tab>
           <van-tab title="历史申请">
@@ -84,18 +110,40 @@
                   <td class="is-center">{{scope.row.detailOneDate}}</td>
                 </template>
               </mu-data-table>
-            </mu-paper> -->
-            <van-list
-                v-model="loading"
-                :finished="finished"
-                finished-text="暂无更多数据"
-                @load="onLoad"
-              >
-                <van-cell v-for="item in listTableHis" :key="item.id">
-                  <span>{{item.repairsType}}</span>
-                  <span style="float: right">状态：{{item.status}}</span>
-                </van-cell>
-              </van-list>
+            </mu-paper>-->
+            <!-- <van-list
+              v-model="loading1"
+              :finished="finished"
+              finished-text="暂无更多数据"
+              :offset="12"
+              @load="onLoadB"
+            >
+              <van-cell v-for="item in listTableHis" :key="item.id">
+                <span>{{item.repairsType}}</span>
+                <span style="float: right">状态：{{item.status}}</span>
+              </van-cell>
+            </van-list> -->
+            <mu-container ref="container" class="demo-loadmore-content">
+                <mu-load-more
+                  @refresh="refresh1"
+                  :refreshing="refreshing1"
+                  :loading="loading1"
+                  @load="load1"
+                >
+                  <mu-list>
+                    <div v-for="(item,index) in listTableHis" :key="index">
+                      <mu-list-item
+                        class="muse-list"
+                      >
+                        <mu-list-item-title>
+                          <span class="repairs">{{item.repairsType}}</span>
+                          <span class="repairs" style="float: right">状态：{{item.status}}</span>
+                        </mu-list-item-title>
+                      </mu-list-item>
+                    </div>
+                  </mu-list>
+                </mu-load-more>
+              </mu-container>
           </van-tab>
         </van-tabs>
       </div>
@@ -236,13 +284,24 @@ export default {
       timer: "",
       list: [],
       loading: false,
+      loading1: false,
       finished: false,
+      finished1: false,
       total: 0,
+      total1: 0,
       offset: 0,
       page: 0,
-      limit: 10,
+      limit: 12,
       error: false,
-      active: 2
+      error1: false,
+      active: 2,
+      isLoading: false,
+      PageIndex: 0,
+      num: 10,
+      refreshing: false,
+      refreshing1: false,
+      loading: false,
+      text: "List"
     };
   },
   created() {
@@ -258,10 +317,128 @@ export default {
     outPage() {
       this.$router.goBack();
     },
-    onLoad() {
-      this.page += 1;
+    refresh() {
+      this.refreshing = true;
+      this.$refs.container.scrollTop = 0;
+      setTimeout(() => {
+        this.refreshing = false;
+        this.pageSize = 10;
+        this.currentPage = 1;
+      }, 2000);
+    },
+    load() {
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+        this.pageSize = 10;
+        this.page++;
+      }, 2000);
+    },
+    refresh1() {
+      this.refreshing = true;
+      this.$refs.container.scrollTop = 0;
+      setTimeout(() => {
+        this.refreshing1 = false;
+        this.page = 1;
+      }, 2000);
+    },
+    load1() {
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+        this.pageSize = 10;
+        this.page++;
+      }, 2000);
+    },
+    onLoadA() {
+      // this.page += 1;
+      let self = this;
+      self.page += 1;
+      setTimeout(() => {
+        this.$axios({
+          url: "admin/mobile/repairs/findRepairs",
+          method: "post",
+          headers: {
+            Authorization: sessionStorage.getItem("token")
+          },
+          data: Qs.stringify({
+            communityId: localStorage.getItem("communityId"),
+            status: "0",
+            repairsType: "",
+            userId: sessionStorage.getItem("userId"),
+            page: self.page,
+            limit: 12
+          })
+        })
+          .then(result => {
+            if (result.data.respCode === "1000") {
+              if (this.listTable.length == result.data.data.totalCount) {
+                // this.finished = true;
+              } else {
+                this.listTable.push(...result.data.data.list);
+                this.total = result.data.data.totalCount;
+                this.loading = false;
+              }
+            } else {
+              this.error = true;
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }, 500);
+      // this.page += 1;
       this.offset = this.limit * this.page;
-      this.getUserApplyWorkflowInfo();
+      // this.getUserApplyWorkflowInfo();
+    },
+    onLoadB() {
+      let self = this;
+      self.PageIndex += 1;
+      setTimeout(() => {
+        this.$axios({
+          url: "admin/mobile/repairs/findRepairs",
+          method: "post",
+          headers: {
+            Authorization: sessionStorage.getItem("token")
+          },
+          data: Qs.stringify({
+            communityId: localStorage.getItem("communityId"),
+            status: "2",
+            repairsType: "",
+            userId: sessionStorage.getItem("userId"),
+            page: self.PageIndex,
+            limit: 1000
+          })
+        })
+          .then(result => {
+            if (result.data.respCode === "1000") {
+              this.listTableHis.push(...result.data.data.list);
+              this.total1 = result.data.data.totalCount;
+              // if (this.listTableHis.length == result.data.data.totalCount) {
+              //   this.loading1 = false;
+              //   // this.finished = true;
+              // } else {
+              //   this.listTableHis.push(...result.data.data.list);
+              //   this.total1 = result.data.data.totalCount;
+              //   // this.loading1 = false;
+              // }
+            } else {
+              this.error1 = true;
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }, 500);
+      // this.page += 1;
+      // this.offset = this.limit * this.page;
+      // this.getUserApplyInfoHistory();
+    },
+    onRefresh() {
+      setTimeout(() => {
+        this.$toast("刷新成功");
+        this.isLoading = false;
+      }, 500);
     },
     electricityRepair() {
       this.$router.push("/electricityRepair");
@@ -294,19 +471,19 @@ export default {
           repairsType: "",
           userId: sessionStorage.getItem("userId"),
           page: this.page,
-          limit: this.limit
+          limit: 1000
         })
       })
         .then(result => {
           if (result.data.respCode === "1000") {
-            this.loading = false;
-            if (this.listTable.length !== result.data.data.totalCount) {
-              this.listTable.push(...result.data.data.list);
-              this.total = result.data.data.totalCount
+            if (this.listTable.length == result.data.data.totalCount) {
+              // this.finished = true;
             } else {
-               this.finished = true;
+              this.listTable.push(...result.data.data.list);
+              console.log(this.listTable);
+              this.total = result.data.data.totalCount;
+              this.loading = false;
             }
-            
             // setInterval(() => {
             //   this.nowTimeStr();
             //   for (var i = 0; i < this.listTable.length; i++) {
@@ -322,6 +499,8 @@ export default {
             //     );
             //   }
             // }, 1000);
+          } else {
+            this.error = true;
           }
         })
         .catch(err => {
@@ -342,7 +521,7 @@ export default {
           repairsType: "",
           userId: sessionStorage.getItem("userId"),
           page: this.page,
-          limit: this.limit
+          limit: 1000
         })
       })
         .then(result => {
@@ -350,11 +529,12 @@ export default {
             this.loading = false;
             if (this.listTable.length !== result.data.data.totalCount) {
               this.listTableHis.push(...result.data.data.list);
-              this.total = result.data.data.totalCount
+              this.total = result.data.data.totalCount;
+              this.loading = true;
             } else {
-               this.finished = true;
+              this.finished = true;
             }
-            
+
             // setInterval(() => {
             //   this.nowTimeStr();
             //   for (var i = 0; i < this.listTable.length; i++) {
@@ -458,5 +638,48 @@ export default {
   font-size: 16px;
   font-weight: 500;
   padding: 6px 10px;
+}
+.container {
+  padding: 0;
+}
+.demo-loadmore-wrap {
+  width: 100%;
+  max-width: 360px;
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+}
+.demo-loadmore-wrap .mu-appbar {
+  width: 100%;
+}
+.demo-loadmore-content {
+  flex: 1;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.muse-list {
+  position: relative;
+}
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+  .muse-list:before {
+    content: "";
+    pointer-events: none; /* 防止点击触发 */
+    box-sizing: border-box;
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    left: 0;
+    top: 0;
+    /* border-radius: 8px; */
+    border-bottom: 1px solid #dcdcdc;
+    -webkit-transform: scale(0.5);
+    -webkit-transform-origin: 0 0;
+    transform: scale(0.5);
+    transform-origin: 0 0;
+  }
+}
+.repairs {
+  color: #323233;
+  font-size: 14px;
 }
 </style>

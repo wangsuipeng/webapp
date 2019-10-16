@@ -14,7 +14,7 @@
           <div>{{postContent.title}}</div>
           <div class="posting-time">
             <div class="portrait">
-              <img :src="avatarImag" alt="">
+              <img :src="avatarImag" alt />
             </div>
             <div class="nickName">
               <div style="margin-left: 1rem">{{postName}}</div>
@@ -93,7 +93,7 @@
                         </mu-list-item-action>
                         <mu-list-item-title>删除</mu-list-item-title>
           </mu-list-item>-->
-          <mu-list-item button>
+          <mu-list-item button @click="complaint">
             <mu-list-item-action>
               <mu-icon value="phone_in_talk" color="green"></mu-icon>
             </mu-list-item-action>
@@ -183,6 +183,9 @@ export default {
     },
     outPage() {
       this.$router.goBack();
+    },
+    complaint() {
+      this.$router.push("/complaint");
     },
     // 点赞文章
     giveThumbs() {

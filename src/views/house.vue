@@ -147,7 +147,10 @@ export default {
       })
         .then(result => {
           if (result.data.respCode === "1000") {
+            this.$toast("报修成功");
             this.$router.goBack();
+          } else {
+            this.$toast(result.data.errorMsg);
           }
         })
         .catch(err => {
