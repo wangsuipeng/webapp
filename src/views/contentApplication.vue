@@ -47,7 +47,7 @@
       </mu-container>
       <mu-flex justify-content="center" class="evaluatebtn">
         <span v-if="type == 0"></span>
-        <van-button v-else type="danger" @click="openFullscreenDialog">评价</van-button>
+        <van-button v-else type="danger" @click="openFullscreenDialog" style="font-size: 16px">评价</van-button>
       </mu-flex>
       <mu-dialog width="360" transition="slide-bottom" fullscreen :open.sync="openFullscreen">
         <mu-appbar title="报修评价" color="#ff5242">
@@ -142,9 +142,8 @@ export default {
     [Dialog.Component.name]: Dialog.Component
   },
   created() {
-    this.content = JSON.parse(localStorage.getItem("process")).detail;
-    this.title = JSON.parse(localStorage.getItem("process")).location;
-    this.processName = JSON.parse(localStorage.getItem("process")).processName;
+    console.log(JSON.parse(localStorage.getItem("process")))
+    this.getUserInfo(JSON.parse(localStorage.getItem("process")).id)
     this.type = JSON.parse(localStorage.getItem("process")).type;
   },
   mounted() {
@@ -164,7 +163,6 @@ export default {
     },
     // 用户评价
     updateUserWorkflowInfo() {
-      console.log(this.form.starType);
       this.$axios({
         url: "admin/mobile/processCheck/updateUserWorkflowInfo",
         method: "post",
@@ -180,6 +178,29 @@ export default {
               this.$toast("评论成功");
             }
           }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 获取用户信息
+    getUserInfo(id) {
+      this.$axios({
+        url: "admin/mobile/repairs/findRepairsById",
+        method: "post",
+        headers: {
+          Authorization: sessionStorage.getItem("token")
+        },
+        data: Qs.stringify({
+          id: id
+        })
+      })
+        .then(result => {
+          if (result.data.respCode == "1000") {
+            this.content = result.data.data.detail;
+            this.title = result.data.data.location;
+            this.processName = result.data.data.repairsType;
+          };
         })
         .catch(err => {
           console.log(err);

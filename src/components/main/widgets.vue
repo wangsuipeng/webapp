@@ -59,23 +59,14 @@
             <span class="hotspot">
               <i class="vertical-line"></i>近期热点
             </span>
-            <span class="more">更多></span>
+            <!-- <span class="more">更多></span> -->
           </mu-flex>
         </mu-flex>
       </div>
       <div class="hot-info">
         <ul>
-          <li class="muse-list">
-            <span>通知：</span>
-            <span>今日海尚菊园小区20：30~明日01：30停水检修。</span>
-          </li>
-          <li class="muse-list">
-            <span>信息：</span>
-            <span>今日海尚菊园小区20：30~明日01：30停水检修。</span>
-          </li>
-          <li class="muse-list">
-            <span>提醒：</span>
-            <span>今日海尚菊园小区20：30~明日01：30停水检修。</span>
+          <li class="muse-list" v-for="item in hotspotData">
+            <span>{{item.title}}</span>
           </li>
         </ul>
       </div>
@@ -115,11 +106,14 @@ export default {
       community: localStorage.getItem("myCommunity"),
       communData: [], // 所有社区的集合
       pageSize: 10,
-      currentPage: 1
+      currentPage: 1,
+      hotspotData: []
     };
   },
   created() {
     this.getCommunity();
+    this.getHotspot();
+    this.recordCommunity();
     this.getAdvertiseByCommunity();
   },
   mounted() {
@@ -246,6 +240,47 @@ export default {
                 // on cancel
               });
           }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 今日热点
+    getHotspot() {
+      this.$axios({
+        url: "admin/mobile/article/queryHotArticle",
+        method: "post",
+        headers: {
+          Authorization: sessionStorage.getItem("token")
+        },
+        data: Qs.stringify({
+          userId: sessionStorage.getItem("userId"),
+          communityId: localStorage.getItem("communityId"),
+          category: 2
+        })
+      })
+        .then(result => {
+          this.hotspotData = result.data.data
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 记录本次登录社区
+    recordCommunity() {
+      this.$axios({
+        url: "admin/mobile/user/setUserLoginCommunity",
+        method: "post",
+        headers: {
+          Authorization: sessionStorage.getItem("token")
+        },
+        data: Qs.stringify({
+          userId: sessionStorage.getItem("userId"),
+          communityId: localStorage.getItem("communityId"),
+        })
+      })
+        .then(result => {
+
         })
         .catch(err => {
           console.log(err);
@@ -563,7 +598,7 @@ export default {
 }
 .hot-info ul li {
   width: 100%;
-  padding: 15px 0px 15px 15px;
+  padding: 15px 10px 15px 15px;
   /* border-bottom: 1px solid #ccc; */
 }
 .muse-list {

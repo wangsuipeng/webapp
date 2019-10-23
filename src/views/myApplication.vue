@@ -9,46 +9,44 @@
       </mu-button>
     </mu-appbar>
     <div class="container-main">
-      <mu-list>
-        <mu-sub-header>
-          <h3>我的申请</h3>
-        </mu-sub-header>
-        <mu-list-item
-          avatar
-          button
-          v-ripple
-          class="muse-list"
-          v-for="(item,index) in postContent"
-          :key="index"
-          @click.native="contentApplication(item)"
-        >
-          <mu-list-item-title>{{item.location}}</mu-list-item-title>
-          <mu-list-item-action>
-            <span v-if="item.type === '0'">状态：待处理</span>
-            <span v-else>状态：已完成</span>
-          </mu-list-item-action>
-        </mu-list-item>
-      </mu-list>
-      <mu-list>
-        <mu-sub-header>
-          <h3>我的处理</h3>
-        </mu-sub-header>
-        <mu-list-item
-          avatar
-          button
-          v-ripple
-          class="muse-list"
-          v-for="(item,index) in detailWorkflowData"
-          :key="index"
-          @click.native="workApply(item.id)"
-        >
-          <mu-list-item-title>{{item.location}}</mu-list-item-title>
-          <mu-list-item-action>
-            <span v-if="item.type === '0'">待处理</span>
-            <span v-else>已完成</span>
-          </mu-list-item-action>
-        </mu-list-item>
-      </mu-list>
+      <van-collapse v-model="activeNames">
+        <van-collapse-item title="我的申请" name="1">
+          <mu-list>
+            <mu-list-item
+              avatar
+              button
+              v-ripple
+              class="muse-list"
+              v-for="(item,index) in postContent"
+              :key="index"
+              @click="contentApplication(item,'1')"
+            >
+              <mu-list-item-title>{{item.repairsType}}</mu-list-item-title>
+              <mu-list-item-action>
+                <span>状态：{{item.status}}</span>
+              </mu-list-item-action>
+            </mu-list-item>
+          </mu-list>
+        </van-collapse-item>
+        <van-collapse-item title="我的处理" name="2">
+          <mu-list>
+            <mu-list-item
+              avatar
+              button
+              v-ripple
+              class="muse-list"
+              v-for="(item,index) in detailWorkflowData"
+              :key="index"
+              @click="workApply(item.id,'2')"
+            >
+              <mu-list-item-title>{{item.repairsType}}</mu-list-item-title>
+              <mu-list-item-action>
+                <span>状态：{{item.status}}</span>
+              </mu-list-item-action>
+            </mu-list-item>
+          </mu-list>
+        </van-collapse-item>
+      </van-collapse>
     </div>
   </div>
 </template>
@@ -57,11 +55,14 @@ import Qs from "qs";
 export default {
   data() {
     return {
+      activeNames: ['1'],
       postContent: [],
       detailWorkflowData: []
     };
   },
   created() {
+    this.activeNames.splice(0,1,sessionStorage.getItem("activeNames")) || ['1']
+    console.log(this.activeNames)
     this.getUserApplyWorkflowInfo();
     this.getUserDetailWorkflow();
   },
@@ -74,31 +75,35 @@ export default {
     outPage() {
       this.$router.goBack();
     },
-    contentApplication(item) {
+    contentApplication(item,id) {
+      sessionStorage.setItem("activeNames",id)
       localStorage.setItem("process", JSON.stringify(item));
       this.$router.push("/contentApplication");
     },
-    workApply(id) {
-      localStorage.setItem("processId", id);
+    workApply(item,id) {
+      sessionStorage.setItem("activeNames",id)
+      localStorage.setItem("processId", item);
       this.$router.push("/workApply");
     },
-    //获取用户申请流程信息
+    //获取我的申请
     getUserApplyWorkflowInfo() {
       this.$axios({
-        url: "admin/mobile/processCheck/getUserApplyWorkflowInfo",
+        url: "admin/mobile/repairs/findRepairs",
         method: "post",
         headers: {
           Authorization: sessionStorage.getItem("token")
         },
         data: Qs.stringify({
           userId: sessionStorage.getItem("userId"),
-          communityId: localStorage.getItem("communityId")
+          communityId: localStorage.getItem("communityId"),
+          page: 1,
+          limit: 1000
         })
       })
         .then(result => {
           if (result.status === 200) {
             if (result.data.respCode == "1000") {
-              this.postContent = result.data.data;
+              this.postContent = result.data.data.list;
             }
           }
         })
@@ -109,20 +114,22 @@ export default {
     // 获取工作人员处理的流程
     getUserDetailWorkflow() {
       this.$axios({
-        url: "admin/mobile/processCheck/getUserDetailWorkflow",
+        url: "admin/mobile/repairs/findRepairs",
         method: "post",
         headers: {
           Authorization: sessionStorage.getItem("token")
         },
         data: Qs.stringify({
           userId: sessionStorage.getItem("userId"),
-          communityId: localStorage.getItem("communityId")
+          communityId: localStorage.getItem("communityId"),
+          page: 1,
+          limit: 1000
         })
       })
         .then(result => {
           if (result.status === 200) {
             if (result.data.respCode == "1000") {
-              this.detailWorkflowData = result.data.data;
+              this.detailWorkflowData = result.data.data.list;
             }
           }
         })

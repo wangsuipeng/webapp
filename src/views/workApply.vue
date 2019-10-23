@@ -89,7 +89,8 @@ export default {
         .then(result => {
           if (result.status === 200) {
             if (result.data.respCode == "1000") {
-              // this.$router.goBack();
+              this.$toast("提交成功");
+              this.$router.goBack();
             }
           }
         })

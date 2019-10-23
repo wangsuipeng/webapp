@@ -240,6 +240,7 @@ export default {
             this.$router.push("/myIntegral");
         },
         myApplication() {
+            sessionStorage.removeItem("activeNames")
             this.$router.push("/myApplication");
         },
         myPost() {
