@@ -27,7 +27,7 @@
             </mu-appbar>
         </mu-paper>
         <div class="container-main">
-            <van-notice-bar :text="content" left-icon="volume-o" />
+            <van-notice-bar text="宝剑锋从磨砺出，梅花香自苦寒来。宝剑锋从磨砺出，梅花香自苦寒来" left-icon="volume-o" />
             <mu-container ref="container" class="demo-loadmore-content">
                 <mu-load-more
                     @refresh="refresh"
