@@ -96,7 +96,7 @@ export default {
   },
   created() {
     this.validateForm.phone = this.$store.getters.phoneNumber;
-    this.validateForm.password = this.$store.getters.password;
+    this.validateForm.password = localStorage.getItem("password");
   },
   methods: {
     toast(msg) {

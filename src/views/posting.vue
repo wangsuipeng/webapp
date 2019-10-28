@@ -108,7 +108,10 @@ export default {
       },
       headerImage: null,
       picValue: null,
-      upImgUrl: ""
+      upImgUrl: "",
+      previewList: [],
+      uploadList: [],
+      quality: "0.6"
     };
   },
   created() {},
@@ -123,11 +126,17 @@ export default {
   methods: {
     //限制输入特殊字符
     btKeyUp(e) {
-      e.target.value = e.target.value.replace(/[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]/g,"");
+      e.target.value = e.target.value.replace(
+        /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]/g,
+        ""
+      );
     },
     // 只能输入汉字、英文、数字
     btKeyDown(e) {
-       e.target.value = e.target.value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,"");
+      e.target.value = e.target.value.replace(
+        /[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,
+        ""
+      );
     },
     outPage() {
       this.$router.goBack();
@@ -145,29 +154,39 @@ export default {
             ele => ele.file.lastModified === item.file.lastModified
           )
       );
-      let fd = new FormData();
-      imgData.forEach((item, index) => {
-        fd.append("file" + index, item.file); //第一个参数字符串可以填任意命名，第二个根据对象属性来找到file
+      let compressImg = [];
+      for (let i = 0; i < imgData.length; i++) {
+        compressImg.push(imgData[i].file);
+      }
+      this.preview(compressImg);
+    },
+    releaseApi(list) {
+      let formData = new FormData();
+      list.forEach((item, index) => {
+        console.log(item)
+        console.log(4444444)
+        formData.append("file" + index, item); //第一个参数字符串可以填任意命名，第二个根据对象属性来找到file
       });
-      fd.append("title", this.postForm.title);
-      fd.append("content", this.postForm.content);
-      fd.append("category", this.postForm.category);
-      fd.append("authorId", this.postForm.authorId);
-      fd.append("communityId", this.postForm.communityId);
-      fd.append("isPrivate", this.postForm.isPrivate);
+      formData.append("title", this.postForm.title);
+      formData.append("content", this.postForm.content);
+      formData.append("category", this.postForm.category);
+      formData.append("authorId", this.postForm.authorId);
+      formData.append("communityId", this.postForm.communityId);
+      formData.append("isPrivate", this.postForm.isPrivate);
       this.$axios({
         url: "admin/mobile/article/publishMsg",
         method: "post",
         headers: {
           Authorization: sessionStorage.getItem("token")
         },
-        data: fd
+        data: formData
       })
         .then(result => {
           if (result.data.respCode == "1000") {
+            this.$toast.success('发布成功');
             this.$router.goBack();
           } else if (result.data.respCode === "1001") {
-            this.$toast.warning(result.data.errorMsg);
+            this.$toast.fail(result.data.respMsg);
           }
         })
         .catch(err => {
@@ -181,213 +200,81 @@ export default {
         this.postData = this.postData.concat(file);
       }
     },
-
-    // // 组件方法 获取 流
-    // async onRead(file) {
-    //     console.log(file);
-    //     console.log(file.file);
-    //     this.files.name = file.file.name; // 获取文件名
-    //     this.files.type = file.file.type; // 获取类型
-    //     this.picValue = file.file; // 文件流
-    //     this.imgPreview(this.picValue);
-    // },
-    // // 处理图片
-    // imgPreview(file) {
-    //     let self = this;
-    //     let Orientation;
-    //     //去获取拍照时的信息，解决拍出来的照片旋转问题
-    //     Exif.getData(file, function() {
-    //         Orientation = Exif.getTag(this, "Orientation");
-    //     });
-    //     // 看支持不支持FileReader
-    //     if (!file || !window.FileReader) return;
-    //     if (/^image/.test(file.type)) {
-    //         // 创建一个reader
-    //         let reader = new FileReader();
-    //         // 将图片2将转成 base64 格式
-    //         reader.readAsDataURL(file);
-    //         // 读取成功后的回调
-    //         reader.onloadend = function() {
-    //             // console.log(this.result);
-    //             let result = this.result;
-    //             let img = new Image();
-    //             img.src = result;
-    //             //判断图片是否大于500K,是就直接上传，反之压缩图片
-    //             if (this.result.length <= 500 * 1024) {
-    //                 self.headerImage = this.result;
-    //                 self.postImg();
-    //             } else {
-    //                 img.onload = function() {
-    //                     let data = self.compress(img, Orientation);
-    //                     self.headerImage = data;
-    //                     self.postImg();
-    //                 };
-    //             }
-    //         };
-    //     }
-    // },
-    // // 压缩图片
-    // compress(img, Orientation) {
-    //     let canvas = document.createElement("canvas");
-    //     let ctx = canvas.getContext("2d");
-    //     //瓦片canvas
-    //     let tCanvas = document.createElement("canvas");
-    //     let tctx = tCanvas.getContext("2d");
-    //     // let initSize = img.src.length;
-    //     let width = img.width;
-    //     let height = img.height;
-    //     //如果图片大于四百万像素，计算压缩比并将大小压至400万以下
-    //     let ratio;
-    //     if ((ratio = (width * height) / 4000000) > 1) {
-    //         // console.log("大于400万像素");
-    //         ratio = Math.sqrt(ratio);
-    //         width /= ratio;
-    //         height /= ratio;
-    //     } else {
-    //         ratio = 1;
-    //     }
-    //     canvas.width = width;
-    //     canvas.height = height;
-    //     //    铺底色
-    //     ctx.fillStyle = "#fff";
-    //     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    //     //如果图片像素大于100万则使用瓦片绘制
-    //     let count;
-    //     if ((count = (width * height) / 1000000) > 1) {
-    //         // console.log("超过100W像素");
-    //         count = ~~(Math.sqrt(count) + 1); //计算要分成多少块瓦片
-    //         //      计算每块瓦片的宽和高
-    //         let nw = ~~(width / count);
-    //         let nh = ~~(height / count);
-    //         tCanvas.width = nw;
-    //         tCanvas.height = nh;
-    //         for (let i = 0; i < count; i++) {
-    //             for (let j = 0; j < count; j++) {
-    //                 tctx.drawImage(
-    //                     img,
-    //                     i * nw * ratio,
-    //                     j * nh * ratio,
-    //                     nw * ratio,
-    //                     nh * ratio,
-    //                     0,
-    //                     0,
-    //                     nw,
-    //                     nh
-    //                 );
-    //                 ctx.drawImage(tCanvas, i * nw, j * nh, nw, nh);
-    //             }
-    //         }
-    //     } else {
-    //         ctx.drawImage(img, 0, 0, width, height);
-    //     }
-    //     //修复ios上传图片的时候 被旋转的问题
-    //     if (Orientation != "" && Orientation != 1) {
-    //         switch (Orientation) {
-    //             case 6: //需要顺时针（向左）90度旋转
-    //                 this.rotateImg(img, "left", canvas);
-    //                 break;
-    //             case 8: //需要逆时针（向右）90度旋转
-    //                 this.rotateImg(img, "right", canvas);
-    //                 break;
-    //             case 3: //需要180度旋转
-    //                 this.rotateImg(img, "right", canvas); //转两次
-    //                 this.rotateImg(img, "right", canvas);
-    //                 break;
-    //         }
-    //     }
-    //     //进行最小压缩
-    //     let ndata = canvas.toDataURL("image/jpeg", 0.1);
-    //     tCanvas.width = tCanvas.height = canvas.width = canvas.height = 0;
-    //     return ndata;
-    // },
-    // // 旋转图片
-    // rotateImg(img, direction, canvas) {
-    //     //最小与最大旋转方向，图片旋转4次后回到原方向
-    //     const min_step = 0;
-    //     const max_step = 3;
-    //     if (img == null) return;
-    //     //img的高度和宽度不能在img元素隐藏后获取，否则会出错
-    //     let height = img.height;
-    //     let width = img.width;
-    //     let step = 2;
-    //     if (step == null) {
-    //         step = min_step;
-    //     }
-    //     if (direction == "right") {
-    //         step++;
-    //         //旋转到原位置，即超过最大值
-    //         step > max_step && (step = min_step);
-    //     } else {
-    //         step--;
-    //         step < min_step && (step = max_step);
-    //     }
-    //     //旋转角度以弧度值为参数
-    //     let degree = (step * 90 * Math.PI) / 180;
-    //     let ctx = canvas.getContext("2d");
-    //     switch (step) {
-    //         case 0:
-    //             canvas.width = width;
-    //             canvas.height = height;
-    //             ctx.drawImage(img, 0, 0);
-    //             break;
-    //         case 1:
-    //             canvas.width = height;
-    //             canvas.height = width;
-    //             ctx.rotate(degree);
-    //             ctx.drawImage(img, 0, -height);
-    //             break;
-    //         case 2:
-    //             canvas.width = width;
-    //             canvas.height = height;
-    //             ctx.rotate(degree);
-    //             ctx.drawImage(img, -width, -height);
-    //             break;
-    //         case 3:
-    //             canvas.width = height;
-    //             canvas.height = width;
-    //             ctx.rotate(degree);
-    //             ctx.drawImage(img, -width, 0);
-    //             break;
-    //     }
-    // },
-    // //将base64转换为文件
-    // dataURLtoFile(dataurl) {
-    //     var arr = dataurl.split(","),
-    //         bstr = atob(arr[1]),
-    //         n = bstr.length,
-    //         u8arr = new Uint8Array(n);
-    //     while (n--) {
-    //         u8arr[n] = bstr.charCodeAt(n);
-    //     }
-    //     return new File([u8arr], this.files.name, {
-    //         type: this.files.type
-    //     });
-    // },
-    // //这里写接口
-    // async postImg() {
-    //     let file = this.dataURLtoFile(this.headerImage);
-    //     console.log("这里是最终的结果")
-    //     console.log(file)
-    //     let formData = new window.FormData();
-    //     formData.append("file", file);
-    //     // toast_loding(this, "图片上传中···");
-    //     try {
-    //         let res = await util.ajax.post(this.upImgUrl, formData, {
-    //             headers: {
-    //                 "Content-Type": "multipart/form-data"
-    //             }
-    //         });
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // },
-
-    deleteImg(file) {
+    deleteImg(file, index) {
       this.imgData.push(file);
     },
-    close(index) {
-      this.list.splice(index, 1);
-      this.maxStatus = this.list == this.max ? false : true;
+    preview(files) {
+      files.forEach((file, i) => {
+        const size = file.size / 1024;
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          if (size > 1024) {
+            this.canvasDataURL(
+              reader.result,
+              { quality: this.quality },
+              base64 => {
+                this.previewList.push(base64);
+                this.uploadList.push(this.convertBase64UrlToBlob(base64));
+              }
+            );
+          } else {
+            this.previewList.push(reader.result);
+            this.uploadList.push(this.convertBase64UrlToBlob(reader.result));
+          }
+          if (i === files.length - 1) {
+            console.log(this.previewList)
+            this.releaseApi(this.uploadList);   
+          }
+        };
+      });
+      
+    },
+    canvasDataURL(path, obj, callback) {
+      const img = new Image();
+      img.src = path;
+      img.onload = e => {
+        // 默认按比例压缩
+        let w = img.width;
+        let h = img.height;
+        const scale = w / h;
+        w = obj.width || w;
+        h = obj.height || w / scale;
+        let quality = 0.7; // 默认图片质量为0.7
+        // 生成canvas
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        // 创建属性节点
+        const anw = document.createAttribute("width");
+        anw.nodeValue = w;
+        const anh = document.createAttribute("height");
+        anh.nodeValue = h;
+        canvas.setAttributeNode(anw);
+        canvas.setAttributeNode(anh);
+        ctx.drawImage(img, 0, 0, w, h);
+        // 图像质量
+        if (obj.quality && obj.quality <= 1 && obj.quality > 0) {
+          quality = obj.quality;
+        }
+        // quality值越小，所绘制出的图像越模糊
+        const base64 = canvas.toDataURL("image/jpeg", quality);
+        // 回调函数返回base64的值
+        callback(base64);
+      };
+    },
+    convertBase64UrlToBlob(urlData) {
+      const arr = urlData.split(",");
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
+    },
+    delPreviewImg(e) {
+      this.previewList.splice(e, 1);
     }
   }
 };
