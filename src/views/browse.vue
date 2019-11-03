@@ -22,7 +22,7 @@
                 <span>{{postTime}}</span>
                 <span>
                   阅读
-                  <span>2999</span>
+                  <span>{{viewNum}}</span>
                 </span>
               </div>
             </div>
@@ -38,8 +38,8 @@
         <mu-flex class="flex-demo" justify-content="center" fill>
           <ul class="share">
             <li @click="giveThumbs">
-              <mu-icon v-if="!giveThumbsup" :size="size" value="favorite_border" color="#B9B9B9"></mu-icon>
-              <mu-icon v-else :size="size" value="favorite" color="#ff5242"></mu-icon>
+              <mu-icon v-show="giveThumbsupA" :size="size" value="favorite_border" color="#B9B9B9"></mu-icon>
+              <mu-icon v-show="giveThumbsupB" :size="size" value="favorite" color="#ff5242"></mu-icon>
               <p style="display: inline-block">{{praiseNum}}</p>
             </li>
             <li>
@@ -123,11 +123,14 @@ export default {
       commeText: "", // 评论内容
       commData: [],
       numberComments: "", // 评论数
-      giveThumbsup: false,
+      giveThumbsupA: true,
+      giveThumbsupB: false,
       imgName: "",
       postTime: "",
       postImg: "",
-      postName: ""
+      postName: "",
+      isPraise: "",
+      viewNum: ""
     };
   },
   created() {
@@ -144,6 +147,16 @@ export default {
       this.imageUrls.push(obj[key]);
     }
     this.postContent = JSON.parse(localStorage.getItem("familyDiscussion"));
+    this.isPraise = JSON.parse(localStorage.getItem("familyDiscussion")).isPraise;
+    this.viewNum = JSON.parse(localStorage.getItem("familyDiscussion")).viewNum;
+    if (this.isPraise === "0") {
+      this.giveThumbsupA = true
+      this.giveThumbsupB = false
+    } else {
+      this.giveThumbsupA = false
+      this.giveThumbsupB = true
+    }
+    console.log(this.postContent.isPraise)
     this.postTime = JSON.parse(
       localStorage.getItem("familyDiscussion")
     ).createdAt.substr(0, 19);
@@ -202,7 +215,13 @@ export default {
       })
         .then(result => {
           if (result.data.respCode === "1000") {
-            this.giveThumbsup = true;
+            if (result.data.data.isPraise === "1") {
+              this.giveThumbsupA = false;
+              this.giveThumbsupB = true;
+            } else {
+              this.giveThumbsupA = true;
+              this.giveThumbsupB = false;
+            }
             this.praiseNum = result.data.data.praiseNum;
           }
         })

@@ -15,8 +15,8 @@ import 'muse-ui-message/dist/muse-ui-message.css';
 import Mui from 'vue-awesome-mui'
 import store from './store'
 import { SwitchCell } from 'vant';
-import 'muse-ui-loading/dist/muse-ui-loading.css'; // load css
-import Loading from 'muse-ui-loading';
+// import 'muse-ui-loading/dist/muse-ui-loading.css'; // load css
+// import Loading from 'muse-ui-loading';
 import { Uploader } from 'vant';
 import { Cell, CellGroup } from 'vant';
 import { Dialog } from 'vant';
@@ -34,7 +34,9 @@ import { Tab, Tabs } from 'vant';
 import { List } from 'vant';
 import { PullRefresh } from 'vant';
 import { Collapse, CollapseItem } from 'vant';
+import { Loading } from 'vant';
 
+Vue.use(Loading);
 Vue.use(Collapse).use(CollapseItem);
 Vue.use(PullRefresh);
 Vue.use(List);

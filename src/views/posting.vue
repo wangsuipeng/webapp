@@ -111,7 +111,7 @@ export default {
       upImgUrl: "",
       previewList: [],
       uploadList: [],
-      quality: "0.6"
+      quality: "0.7"
     };
   },
   created() {},
@@ -162,11 +162,15 @@ export default {
     },
     releaseApi(list) {
       let formData = new FormData();
-      list.forEach((item, index) => {
-        console.log(item)
-        console.log(4444444)
+      let files = JSON.parse(JSON.stringify(list))
+      console.log(files)
+      console.log("333333")
+      files.forEach((item, index) => {
         formData.append("file" + index, item); //第一个参数字符串可以填任意命名，第二个根据对象属性来找到file
       });
+      // for (let i = 0;i < list.__ob__.value.length;i++) {
+      //   formData.append("file" + i, list[i]); //第一个参数字符串可以填任意命名，第二个根据对象属性来找到file
+      // }
       formData.append("title", this.postForm.title);
       formData.append("content", this.postForm.content);
       formData.append("category", this.postForm.category);
@@ -183,10 +187,14 @@ export default {
       })
         .then(result => {
           if (result.data.respCode == "1000") {
-            this.$toast.success('发布成功');
+            this.$toast({
+              message: "发布成功",
+              position: "middle",
+              duration: 1500
+            });
             this.$router.goBack();
           } else if (result.data.respCode === "1001") {
-            this.$toast.fail(result.data.respMsg);
+            this.$toast.fail(result.data.errorMsg);
           }
         })
         .catch(err => {
@@ -209,21 +217,25 @@ export default {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {
+          console.log(size)
           if (size > 1024) {
             this.canvasDataURL(
               reader.result,
               { quality: this.quality },
               base64 => {
                 this.previewList.push(base64);
-                this.uploadList.push(this.convertBase64UrlToBlob(base64));
+                this.uploadList.push(this.convertBase64UrlToBlob(base64,file.name));
               }
             );
+            console.log("压缩")
           } else {
+            console.log("不压缩")
             this.previewList.push(reader.result);
-            this.uploadList.push(this.convertBase64UrlToBlob(reader.result));
+            this.uploadList.push(this.convertBase64UrlToBlob(reader.result,file.name));
           }
           if (i === files.length - 1) {
-            console.log(this.previewList)
+            // console.log(JSON.parse(JSON.stringify(this.uploadList)))
+            console.log("转换的数据")
             this.releaseApi(this.uploadList);   
           }
         };
@@ -262,7 +274,7 @@ export default {
         callback(base64);
       };
     },
-    convertBase64UrlToBlob(urlData) {
+    convertBase64UrlToBlob(urlData,name) {
       const arr = urlData.split(",");
       const mime = arr[0].match(/:(.*?);/)[1];
       const bstr = atob(arr[1]);
@@ -271,7 +283,9 @@ export default {
       while (n--) {
         u8arr[n] = bstr.charCodeAt(n);
       }
-      return new Blob([u8arr], { type: mime });
+      return new File([u8arr], name, {
+        type: mime
+      });;
     },
     delPreviewImg(e) {
       this.previewList.splice(e, 1);

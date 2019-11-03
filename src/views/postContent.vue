@@ -135,7 +135,11 @@ export default {
             .then(result => {
               if (result.data.respCode == "1000") {
                 this.$router.goBack();
-                this.$toast("删除成功");
+                this.$toast({
+                  message: "删除成功",
+                  position: "middle",
+                  duration: 1500
+                });
               }
             })
             .catch(err => {
@@ -163,7 +167,11 @@ export default {
             .then(result => {
               if (result.data.respCode == "1000") {
                 this.$router.goBack();
-                this.$toast("删除成功");
+                 this.$toast({
+                  message: "删除成功",
+                  position: "middle",
+                  duration: 1500
+                });
               }
             })
             .catch(err => {

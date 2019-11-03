@@ -361,6 +361,7 @@ export default {
         bstr = atob(arr[1]),
         n = bstr.length,
         u8arr = new Uint8Array(n);
+        console.log(arr)
       while (n--) {
         u8arr[n] = bstr.charCodeAt(n);
       }
@@ -371,9 +372,6 @@ export default {
     //这里写接口
     async postImg() {
       let file = this.dataURLtoFile(this.headerImage);
-      console.log("最终结果start");
-      console.log(file);
-      console.log("最终结果end");
       let formData = new window.FormData();
       formData.append("file", file);
       this.$axios({
@@ -453,7 +451,6 @@ export default {
       })
         .then(result => {
           if (result.status === 200) {
-            console.log(result.data.data.nickName);
             this.nickName = result.data.data.nickName; // 昵称
             this.sex = result.data.data.sex; // 性别
             this.phone = result.data.data.username; // 手机
@@ -481,7 +478,6 @@ export default {
           })
             .then(result => {
               if (result.status === 200) {
-                console.log(result);
                 this.$router.push("/login");
                 sessionStorage.removeItem("bottomNav");
               }

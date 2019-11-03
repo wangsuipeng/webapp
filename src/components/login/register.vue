@@ -80,12 +80,10 @@ export default {
                         data: Qs.stringify(this.validateForm)
                     })
                         .then(result => {
-                            console.log(result);
-                            if (result.data.data === 0) {
-                                console.log(result.data.data);
+                            if (result.data.status === "success") {
                                 this.$router.push("/login/loginSuccess");
                             } else {
-                                this.toast(result.data.data);
+                                this.$toast(result.data.data);
                             }
                         })
                         .catch(err => {

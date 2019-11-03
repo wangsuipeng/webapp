@@ -39,7 +39,10 @@
             </mu-container>
           </div>
         </mu-sub-header>
-        <div class="list-content" id="content">
+        <div class="loading" v-if="loadingFlag">
+          <van-loading type="spinner" color="#1989fa" />
+        </div>
+        <div class="list-content" id="content" v-else>
           <div v-for="(item,index) in postContent" :key="index">
             <mu-list-item
               avatar
@@ -82,6 +85,7 @@ export default {
       scrollTop: "",
       img: '../assets/images/325543.jpg',
       queryType: '1',
+      loadingFlag: true
     };
   },
   created() {
@@ -89,8 +93,8 @@ export default {
   },
   mounted() {
     mui.back = function() {
-      // history.go(-1); //回退到上一页面
-      this.$router.goBack();
+      history.go(-1); //回退到上一页面
+      // this.$router.goBack();
     };
   },
   // //在页面离开时记录滚动位置
@@ -138,7 +142,8 @@ export default {
       })
         .then(result => {
           if (result.status === 200) {
-            if (result.data.respCode == 1000) {
+            if (result.data.respCode === "1000") {
+              this.loadingFlag = false
               this.postContent = result.data.data;
             } else {
               Dialog.alert({
@@ -257,6 +262,11 @@ option {
 }
 .muse-list {
   position: relative;
+}
+.loading {
+  height: calc(100vh - 110px);
+  line-height: calc(100vh - 120px);
+  text-align: center;
 }
 @media screen and (-webkit-min-device-pixel-ratio: 2) {
   .muse-list:before {

@@ -125,7 +125,12 @@ export default {
       //首次按键，提示 再按一次退出应用
       if (!first) {
         first = new Date().getTime(); //记录第一次按下回退键的时间
-        mui.toast("再按一次退出社区"); //给出提示
+        this.$toast({
+          message: "再按一次退出社区",
+          position: "middle",
+          duration: 1000
+        });
+        // mui.toast("再按一次退出社区"); //给出提示
         // history.go(-1); //回退到上一页面
         setTimeout(function() {
           //1s中后清除
@@ -260,7 +265,7 @@ export default {
         })
       })
         .then(result => {
-          this.hotspotData = result.data.data
+          this.hotspotData = result.data.data;
         })
         .catch(err => {
           console.log(err);
@@ -276,12 +281,10 @@ export default {
         },
         data: Qs.stringify({
           userId: sessionStorage.getItem("userId"),
-          communityId: localStorage.getItem("communityId"),
+          communityId: localStorage.getItem("communityId")
         })
       })
-        .then(result => {
-
-        })
+        .then(result => {})
         .catch(err => {
           console.log(err);
         });

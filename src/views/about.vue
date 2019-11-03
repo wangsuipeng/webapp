@@ -11,7 +11,7 @@
     <div class="container-main">
       <div class="box-list">
         当前版本
-        <span style="margin-left: 40px" id="version">1.6.1</span>
+        <span style="margin-left: 40px" id="version">1.6.3</span>
       </div>
       <div class="box-list">
         最新版本
@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       appVersion: "",
-      version: "1.6.0",
+      version: "1.6.2",
       newVersions: ""
     };
   },
@@ -54,7 +54,7 @@ export default {
           Authorization: sessionStorage.getItem("token")
         },
         data: Qs.stringify({
-          version: "1.5.9",
+          version: "1.6.1",
           clientType: "a"
         })
       })
@@ -103,7 +103,6 @@ export default {
                     },
                     function(e) {
                       plus.nativeUI.toast(d.filename + "安装失败");
-                      // alert(JSON.stringify(e));
                     }
                   );
                 } else {
@@ -113,10 +112,18 @@ export default {
               //开始下载任务
               SX_down.start();
             } else {
-              this.$toast("当前已是最新版本");
+              this.$toast({
+                message: "当前已是最新版本",
+                position: "middle",
+                duration: 1500
+              });
             }
           } else {
-            this.$toast.error("下载失败");
+            this.$toast({
+              message: "下载失败",
+              position: "middle",
+              duration: 1500
+            });
           }
         })
         .catch(err => {
