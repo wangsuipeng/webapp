@@ -161,16 +161,11 @@ export default {
       this.preview(compressImg);
     },
     releaseApi(list) {
-      let formData = new FormData();
       let files = JSON.parse(JSON.stringify(list))
-      console.log(files)
-      console.log("333333")
-      files.forEach((item, index) => {
+      let formData = new FormData();
+      list.forEach((item, index) => {
         formData.append("file" + index, item); //第一个参数字符串可以填任意命名，第二个根据对象属性来找到file
       });
-      // for (let i = 0;i < list.__ob__.value.length;i++) {
-      //   formData.append("file" + i, list[i]); //第一个参数字符串可以填任意命名，第二个根据对象属性来找到file
-      // }
       formData.append("title", this.postForm.title);
       formData.append("content", this.postForm.content);
       formData.append("category", this.postForm.category);
@@ -217,7 +212,6 @@ export default {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {
-          console.log(size)
           if (size > 1024) {
             this.canvasDataURL(
               reader.result,
@@ -227,15 +221,11 @@ export default {
                 this.uploadList.push(this.convertBase64UrlToBlob(base64,file.name));
               }
             );
-            console.log("压缩")
           } else {
-            console.log("不压缩")
             this.previewList.push(reader.result);
             this.uploadList.push(this.convertBase64UrlToBlob(reader.result,file.name));
           }
           if (i === files.length - 1) {
-            // console.log(JSON.parse(JSON.stringify(this.uploadList)))
-            console.log("转换的数据")
             this.releaseApi(this.uploadList);   
           }
         };
@@ -285,7 +275,7 @@ export default {
       }
       return new File([u8arr], name, {
         type: mime
-      });;
+      });
     },
     delPreviewImg(e) {
       this.previewList.splice(e, 1);

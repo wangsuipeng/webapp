@@ -239,6 +239,10 @@ export default new Router({
     {
       path: '/complaint',
       component: () => import('@/views/complaint.vue')
+    },
+    {
+      path: '/forgetPassword',
+      component: () => import('@/components/login/forgetPassword.vue')
     }
   ]
 })

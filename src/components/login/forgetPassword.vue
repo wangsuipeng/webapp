@@ -1,10 +1,10 @@
 <template>
-  <div id="register">
+  <div class="forget-password">
     <mu-flex class="flex-wrapper" justify-content="center">
       <i class="iconfont icon-fanhui ret-btn" @click="outPage"></i>
-      <mu-flex class="flex-demo fast-register" justify-content="center">快速注册</mu-flex>
+      <mu-flex class="flex-demo fast-register" justify-content="center">忘记密码</mu-flex>
     </mu-flex>
-    <div class="register-input">
+    <div class="content">
       <mu-container style="padding: 46px 0;">
         <mu-row justify-content="center">
           <mu-avatar :size="size">
@@ -22,64 +22,63 @@
               placeholder="请输入手机号"
             ></mu-text-field>
           </mu-form-item>
-          <mu-form-item prop="password" :rules="passwordRules">
+          <mu-form-item prop="securityCode" :rules="passwordRules">
             <mu-text-field
               class="title"
               type="password"
-              v-model="validateForm.password"
+              v-model="validateForm.securityCode"
               prop="password"
-              placeholder="请输入密码"
-            ></mu-text-field>
+              placeholder="请输入验证码"
+            >
+              <button class="send-out" color="success">发送验证码</button>
+            </mu-text-field>
           </mu-form-item>
         </mu-form>
       </mu-container>
-      <mu-button class="signIn" color="primary" @click="submit">注 册</mu-button>
+      <mu-button class="signIn" color="primary" @click="nextStep">下一步</mu-button>
     </div>
   </div>
 </template>
+
 <script>
 import Qs from "qs";
 export default {
+  name: "forgetPassword",
   data() {
     return {
       size: 100,
       usernameRules: [
-        { validate: val => !!val, message: "必须填写用户名" },
+        { validate: val => !!val, message: "必须填写手机号" },
         { validate: val => val.length >= 3, message: "用户名长度大于3" }
       ],
       passwordRules: [
-        { validate: val => !!val, message: "必须填写密码" },
+        { validate: val => !!val, message: "必须填写验证码" },
         {
-          validate: val => val.length >= 3 && val.length <= 10,
-          message: "密码长度大于3小于10"
+          validate: val => val.length = 6,
+          message: "验证码长度等于6"
         }
       ],
-      argeeRules: [{ validate: val => !!val, message: "必须同意用户协议" }],
       validateForm: {
         phone: "",
-        password: ""
-        // isAgree: false
+        securityCode: "",
       }
     };
   },
   methods: {
-    toast(msg) {
-      this.$toast.error(msg);
-    },
     outPage() {
       this.$router.goBack();
     },
-    submit() {
+    nextStep() {
       this.$refs.form.validate().then(result => {
         if (result) {
           this.$axios({
-            url: "admin/mobile/user/register",
+            url: "admin/mobile/user/findBackPassword",
             method: "post",
             data: Qs.stringify(this.validateForm)
           })
             .then(result => {
               if (result.data.status === "success") {
-                this.$router.push("/login/loginSuccess");
+                // this.$router.push("/login/loginSuccess");
               } else {
                 this.$toast(result.data.data);
               }
@@ -89,28 +88,14 @@ export default {
             });
         }
       });
-    },
-    clear() {
-      this.$refs.form.clear();
-      this.validateForm = {
-        phone: "",
-        password: ""
-        // isAgree: false
-      };
-    },
-    goSign() {
-      this.$router.push("/layout/login");
     }
   }
 };
 </script>
+
 <style scoped>
-#register {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
+.content {
+  padding: 0 20px;
 }
 .ret-btn {
   display: inline-block;
@@ -128,30 +113,11 @@ export default {
   font-size: 18px;
   color: #fff;
 }
-.register-input {
-  box-sizing: border-box;
-  padding: 0 20px;
-}
-.title {
-  font-size: 14px !important;
-  border-bottom: 1px solid #ff5242;
-}
 .signIn {
   width: 100%;
   height: 40px;
   border-radius: 20px;
   font-size: 16px;
   background-color: #ff5242;
-}
-.another-sign .message {
-  display: inline-block;
-  color: #969799;
-  margin-top: 8px;
-}
-.another-sign .register {
-  display: block;
-  float: right;
-  color: #969799;
-  margin-top: 8px;
 }
 </style>
