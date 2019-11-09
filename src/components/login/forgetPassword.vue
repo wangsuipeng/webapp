@@ -71,20 +71,17 @@ export default {
     nextStep() {
       this.$refs.form.validate().then(result => {
         if (result) {
-          this.$router.push("/setPassWord")
           this.$axios({
-            url: "admin/mobile/user/findBackPassword",
+            url: "admin/outapp/findBackPassword",
             method: "post",
-            headers: {
-              Authorization: sessionStorage.getItem("token")
-            },
             data: Qs.stringify(this.validateForm)
           })
             .then(result => {
-              if (result.data.status === "success") {
-                // this.$router.push("/login/loginSuccess");
+              if (result.data.respCode === "1000") {
+                localStorage.setItem("userId",result.data.data.userId)
+                this.$router.push("/setPassWord")
               } else {
-                // this.$toast(result.data.data);
+                this.$toast(result.data.respMsg);
               }
             })
             .catch(err => {

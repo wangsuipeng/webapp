@@ -14,23 +14,23 @@
       </mu-container>
       <mu-container>
         <mu-form ref="form" :model="validateForm" class="mu-demo-form">
-          <mu-form-item prop="phone" :rules="usernameRules">
+          <mu-form-item prop="phone">
             <mu-text-field
               class="title"
-              v-model="validateForm.phone"
+              type="password"
+              v-model="validateForm.password"
               prop="phone"
               placeholder="请输入新密码"
             ></mu-text-field>
           </mu-form-item>
-          <mu-form-item prop="securityCode" :rules="passwordRules">
+          <mu-form-item prop="securityCode">
             <mu-text-field
               class="title"
               type="password"
               v-model="validateForm.securityCode"
               prop="password"
               placeholder="请确认密码"
-            >
-            </mu-text-field>
+            ></mu-text-field>
           </mu-form-item>
         </mu-form>
       </mu-container>
@@ -40,36 +40,47 @@
 </template>
 
 <script>
+import Qs from "qs";
 export default {
-  data () {
+  data() {
     return {
       size: 100,
-      usernameRules: [
-        { validate: val => !!val, message: "密码长度大于等于八位数" },
-        { validate: val => val.length >= 8, message: "密码长度大于等于8" }
-      ],
-      passwordRules: [
-        { validate: val => !!val, message: "填写验证码" },
-        {
-          validate: val => val.length <= 6,
-          message: "验证码长度等于6"
-        }
-      ],
       validateForm: {
-        phone: "",
-        securityCode: "",
+        password: "",
+        securityCode: ""
       }
-    }
+    };
   },
   methods: {
     outPage() {
       this.$router.goBack();
     },
     setPassWord() {
-
+      if (this.validateForm.password === this.validateForm.securityCode) {
+        this.$axios({
+          url: "admin/outapp/reSettingPassword",
+          method: "post",
+          data: Qs.stringify({
+            password: this.validateForm.password,
+            userId: localStorage.getItem("userId")
+          })
+        })
+          .then(result => {
+            if (result.data.respCode === "1000") {
+              console.log("chegngon ")
+            } else {
+              this.$toast(result.data.respMsg);
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        this.$toast("两次输入的密码不一致");
+      }
     }
   }
-}
+};
 </script>
 
 <style scoped>
