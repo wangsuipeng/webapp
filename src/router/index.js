@@ -243,6 +243,10 @@ export default new Router({
     {
       path: '/forgetPassword',
       component: () => import('@/components/login/forgetPassword.vue')
+    },
+    {
+      path: '/setPassWord',
+      component: () => import('@/components/login/setPassWord.vue')
     }
   ]
 })

@@ -1,8 +1,8 @@
 <template>
-  <div class="forget-password">
+  <div class="set-password">
     <mu-flex class="flex-wrapper" justify-content="center">
       <i class="iconfont icon-fanhui ret-btn" @click="outPage"></i>
-      <mu-flex class="flex-demo fast-register" justify-content="center">忘记密码</mu-flex>
+      <mu-flex class="flex-demo fast-register" justify-content="center">设置密码</mu-flex>
     </mu-flex>
     <div class="content">
       <mu-container style="padding: 46px 0;">
@@ -19,7 +19,7 @@
               class="title"
               v-model="validateForm.phone"
               prop="phone"
-              placeholder="请输入手机号"
+              placeholder="请输入新密码"
             ></mu-text-field>
           </mu-form-item>
           <mu-form-item prop="securityCode" :rules="passwordRules">
@@ -28,28 +28,25 @@
               type="password"
               v-model="validateForm.securityCode"
               prop="password"
-              placeholder="请输入验证码"
+              placeholder="请确认密码"
             >
-              <button class="send-out" color="success">发送验证码</button>
             </mu-text-field>
           </mu-form-item>
         </mu-form>
       </mu-container>
-      <mu-button class="signIn" color="primary" @click="nextStep">下一步</mu-button>
+      <mu-button class="signIn" color="primary" @click="setPassWord">确 定</mu-button>
     </div>
   </div>
 </template>
 
 <script>
-import Qs from "qs";
 export default {
-  name: "forgetPassword",
-  data() {
+  data () {
     return {
       size: 100,
       usernameRules: [
-        { validate: val => !!val, message: "请输入正确的手机号" },
-        { validate: val => val.length == 11, message: "请输入正确的手机号" }
+        { validate: val => !!val, message: "密码长度大于等于八位数" },
+        { validate: val => val.length >= 8, message: "密码长度大于等于8" }
       ],
       passwordRules: [
         { validate: val => !!val, message: "填写验证码" },
@@ -62,39 +59,17 @@ export default {
         phone: "",
         securityCode: "",
       }
-    };
+    }
   },
   methods: {
     outPage() {
       this.$router.goBack();
     },
-    nextStep() {
-      this.$refs.form.validate().then(result => {
-        if (result) {
-          this.$router.push("/setPassWord")
-          this.$axios({
-            url: "admin/mobile/user/findBackPassword",
-            method: "post",
-            headers: {
-              Authorization: sessionStorage.getItem("token")
-            },
-            data: Qs.stringify(this.validateForm)
-          })
-            .then(result => {
-              if (result.data.status === "success") {
-                // this.$router.push("/login/loginSuccess");
-              } else {
-                // this.$toast(result.data.data);
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        }
-      });
+    setPassWord() {
+
     }
   }
-};
+}
 </script>
 
 <style scoped>

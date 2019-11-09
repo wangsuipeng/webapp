@@ -111,7 +111,8 @@ export default {
       upImgUrl: "",
       previewList: [],
       uploadList: [],
-      quality: "0.7"
+      quality: "0.7",
+      imgLength: ""
     };
   },
   created() {},
@@ -122,6 +123,15 @@ export default {
     mui.back = function() {
       history.go(-1); //回退到上一页面
     };
+  },
+  watch: {
+    "uploadList.length": {
+      handler(newValue,oldValue) {
+        if (newValue == this.imgLength) {
+          this.releaseApi(this.uploadList);
+        }
+      }
+    }
   },
   methods: {
     //限制输入特殊字符
@@ -202,6 +212,7 @@ export default {
       } else if (file.constructor == Array) {
         this.postData = this.postData.concat(file);
       }
+      this.imgLength = this.postData.length;
     },
     deleteImg(file, index) {
       this.imgData.push(file);
@@ -226,11 +237,10 @@ export default {
             this.uploadList.push(this.convertBase64UrlToBlob(reader.result,file.name));
           }
           if (i === files.length - 1) {
-            this.releaseApi(this.uploadList);   
+            
           }
         };
-      });
-      
+      });  
     },
     canvasDataURL(path, obj, callback) {
       const img = new Image();
