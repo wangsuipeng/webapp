@@ -67,7 +67,8 @@ export default {
         })
           .then(result => {
             if (result.data.respCode === "1000") {
-              console.log("chegngon ")
+              this.$router.push("/login");
+              this.$toast("设置成功");
             } else {
               this.$toast(result.data.respMsg);
             }

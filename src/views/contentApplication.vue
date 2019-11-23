@@ -17,6 +17,33 @@
                 <mu-list-item>
                   <mu-list-item-content>
                     <mu-list-item-title>
+                      业主：
+                      <span>{{content.userRealName}}</span>
+                    </mu-list-item-title>
+                  </mu-list-item-content>
+                </mu-list-item>
+                <mu-divider shallow-inset></mu-divider>
+                <mu-list-item>
+                  <mu-list-item-content>
+                    <mu-list-item-title>
+                      手机：
+                      <span>{{content.userPhone}}</span>
+                    </mu-list-item-title>
+                  </mu-list-item-content>
+                </mu-list-item>
+                <mu-divider shallow-inset></mu-divider>
+                <mu-list-item>
+                  <mu-list-item-content>
+                    <mu-list-item-title>
+                      社区：
+                      <span>{{content.communityName}}</span>
+                    </mu-list-item-title>
+                  </mu-list-item-content>
+                </mu-list-item>
+                <mu-divider shallow-inset></mu-divider>
+                <mu-list-item>
+                  <mu-list-item-content>
+                    <mu-list-item-title>
                       位置：
                       <span>{{title}}</span>
                     </mu-list-item-title>
@@ -36,10 +63,38 @@
                   <mu-list-item-content>
                     <mu-list-item-title>
                       描述：
-                      <span>{{content}}</span>
+                      <span>{{content.detail}}</span>
                     </mu-list-item-title>
                   </mu-list-item-content>
                 </mu-list-item>
+                <mu-divider shallow-inset></mu-divider>
+                <mu-list-item>
+                  <mu-list-item-content>
+                    <mu-list-item-title>
+                      状态：
+                      <span>{{content.status}}</span>
+                    </mu-list-item-title>
+                  </mu-list-item-content>
+                </mu-list-item>
+                <mu-divider shallow-inset></mu-divider>
+                <mu-list-item>
+                  <mu-list-item-content>
+                    <mu-list-item-title>
+                      上门时间：
+                      <span>{{content.serviceDate}}</span>
+                    </mu-list-item-title>
+                  </mu-list-item-content>
+                </mu-list-item>
+                <mu-divider shallow-inset></mu-divider>
+                <mu-list-item>
+                  <mu-list-item-content>
+                    <mu-list-item-title>
+                      逗留时间：
+                      <span>{{stayTime}}</span>
+                    </mu-list-item-title>
+                  </mu-list-item-content>
+                </mu-list-item>
+                <mu-divider shallow-inset></mu-divider>
               </mu-list>
             </mu-paper>
           </mu-col>
@@ -58,6 +113,43 @@
         </mu-appbar>
         <div>
           <div class="partition-line"></div>
+          <mu-container>
+            <mu-row gutter>
+              <mu-col span="12">
+                <mu-paper :z-depth="0">
+                  <mu-list>
+                    <mu-list-item>
+                      <mu-list-item-content>
+                        <mu-list-item-title>
+                          维修人员：
+                          <span>{{content.repairsName}}</span>
+                        </mu-list-item-title>
+                      </mu-list-item-content>
+                    </mu-list-item>
+                    <mu-divider shallow-inset></mu-divider>
+                    <mu-list-item>
+                      <mu-list-item-content>
+                        <mu-list-item-title>
+                          维修人员号码：
+                          <span>{{content.repairsPhone}}</span>
+                        </mu-list-item-title>
+                      </mu-list-item-content>
+                    </mu-list-item>
+                    <mu-divider shallow-inset></mu-divider>
+                    <mu-list-item>
+                      <mu-list-item-content>
+                        <mu-list-item-title>
+                          维修完成时间：
+                          <span>{{content.repairsTime}}</span>
+                        </mu-list-item-title>
+                      </mu-list-item-content>
+                    </mu-list-item>
+                    <mu-divider shallow-inset></mu-divider>
+                  </mu-list>
+                </mu-paper>
+              </mu-col>
+            </mu-row>
+          </mu-container>
           <div class="evaluate">
             <div class="evaluate-title">报修评价</div>
             <div style="margin-top: 20px">
@@ -134,16 +226,16 @@ export default {
         userOpinion: "",
         type: "2",
         id: JSON.parse(localStorage.getItem("process")).id,
-        starType: 0
-      }
+        starType: 0,
+      },
+      stayTime: ""
     };
   },
   components: {
     [Dialog.Component.name]: Dialog.Component
   },
   created() {
-    console.log(JSON.parse(localStorage.getItem("process")))
-    this.getUserInfo(JSON.parse(localStorage.getItem("process")).id)
+    this.getUserInfo(JSON.parse(localStorage.getItem("process")).id);
     this.type = JSON.parse(localStorage.getItem("process")).type;
   },
   mounted() {
@@ -197,14 +289,68 @@ export default {
       })
         .then(result => {
           if (result.data.respCode == "1000") {
-            this.content = result.data.data.detail;
+            this.content = result.data.data;
             this.title = result.data.data.location;
             this.processName = result.data.data.repairsType;
-          };
+            setInterval(() => {
+              this.nowTimeStr();
+                let minutes = this.GetDateDiff(
+                  result.data.data.createTime,
+                  this.timer,
+                  "minute"
+                );
+                this.stayTime = Math.floor(minutes / 60) + "小时" + (minutes % 60) + "分"
+                // this.$set(
+                //   this.listTable[i],
+                //   "endTime",
+                //   Math.floor(minutes / 60) + "小时" + (minutes % 60) + "分"
+                // );
+            }, 0);
+          }
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    nowTimeStr() {
+      var date = new Date();
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      var h = date.getHours();
+      var m = date.getMinutes();
+      var s = date.getSeconds();
+      var timestr =
+        year + "-" + month + "-" + day + "- " + h + ":" + m + ":" + s;
+      this.timer = timestr;
+    },
+    GetDateDiff(startTime, endTime, diffType) {
+      //将xxxx-xx-xx的时间格式，转换为 xxxx/xx/xx的格式
+      startTime = startTime.replace(/\-/g, "/");
+      endTime = endTime.replace(/\-/g, "/");
+      //将计算间隔类性字符转换为小写
+      diffType = diffType.toLowerCase();
+      var sTime = new Date(startTime); //开始时间
+      var eTime = new Date(endTime); //结束时间
+      //作为除数的数字
+      var timeType = 1;
+      switch (diffType) {
+        case "second":
+          timeType = 1000;
+          break;
+        case "minute":
+          timeType = 1000 * 60;
+          break;
+        case "hour":
+          timeType = 1000 * 3600;
+          break;
+        case "day":
+          timeType = 1000 * 3600 * 24;
+          break;
+        default:
+          break;
+      }
+      return parseInt((eTime.getTime() - sTime.getTime()) / parseInt(timeType));
     }
   }
 };

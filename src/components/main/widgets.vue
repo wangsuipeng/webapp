@@ -65,8 +65,8 @@
       </div>
       <div class="hot-info">
         <ul>
-          <li class="muse-list" v-for="item in hotspotData">
-            <span>{{item.title}}</span>
+          <li class="muse-list" v-for="(item, index) in hotspotData" :key="index">
+            <span @click="nearHot(item)">{{item.title}}</span>
           </li>
         </ul>
       </div>
@@ -145,6 +145,10 @@ export default {
     };
   },
   methods: {
+    nearHot(item) {
+      localStorage.setItem("nearHot",JSON.stringify(item))
+      this.$router.push("/nearHot")
+    },
     swipeImg(item) {
       for (let i = 0; i < this.advertisement.length; i++) {
         for (
@@ -168,6 +172,7 @@ export default {
       localStorage.setItem("communityId", id);
       this.imagesData = [];
       this.getAdvertiseByCommunity();
+      this.getHotspot();
     },
     closeBottomSheet() {
       this.open = false;

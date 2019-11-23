@@ -118,6 +118,7 @@ export default {
       this.$router.push("./post");
     },
     browsePost(item) {
+      this.readNum(item)
       localStorage.setItem("familyDiscussion", JSON.stringify(item));
       this.$router.push("/browse");
     },
@@ -153,6 +154,26 @@ export default {
                 this.$router.goBack();
               });
             }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    readNum(item) {
+      this.$axios({
+        url: "admin/mobile/article/addViewByArticleId",
+        method: "post",
+        headers: {
+          Authorization: sessionStorage.getItem("token")
+        },
+        data: Qs.stringify({
+          articleId: item.articleId
+        })
+      })
+        .then(result => {
+          if (result.status === 200) {
+            
           }
         })
         .catch(err => {

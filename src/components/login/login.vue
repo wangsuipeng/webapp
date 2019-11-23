@@ -88,21 +88,27 @@ export default {
       validateForm: {
         phone: "",
         password: "",
+        clientId: "",
         isAgree: true
       },
       loginMode: true,
-      signText: "短信验证码登录"
+      signText: "短信验证码登录",
     };
   },
   created() {
     this.validateForm.phone = this.$store.getters.phoneNumber;
     this.validateForm.password = localStorage.getItem("password");
+    
   },
   methods: {
     toast(msg) {
       this.$toast.error(msg);
     },
     submit() {
+      if (window.plus) {
+        const info = plus.push.getClientInfo();
+        this.validateForm.clientId = JSON.stringify(info.clientid);
+      }
       this.$refs.form.validate().then(result => {
         if (result) {
           this.$axios({

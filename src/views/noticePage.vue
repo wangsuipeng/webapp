@@ -9,8 +9,8 @@
       </mu-button>
     </mu-appbar>
     <div class="container-main">
-      <div class="notic-titlt">{{content.title}}</div>
-      <div class="notic-content">{{content.content}}</div>
+      <!-- <div class="notic-titlt">{{content.title}}</div> -->
+      <div class="notic-content" v-html="content.content"></div>
       <div class="notic-img">
         <div v-for="(item,index) in JSON.parse(content.imgJson)" :key="index">
           <img :src="item.path" alt />

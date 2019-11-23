@@ -247,6 +247,10 @@ export default new Router({
     {
       path: '/setPassWord',
       component: () => import('@/components/login/setPassWord.vue')
+    },
+    {
+      path: '/nearHot',
+      component: () => import('@/views/nearHot.vue')
     }
   ]
 })

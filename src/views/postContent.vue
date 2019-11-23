@@ -64,7 +64,6 @@ export default {
   },
   created() {
     this.activeName = localStorage.getItem("activeName");
-    console.log(this.activeName)
     if (localStorage.getItem("activeName") == 1) {
       var obj = JSON.parse(JSON.parse(localStorage.getItem("myPost")).imgPath);
       for (var key in obj) {

@@ -33,25 +33,6 @@
       <div class>
         <van-tabs v-model="active" sticky>
           <van-tab title="当前申请">
-            <!-- <mu-data-table
-            stripe
-            :columns="columns"
-            :sort.sync="sort"
-            @sort-change="handleSortChange"
-            :data="listTable"
-          >
-            <template slot-scope="scope">
-              <td class="is-center">{{scope.row.processName}}</td>
-              <td class="is-center">{{scope.row.detail}}</td>
-              <td class="is-center">
-                <span v-if="scope.row.type == '2'">处理完成</span>
-                <span v-else>处理中...</span>
-              </td>
-              <td class="is-center">{{scope.row.detailPhoneOneName}}</td>
-              <td class="is-center">{{scope.row.detailOneDate}}</td>
-              <td class="is-center">{{scope.row.endTime}}</td>
-            </template>
-            </mu-data-table>-->
             <div class="content-apply list-content" id="list-content">
               <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
                 <van-list
@@ -69,24 +50,6 @@
             </div>
           </van-tab>
           <van-tab title="历史申请">
-            <!-- <mu-paper :z-depth="0">
-              <mu-data-table
-                :columns="columns1"
-                :sort.sync="sort"
-                @sort-change="handleSortChange"
-                :data="listTableHis"
-              >
-                <template slot-scope="scope">
-                  <td class="is-center">{{scope.row.processName}}</td>
-                  <td class="is-center">{{scope.row.detail}}</td>
-                  <td class="is-center">
-                    <span v-if="scope.row.type == '2'">处理完成</span>
-                    <span v-else>处理中...</span>
-                  </td>
-                  <td class="is-center">{{scope.row.detailOneDate}}</td>
-                </template>
-              </mu-data-table>
-            </mu-paper>-->
             <van-list
               v-model="loading1"
               :finished="finished1"
@@ -101,62 +64,6 @@
           </van-tab>
         </van-tabs>
       </div>
-      <!-- <mu-row>
-        <mu-col span="12">
-          <div class="grid-cell">
-            <span class="current-application">当前申请</span>
-          </div>
-        </mu-col>
-      </mu-row>-->
-      <!-- <mu-paper :z-depth="0">
-        <mu-data-table
-          stripe
-          :columns="columns"
-          :sort.sync="sort"
-          @sort-change="handleSortChange"
-          :data="listTable"
-        >
-          <template slot-scope="scope">
-            <td class="is-center">{{scope.row.processName}}</td>
-            <td class="is-center">{{scope.row.detail}}</td>
-            <td class="is-center">
-              <span v-if="scope.row.type == '2'">处理完成</span>
-              <span v-else>处理中...</span>
-            </td>
-            <td class="is-center">{{scope.row.detailPhoneOneName}}</td>
-            <td class="is-center">{{scope.row.detailOneDate}}</td>
-            <td class="is-center">{{scope.row.endTime}}</td>
-          </template>
-        </mu-data-table>
-      </mu-paper>-->
-      <!-- <mu-flex class="flex-wrapper" justify-content="start">
-        <mu-flex class="flex-demo" justify-content="center"></mu-flex>
-      </mu-flex>
-      <mu-row>
-        <mu-col span="12">
-          <div class="grid-cell">
-            <span class="current-application">历史申请</span>
-          </div>
-        </mu-col>
-      </mu-row>-->
-      <!-- <mu-paper :z-depth="0">
-        <mu-data-table
-          :columns="columns1"
-          :sort.sync="sort"
-          @sort-change="handleSortChange"
-          :data="listTableHis"
-        >
-          <template slot-scope="scope">
-            <td class="is-center">{{scope.row.processName}}</td>
-            <td class="is-center">{{scope.row.detail}}</td>
-            <td class="is-center">
-              <span v-if="scope.row.type == '2'">处理完成</span>
-              <span v-else>处理中...</span>
-            </td>
-            <td class="is-center">{{scope.row.detailOneDate}}</td>
-          </template>
-        </mu-data-table>
-      </mu-paper>-->
     </div>
   </div>
 </template>

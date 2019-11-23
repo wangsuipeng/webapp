@@ -63,6 +63,7 @@ export default {
       this.$router.push("/sharePosts");
     },
     browseShare(item) {
+      this.readNum(item)
       localStorage.setItem("browseShare", JSON.stringify(item));
       this.$router.push("/browseShare");
     },
@@ -91,6 +92,26 @@ export default {
               this.$router.goBack();
               // on close
             });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    readNum(item) {
+      this.$axios({
+        url: "admin/mobile/article/addViewByArticleId",
+        method: "post",
+        headers: {
+          Authorization: sessionStorage.getItem("token")
+        },
+        data: Qs.stringify({
+          articleId: item.articleId
+        })
+      })
+        .then(result => {
+          if (result.status === 200) {
+            
           }
         })
         .catch(err => {
