@@ -167,8 +167,8 @@ export default {
     };
   },
   created() {
-    this.getUserApplyWorkflowInfo();
-    this.getUserApplyInfoHistory();
+    // this.getUserApplyWorkflowInfo();
+    // this.getUserApplyInfoHistory();
   },
   mounted() {
     mui.back = function() {
@@ -233,7 +233,7 @@ export default {
           this.loading = false;
           if (result.data.respCode === "1000") {
             if (result.data.data.list.length) {
-              this.listTable.push(...result.data.data.list);
+              this.listTable.push(...new Set(result.data.data.list));
             } else {
               this.finished = true;
               // this.total = result.data.data.totalCount;

@@ -8,7 +8,7 @@
         <!-- <mu-icon size="30" value="control_point"></mu-icon> -->
       </mu-button>
     </mu-appbar>
-    <div class="content-main">
+    <div class="content-main" id="scrool">
       <mu-list>
         <mu-sub-header>
           <div>
@@ -92,6 +92,7 @@ export default {
     this.articleQueryAll();
   },
   mounted() {
+    window.scrollTo(100,500); 
     mui.back = function() {
       history.go(-1); //回退到上一页面
       // this.$router.goBack();
@@ -99,15 +100,15 @@ export default {
   },
   // //在页面离开时记录滚动位置
   // beforeRouteLeave (to, from, next) {
-  //     this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-  //     next()
+  //   this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+  //   next()
   // },
   // //进入该页面时，用之前保存的滚动位置赋值
   // beforeRouteEnter (to, from, next) {
   //     next(vm => {
-  //         console.log(vm.scrollTop)
-  //         document.body.scrollTop = 500 + 'px'
-
+  //       console.log(vm.scrollTop)
+  //       document.getElementById("scrool").scrollTo = 200 + 'px'; 
+  //       // document.body.scrollTop = 500 + 'px'
   //     })
   // },
   methods: {
@@ -123,11 +124,17 @@ export default {
       this.$router.push("/browse");
     },
     selectSort(val) {
-      this.articleQueryAll(val)
+      this.articleQueryAll(val);
+      sessionStorage.setItem("queryType",val)
     },
     //查询所有新闻或公告
     articleQueryAll(val) {
-      this.queryType = val;
+      if (sessionStorage.getItem("queryType")) {
+        this.queryType = sessionStorage.getItem("queryType")
+      }
+      if (val) {
+        this.queryType = val;
+      }
       this.$axios({
         url: "admin/mobile/article/queryAllByCommunityIdAndCategary",
         method: "post",

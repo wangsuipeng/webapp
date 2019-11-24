@@ -12,59 +12,68 @@
       <van-tabs v-model="activeName">
         <van-tab title="家事讨论" name="a">
           <mu-list>
-            <div v-for="(item,index) in postContent" :key="index">
-              <mu-list-item
-                avatar
-                class="word-list muse-list"
-                v-ripple
-                @click.native="browsePost(item)"
-              >
-                <mu-list-item-action>
-                  <mu-avatar :size="size">
-                    <img :src="item.headUrl" />
-                  </mu-avatar>
-                </mu-list-item-action>
-                <mu-list-item-title>{{item.title}}</mu-list-item-title>
-              </mu-list-item>
+            <div v-if="postContent.length !== 0">
+              <div v-for="(item,index) in postContent" :key="index">
+                <mu-list-item
+                  avatar
+                  class="word-list muse-list"
+                  v-ripple
+                  @click.native="browsePost(item)"
+                >
+                  <mu-list-item-action>
+                    <mu-avatar :size="size">
+                      <img :src="item.headUrl" />
+                    </mu-avatar>
+                  </mu-list-item-action>
+                  <mu-list-item-title>{{item.title}}</mu-list-item-title>
+                </mu-list-item>
+              </div>
             </div>
+            <div v-else class="no-data">暂无数据</div>
           </mu-list>
         </van-tab>
         <van-tab title="车位分享" name="b">
           <mu-list>
-            <div v-for="(item,index) in vehicleData" :key="index">
-              <mu-list-item
-                avatar
-                class="word-list muse-list"
-                v-ripple
-                @click.native="browsePost(item)"
-              >
-                <mu-list-item-action>
-                  <mu-avatar :size="size">
-                    <img :src="item.handImg" />
-                  </mu-avatar>
-                </mu-list-item-action>
-                <mu-list-item-title>{{item.title}}</mu-list-item-title>
-              </mu-list-item>
+            <div v-if="vehicleData.length !== 0">
+              <div v-for="(item,index) in vehicleData" :key="index">
+                <mu-list-item
+                  avatar
+                  class="word-list muse-list"
+                  v-ripple
+                  @click.native="browsePost(item)"
+                >
+                  <mu-list-item-action>
+                    <mu-avatar :size="size">
+                      <img :src="item.handImg" />
+                    </mu-avatar>
+                  </mu-list-item-action>
+                  <mu-list-item-title>{{item.title}}</mu-list-item-title>
+                </mu-list-item>
+              </div>
             </div>
+            <div v-else class="no-data">暂无数据</div>
           </mu-list>
         </van-tab>
         <van-tab title="闲置分享" name="c">
           <mu-list>
-            <div v-for="(item,index) in shareData" :key="index">
-              <mu-list-item
-                avatar
-                class="word-list muse-list"
-                v-ripple
-                @click.native="browsePost(item)"
-              >
-                <mu-list-item-action>
-                  <mu-avatar :size="size">
-                    <img :src="item.handImg" />
-                  </mu-avatar>
-                </mu-list-item-action>
-                <mu-list-item-title>{{item.serviceName}}</mu-list-item-title>
-              </mu-list-item>
+            <div v-if="shareData.length !== 0">
+              <div v-for="(item,index) in shareData" :key="index">
+                <mu-list-item
+                  avatar
+                  class="word-list muse-list"
+                  v-ripple
+                  @click.native="browsePost(item)"
+                >
+                  <mu-list-item-action>
+                    <mu-avatar :size="size">
+                      <img :src="item.handImg" />
+                    </mu-avatar>
+                  </mu-list-item-action>
+                  <mu-list-item-title>{{item.serviceName}}</mu-list-item-title>
+                </mu-list-item>
+              </div>
             </div>
+            <div v-else class="no-data">暂无数据</div>
           </mu-list>
         </van-tab>
       </van-tabs>
@@ -115,7 +124,7 @@ export default {
         data: Qs.stringify({
           authorId: sessionStorage.getItem("userId"),
           communityId: localStorage.getItem("communityId"),
-          category: '2'
+          category: "2"
         })
       })
         .then(result => {
@@ -206,5 +215,10 @@ export default {
     transform: scale(0.5);
     transform-origin: 0 0;
   }
+}
+.no-data {
+  text-align: center;
+  line-height: calc(100vh - 156px);
+  color: #ccc;
 }
 </style>

@@ -80,6 +80,15 @@
                 <mu-list-item>
                   <mu-list-item-content>
                     <mu-list-item-title>
+                      处理人：
+                      <span>{{content.repairsName}}</span>
+                    </mu-list-item-title>
+                  </mu-list-item-content>
+                </mu-list-item>
+                <mu-divider shallow-inset></mu-divider>
+                <mu-list-item>
+                  <mu-list-item-content>
+                    <mu-list-item-title>
                       上门时间：
                       <span>{{content.serviceDate}}</span>
                     </mu-list-item-title>
@@ -91,6 +100,15 @@
                     <mu-list-item-title>
                       逗留时间：
                       <span>{{stayTime}}</span>
+                    </mu-list-item-title>
+                  </mu-list-item-content>
+                </mu-list-item>
+                <mu-divider shallow-inset></mu-divider>
+                <mu-list-item>
+                  <mu-list-item-content>
+                    <mu-list-item-title>
+                      处理人电话：
+                      <span>{{content.repairsPhone}}</span>
                     </mu-list-item-title>
                   </mu-list-item-content>
                 </mu-list-item>
@@ -300,11 +318,6 @@ export default {
                   "minute"
                 );
                 this.stayTime = Math.floor(minutes / 60) + "小时" + (minutes % 60) + "分"
-                // this.$set(
-                //   this.listTable[i],
-                //   "endTime",
-                //   Math.floor(minutes / 60) + "小时" + (minutes % 60) + "分"
-                // );
             }, 0);
           }
         })

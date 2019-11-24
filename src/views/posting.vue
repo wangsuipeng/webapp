@@ -37,6 +37,7 @@
         ></textarea>
         <div class="content-img">
           <van-uploader
+            id="input"
             :after-read="onRead"
             @delete="deleteImg"
             v-model="fileList"
@@ -112,7 +113,7 @@ export default {
       previewList: [],
       uploadList: [],
       quality: "0.7",
-      imgLength: ""
+      imgLength: 0
     };
   },
   created() {},
@@ -120,13 +121,17 @@ export default {
     // if (window.plus) {
     //     this.height = plus.navigator.getStatusbarHeight();
     // }
+    var file = document.getElementById("input");
+    if (this.getIos()) {
+      file.removeAttribute("capture");
+    }
     mui.back = function() {
       history.go(-1); //回退到上一页面
     };
   },
   watch: {
     "uploadList.length": {
-      handler(newValue,oldValue) {
+      handler(newValue, oldValue) {
         if (newValue == this.imgLength) {
           this.releaseApi(this.uploadList);
         }
@@ -134,6 +139,13 @@ export default {
     }
   },
   methods: {
+    getIos() {
+      if (!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     //限制输入特殊字符
     btKeyUp(e) {
       e.target.value = e.target.value.replace(
@@ -153,6 +165,11 @@ export default {
     },
     // 发帖
     postingMsg() {
+      console.log(this.imgLength);
+      if (this.imgLength === 0) {
+        this.releaseApi([]);
+        return;
+      }
       if (this.checked) {
         this.postForm.isPrivate = 1;
       } else {
@@ -171,7 +188,7 @@ export default {
       this.preview(compressImg);
     },
     releaseApi(list) {
-      let files = JSON.parse(JSON.stringify(list))
+      let files = JSON.parse(JSON.stringify(list));
       let formData = new FormData();
       list.forEach((item, index) => {
         formData.append("file" + index, item); //第一个参数字符串可以填任意命名，第二个根据对象属性来找到file
@@ -229,18 +246,21 @@ export default {
               { quality: this.quality },
               base64 => {
                 this.previewList.push(base64);
-                this.uploadList.push(this.convertBase64UrlToBlob(base64,file.name));
+                this.uploadList.push(
+                  this.convertBase64UrlToBlob(base64, file.name)
+                );
               }
             );
           } else {
             this.previewList.push(reader.result);
-            this.uploadList.push(this.convertBase64UrlToBlob(reader.result,file.name));
+            this.uploadList.push(
+              this.convertBase64UrlToBlob(reader.result, file.name)
+            );
           }
           if (i === files.length - 1) {
-            
           }
         };
-      });  
+      });
     },
     canvasDataURL(path, obj, callback) {
       const img = new Image();
@@ -274,7 +294,7 @@ export default {
         callback(base64);
       };
     },
-    convertBase64UrlToBlob(urlData,name) {
+    convertBase64UrlToBlob(urlData, name) {
       const arr = urlData.split(",");
       const mime = arr[0].match(/:(.*?);/)[1];
       const bstr = atob(arr[1]);

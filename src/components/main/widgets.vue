@@ -485,6 +485,7 @@ export default {
         });
     },
     familyDiscussion() {
+      sessionStorage.setItem("queryType",1)
       this.articleFamilyQueryAll();
     },
     propertyPay() {
