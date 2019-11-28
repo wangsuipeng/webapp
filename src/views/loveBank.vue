@@ -161,7 +161,7 @@ export default {
         })
       })
         .then(result => {
-          if (result.data.respCode == 1000) {
+          if (result.data.respCode === "1000") {
             this.queryAllTaskData = result.data.data;
           } else {
             Dialog.alert({
@@ -190,7 +190,7 @@ export default {
         })
       })
         .then(result => {
-          if (result.data.respCode == 1000) {
+          if (result.data.respCode === "1000") {
             this.rankByGoldData = result.data.data;
           }
         })

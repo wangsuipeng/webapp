@@ -54,7 +54,6 @@ export default {
     };
   },
   created() {
-    this.serviceId = sessionStorage.getItem("serviceId");
     this.queryAllTask();
   },
   mounted() {
@@ -104,6 +103,7 @@ export default {
     },
     // 爱心大厅
     queryAllTask() {
+      this.serviceId = sessionStorage.getItem("serviceId");
       this.$axios({
         url: "admin/mobile/welfare/queryAllTask",
         method: "post",
@@ -111,11 +111,13 @@ export default {
           Authorization: sessionStorage.getItem("token")
         },
         data: Qs.stringify({
+          userId: sessionStorage.getItem("userId"),
           communityId: localStorage.getItem("communityId")
         })
       })
         .then(result => {
-          if (result.data.respCode == 1000) {
+          if (result.data.respCode === "1000") {
+            console.log(this.serviceId)
             let imgData = {};
             for (var i = 0; i < result.data.data.length; i++) {
               if (this.serviceId == result.data.data[i].serviceId) {

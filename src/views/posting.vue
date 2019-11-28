@@ -121,10 +121,10 @@ export default {
     // if (window.plus) {
     //     this.height = plus.navigator.getStatusbarHeight();
     // }
-    var file = document.getElementById("input");
-    if (this.getIos()) {
-      file.removeAttribute("capture");
-    }
+    // var file = document.getElementById("input");
+    // if (this.getIos()) {
+    //   file.removeAttribute("capture");
+    // }
     mui.back = function() {
       history.go(-1); //回退到上一页面
     };
