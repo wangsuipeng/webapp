@@ -95,6 +95,7 @@ export default {
   },
   created() {
     this.queryAllCreatedTask();
+    this.queryAllTask();
     this.rankByGold();
     this.active3 = parseInt(localStorage.getItem("active3"));
   },

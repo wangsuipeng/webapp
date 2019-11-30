@@ -1,7 +1,7 @@
 .Router {
     position: absolute;
     width: 100%;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease-in-out;
     top: 0px;
 }
 

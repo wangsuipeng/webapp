@@ -17,7 +17,7 @@
               <img :src="avatarImag" alt="">
             </div>
             <div class="nickName">
-              <div style="margin-left: 1rem">{{postName}}</div>
+              <div style="margin-left: 1rem;color: #000">{{postName}}</div>
               <div style="color: #8A8A8A">
                 <span>{{postTime}}</span>
                 <span>
@@ -389,6 +389,7 @@ export default {
 .textarea-text {
   width: 100%;
   text-indent: 20px;
+  font-size: 16px;
   outline: none;
   padding: 5px 10px;
 }

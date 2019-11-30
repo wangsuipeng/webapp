@@ -12,15 +12,7 @@
       <mu-flex class="flex-wrapper" justify-content="start">
         <mu-flex class="flex-demo" justify-content="center">{{loveTitle}}</mu-flex>
       </mu-flex>
-      <textarea
-        readonly
-        name="text"
-        id
-        cols="20"
-        v-model="postContent"
-        rows="6"
-        class="textarea-text"
-      ></textarea>
+      <div class="textarea-text">{{postContent}}</div>
       <div class="love-img" v-for="(item,index) in imgUrl" :key="index">
         <img class="images" :src="item" alt />
       </div>
@@ -154,11 +146,11 @@ export default {
   width: 100%;
   height: 40px;
   line-height: 40px;
-  background-color: rgb(204, 204, 204, 0.6);
+  background-color: rgba(231, 222, 222, 0.6);
+  border-radius: 5px;
 }
 .textarea-text {
   width: 100%;
-  min-height: 10rem;
   text-indent: 20px;
   outline: none;
   padding: 5px 10px;
