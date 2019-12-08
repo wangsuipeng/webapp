@@ -11,7 +11,7 @@
     <div class="container-main">
       <div class="box-list">
         当前版本
-        <span style="margin-left: 40px" id="version">1.7.2</span>
+        <span style="margin-left: 40px" id="version">1.7.4</span>
       </div>
       <div class="box-list">
         最新版本
@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       appVersion: "",
-      version: "1.7.1",
+      version: "1.7.3",
       newVersions: ""
     };
   },
@@ -54,7 +54,7 @@ export default {
           Authorization: sessionStorage.getItem("token")
         },
         data: Qs.stringify({
-          version: "1.7.0",
+          version: "1.7.2",
           clientType: "a"
         })
       })

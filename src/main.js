@@ -35,7 +35,11 @@ import { List } from 'vant';
 import { PullRefresh } from 'vant';
 import { Collapse, CollapseItem } from 'vant';
 import { Loading } from 'vant';
+import { ActionSheet } from 'vant';
+import { Field } from 'vant';
 
+Vue.use(Field);
+Vue.use(ActionSheet);
 Vue.use(Loading);
 Vue.use(Collapse).use(CollapseItem);
 Vue.use(PullRefresh);

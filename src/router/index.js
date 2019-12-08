@@ -251,6 +251,14 @@ export default new Router({
     {
       path: '/nearHot',
       component: () => import('@/views/nearHot.vue')
+    },
+    {
+      path: '/repairProcess',
+      component: () => import('@/views/repairProcess.vue')
+    },
+    {
+      path: '/currRepairProcess',
+      component: () => import('@/views/currRepairProcess.vue')
     }
   ]
 })

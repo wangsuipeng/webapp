@@ -9,7 +9,7 @@
       </mu-button>
     </mu-appbar>
     <div class="container-main">
-      <van-collapse v-model="activeNames">
+      <!-- <van-collapse v-model="activeNames">
         <van-collapse-item title="我的申请" name="1">
           <mu-list>
             <mu-list-item
@@ -46,7 +46,129 @@
             </mu-list-item>
           </mu-list>
         </van-collapse-item>
-      </van-collapse>
+      </van-collapse> -->
+      <van-tabs v-model="active" sticky>
+          <van-tab title="房屋报修">
+            <div class="content-apply list-content">
+              <div class="muse-list" v-for="(item,index) in postContent" :key="index"  @click="repairProcess(item)">
+                <div class="repair-title">
+                  <img src="../assets/images/325543.jpg" alt="">
+                  <span>爱奔跑的女孩</span>
+                </div>
+                <div class="current-content">
+                  <ul>
+                    <li>
+                      报修位置：
+                      <span>{{item.userRealName}}</span>
+                    </li>
+                    <li>
+                      报修人手机：
+                      <span>{{item.userPhone}}</span>
+                    </li>
+                    <li>
+                      可上门维修时间：
+                      <span>{{item.createTime}}</span>
+                    </li>
+                    <li>
+                      报修时间：
+                      <span>{{item.createTime}}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </van-tab>
+          <van-tab title="电力报修">
+            <div class="content-apply list-content">
+              <div class="muse-list" v-for="(item,index) in postContent" :key="index"  @click="repairProcess(item)">
+                <div class="repair-title">
+                  <img src="../assets/images/325543.jpg" alt="">
+                  <span>爱奔跑的女孩</span>
+                </div>
+                <div class="current-content">
+                  <ul>
+                    <li>
+                      报修位置：
+                      <span>{{item.userRealName}}</span>
+                    </li>
+                    <li>
+                      报修人手机：
+                      <span>{{item.userPhone}}</span>
+                    </li>
+                    <li>
+                      可上门维修时间：
+                      <span>{{item.createTime}}</span>
+                    </li>
+                    <li>
+                      报修时间：
+                      <span>{{item.createTime}}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </van-tab>
+          <van-tab title="煤气报修">
+            <div class="content-apply list-content">
+              <div class="muse-list" v-for="(item,index) in postContent" :key="index"  @click="repairProcess(item)">
+                <div class="repair-title">
+                  <img src="../assets/images/325543.jpg" alt="">
+                  <span>爱奔跑的女孩</span>
+                </div>
+                <div class="current-content">
+                  <ul>
+                    <li>
+                      报修位置：
+                      <span>{{item.userRealName}}</span>
+                    </li>
+                    <li>
+                      报修人手机：
+                      <span>{{item.userPhone}}</span>
+                    </li>
+                    <li>
+                      可上门维修时间：
+                      <span>{{item.createTime}}</span>
+                    </li>
+                    <li>
+                      报修时间：
+                      <span>{{item.createTime}}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </van-tab>
+          <van-tab title="供水报修">
+            <div class="content-apply list-content">
+              <div class="muse-list" v-for="(item,index) in postContent" :key="index"  @click="repairProcess(item)">
+                <div class="repair-title">
+                  <img src="../assets/images/325543.jpg" alt="">
+                  <span>爱奔跑的女孩</span>
+                </div>
+                <div class="current-content">
+                  <ul>
+                    <li>
+                      报修位置：
+                      <span>{{item.userRealName}}</span>
+                    </li>
+                    <li>
+                      报修人手机：
+                      <span>{{item.userPhone}}</span>
+                    </li>
+                    <li>
+                      可上门维修时间：
+                      <span>{{item.createTime}}</span>
+                    </li>
+                    <li>
+                      报修时间：
+                      <span>{{item.createTime}}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </van-tab>
+        </van-tabs>
     </div>
   </div>
 </template>
@@ -56,6 +178,7 @@ export default {
   data() {
     return {
       activeNames: ['1'],
+      active: 0,
       postContent: [],
       detailWorkflowData: []
     };
@@ -85,6 +208,10 @@ export default {
       localStorage.setItem("processId", item);
       this.$router.push("/workApply");
     },
+    repairProcess(item) {
+      localStorage.setItem("repairProcess", JSON.stringify(item));
+      this.$router.push("/repairProcess");
+    },
     //获取我的申请
     getUserApplyWorkflowInfo() {
       this.$axios({
@@ -101,11 +228,9 @@ export default {
         })
       })
         .then(result => {
-          if (result.status === 200) {
             if (result.data.respCode == "1000") {
               this.postContent = result.data.data.list;
             }
-          }
         })
         .catch(err => {
           console.log(err);
@@ -171,6 +296,31 @@ export default {
     transform: scale(0.5);
     transform-origin: 0 0;
   }
+}
+.content-apply {
+  width: 100%;
+  height: calc(100vh - 106px);
+  overflow-y: auto;
+}
+.repair-title {
+  position: relative;
+  padding-left: 0.5rem;
+  font-weight: 700;
+  font-size: 16px;
+}
+.repair-title img {
+  width: 2rem;
+  height: 2rem;
+  margin-top: 10px;
+  border-radius: 50%;
+}
+.repair-title span {
+  position: absolute;
+  top: 20px;
+  left: 54px;
+}
+ul {
+  padding-left: 10px;
 }
 </style>
 <style>

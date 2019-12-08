@@ -156,7 +156,6 @@ export default {
       this.giveThumbsupA = false
       this.giveThumbsupB = true
     }
-    console.log(this.postContent.isPraise)
     this.postTime = JSON.parse(
       localStorage.getItem("familyDiscussion")
     ).createdAt.substr(0, 19);

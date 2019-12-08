@@ -98,7 +98,6 @@ export default {
   created() {
     this.validateForm.phone = this.$store.getters.phoneNumber;
     this.validateForm.password = localStorage.getItem("password");
-    
   },
   methods: {
     toast(msg) {
@@ -107,6 +106,7 @@ export default {
     submit() {
       if (window.plus) {
         const info = plus.push.getClientInfo();
+        alert(JSON.stringify(info.clientid))
         this.validateForm.clientId = JSON.stringify(info.clientid);
       }
       this.$refs.form.validate().then(result => {

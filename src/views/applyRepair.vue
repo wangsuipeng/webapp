@@ -33,34 +33,56 @@
       <div class>
         <van-tabs v-model="active" sticky>
           <van-tab title="当前申请">
-            <div class="content-apply list-content" id="list-content">
-              <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-                <van-list
-                  v-model="loading"
-                  :finished="finished"
-                  finished-text="暂无更多数据"
-                  @load="onLoadA"
-                >
-                  <van-cell v-for="item in listTable" :key="item.id">
-                    <span>{{item.repairsType}}</span>
-                    <span style="float: right">状态：{{item.status}}</span>
-                  </van-cell>
-                </van-list>
-              </van-pull-refresh>
+            <div class="content-apply list-content">
+              <div class="muse-list" v-for="(item,index) in listTable" :key="index"  @click="repairProcess(item)">
+                <div v-if="item.repairsType === '房屋维修'" class="repair-title">
+                  <i class="icon-ic_developer iconfont"></i>房屋报修
+                </div>
+                <div v-else-if="item.repairsType === '供水报修'" class="repair-title">
+                  <i class="icon-gongshui1 iconfont"></i>供水报修
+                </div>
+                <div v-else-if="item.repairsType === '电力报修'" class="repair-title">
+                  <i class="icon-dianqidianli iconfont"></i>电力报修
+                </div>
+                <div v-else class="repair-title">
+                  <i class="icon-meiqi iconfont"></i>煤气报修
+                </div>
+                <div class="current-content">
+                  <ul>
+                    <li>
+                      当前处理人：
+                      <span>{{item.userRealName}}</span>
+                    </li>
+                    <li>
+                      手机：
+                      <span>{{item.userPhone}}</span>
+                    </li>
+                    <li>
+                      报修时间：
+                      <span>{{item.createTime}}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </van-tab>
           <van-tab title="历史申请">
-            <van-list
-              v-model="loading1"
-              :finished="finished1"
-              finished-text="暂无更多数据"
-              @load="onLoadB"
-            >
-              <van-cell v-for="item in listTableHis" :key="item.id">
-                <span>{{item.repairsType}}</span>
-                <span style="float: right">状态：{{item.status}}</span>
-              </van-cell>
-            </van-list>
+            <table class="table">
+              <tr>
+                <th>序号</th>
+                <th>报修时间</th>
+                <th>事项</th>
+                <th>处理人</th>
+                <th>状态</th>
+              </tr>
+              <tr v-for="(item,index) in listTableHis" :key="index">
+                <td>{{item.num}}</td>
+                <td>{{item.createTime.substring(0,10)}}</td>
+                <td>{{item.repairsType}}</td>
+                <td>{{item.userRealName}}</td>
+                <td>完成</td>
+              </tr>
+            </table>
           </van-tab>
         </van-tabs>
       </div>
@@ -72,103 +94,30 @@ import Qs from "qs";
 export default {
   data() {
     return {
-      sort: {
-        name: "",
-        order: "asc"
-      },
-      columns: [
-        {
-          title: "事项",
-          name: "processName",
-          width: 150,
-          align: "center"
-        },
-        {
-          title: "描述",
-          name: "detail",
-          width: 226,
-          align: "center"
-        },
-        {
-          title: "阶段",
-          name: "type",
-          width: 126,
-          align: "center"
-        },
-        {
-          title: "当前处理人",
-          name: "userId",
-          width: 126,
-          align: "center"
-        },
-        {
-          title: "处理时间",
-          name: "detailOneDate",
-          width: 170,
-          align: "center"
-        },
-        {
-          title: "逗留时间",
-          name: "endTime",
-          width: 170,
-          align: "center"
-        }
-      ],
-      columns1: [
-        {
-          title: "事项",
-          name: "processName",
-          width: 150,
-          align: "center"
-        },
-        {
-          title: "描述",
-          name: "detail",
-          width: 226,
-          align: "center"
-        },
-        {
-          title: "阶段",
-          name: "type",
-          width: 126,
-          align: "center"
-        },
-        {
-          title: "处理时间",
-          name: "detailOneDate",
-          width: 170,
-          align: "center"
-        }
-      ],
       listTable: [], // 申请中的数据
       listTableHis: [], // 历史申请的数据
       timer: "",
       list: [],
       loading: false,
       loading1: false,
-      finished: false,
-      finished1: false,
       total: 0,
       total1: 0,
       offset: 0,
       page: 0,
-      limit: 10,
+      limit: 1000,
       limit1: 10,
       error: false,
       error1: false,
       active: 2,
-      isLoading: false,
       PageIndex: 0,
       num: 10,
-      refreshing: false,
-      refreshing1: false,
       loading: false,
       text: "List"
     };
   },
   created() {
-    // this.getUserApplyWorkflowInfo();
-    // this.getUserApplyInfoHistory();
+    this.getUserApplyWorkflowInfo();
+    this.getUserApplyInfoHistory();
   },
   mounted() {
     mui.back = function() {
@@ -179,24 +128,12 @@ export default {
     outPage() {
       this.$router.goBack();
     },
-    onLoadA() {
-      this.page += 1;
-      this.offset = this.limit * this.page;
-      this.getUserApplyWorkflowInfo();
-    },
-    onLoadB() {
-      this.PageIndex += 1;
-      this.offset = this.limit1 * this.PageIndex;
-      this.getUserApplyInfoHistory();
-    },
-    onRefresh() {
-      setTimeout(() => {
-        this.$toast("刷新成功");
-        this.isLoading = false;
-      }, 500);
-    },
     electricityRepair() {
       this.$router.push("/electricityRepair");
+    },
+    repairProcess(item) {
+      localStorage.setItem("currRepairProcess", JSON.stringify(item));
+      this.$router.push("/currRepairProcess");
     },
     handleSortChange({ name, order }) {
       this.list = this.list.sort((a, b) =>
@@ -222,7 +159,7 @@ export default {
         },
         data: Qs.stringify({
           communityId: localStorage.getItem("communityId"),
-          status: "0",
+          status: "3",
           repairsType: "",
           userId: sessionStorage.getItem("userId"),
           page: this.page,
@@ -230,32 +167,8 @@ export default {
         })
       })
         .then(result => {
-          this.loading = false;
           if (result.data.respCode === "1000") {
-            if (result.data.data.list.length) {
-              this.listTable.push(...new Set(result.data.data.list));
-            } else {
-              this.finished = true;
-              // this.total = result.data.data.totalCount;
-              // this.loading = false;
-            }
-            // setInterval(() => {
-            //   this.nowTimeStr();
-            //   for (var i = 0; i < this.listTable.length; i++) {
-            //     let minutes = this.GetDateDiff(
-            //       this.listTable[i].createTime,
-            //       this.timer,
-            //       "minute"
-            //     );
-            //     this.$set(
-            //       this.listTable[i],
-            //       "endTime",
-            //       Math.floor(minutes / 60) + "小时" + (minutes % 60) + "分"
-            //     );
-            //   }
-            // }, 1000);
-          } else {
-            this.error = true;
+            this.listTable = result.data.data.list;
           }
         })
         .catch(err => {
@@ -280,28 +193,12 @@ export default {
         })
       })
         .then(result => {
-          this.loading1 = false;
           if (result.data.respCode === "1000") {
-            if (result.data.data.list.length) {
-              this.listTableHis.push(...result.data.data.list);
-            } else {
-              this.finished1 = true;
+            this.listTableHis = result.data.data.list;
+            for (let i = 0;i < this.listTableHis.length;i++) {
+              this.listTableHis[i].num = i + 1;
             }
-            // setInterval(() => {
-            //   this.nowTimeStr();
-            //   for (var i = 0; i < this.listTable.length; i++) {
-            //     let minutes = this.GetDateDiff(
-            //       this.listTable[i].createTime,
-            //       this.timer,
-            //       "minute"
-            //     );
-            //     this.$set(
-            //       this.listTable[i],
-            //       "endTime",
-            //       Math.floor(minutes / 60) + "小时" + (minutes % 60) + "分"
-            //     );
-            //   }
-            // }, 1000);
+            console.log(this.listTableHis)
           }
         })
         .catch(err => {
@@ -352,6 +249,9 @@ export default {
 };
 </script>
 <style scoped>
+.muse-list {
+  background-color: #fff;
+}
 .ret-btn {
   display: inline-block;
   color: #fff;
@@ -363,7 +263,7 @@ export default {
 }
 .content-apply {
   width: 100%;
-  height: calc(100vh - 156px);
+  height: calc(100vh - 196px);
   overflow-y: auto;
 }
 .content {
@@ -377,7 +277,7 @@ export default {
 }
 .flex-wrapper {
   width: 100%;
-  height: 10px;
+  height: 0.4rem;
 }
 .flex-demo {
   width: 100%;
@@ -433,5 +333,55 @@ export default {
 .repairs {
   color: #323233;
   font-size: 14px;
+}
+.repair-title {
+  padding-left: 0.5rem;
+  font-weight: 700;
+  font-size: 16px;
+}
+.repair-title i {
+  display: inline-block;
+  padding-right: 0.3rem;
+  font-size: 22px;
+  color: orangered;
+}
+.current-content {
+  padding: 0.2rem;
+}
+.current-content ul {
+  padding-left: 0.6rem;
+  color: rgb(85, 84, 84);
+}
+.current-content ul li {
+  margin: 0.1rem 0;
+}
+.table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.table tr {
+  width: calc(100vw - 1px);
+  display: flex;
+}
+.table tr td,table tr th {
+  height: 40px;
+  line-height: 40px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+.table tr td:nth-child(1),.table tr th:nth-child(1) {
+  flex: 1;
+}
+.table tr td:nth-child(2),.table tr th:nth-child(2) {
+  flex: 2;
+}
+.table tr td:nth-child(3),.table tr th:nth-child(3) {
+  flex: 2;
+}
+.table tr td:nth-child(4),.table tr th:nth-child(4) {
+  flex: 1.5;
+}
+.table tr td:nth-child(5),.table tr th:nth-child(5) {
+  flex: 1;
 }
 </style>
