@@ -106,7 +106,7 @@ export default {
     submit() {
       if (window.plus) {
         const info = plus.push.getClientInfo();
-        alert(JSON.stringify(info.clientid))
+        // alert(JSON.stringify(info.clientid))
         this.validateForm.clientId = JSON.stringify(info.clientid);
       }
       this.$refs.form.validate().then(result => {

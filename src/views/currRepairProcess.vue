@@ -161,11 +161,11 @@ export default {
 .describe {
   margin-top: 0.3rem;
   font-size: 16px;
-  padding: 0 0.3rem;
+  padding: 0 0.7rem;
 }
 .text {
   font-size: 14px;
-  padding: 0 0.3rem;
+  padding: 0 0.7rem;
 }
 .images {
   width: 100%;
