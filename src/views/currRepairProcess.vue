@@ -9,18 +9,41 @@
       </mu-button>
     </mu-appbar>
     <div class="container-main">
-      <van-cell title="位置" value="富都名邸3号901室" size="large" />
-      <van-cell title="保修时间：" :value="content.createTime" size="large" />
+      <van-cell title="报修时间：" :value="content.createTime" size="large" />
       <van-cell title="上门时间：" is-link :value="valueType" @click="openSelect" />
       <van-cell title="当前环节停留时间：" :value="stayTime" size="large" />
       <van-cell title="处理人：" :value="content.userRealName+content.userPhone" size="large" />
-      <div class="describe">描述：</div>
-      <p class="text">{{content.detail}}</p>
+      <!-- <div class="describe">描述：</div> -->
+      <!-- <p class="text">{{content.detail}}</p> -->
+      <van-cell-group>
+        <van-field
+          v-model="location"
+          label-width="55px"
+          rows="1"
+          autosize
+          label="位置"
+          type="textarea"
+          placeholder="请输入位置"
+        />
+      </van-cell-group>
+      <van-cell-group>
+        <van-field
+          v-model="detail"
+          label-width="55px"
+          rows="2"
+          autosize
+          label="描述："
+          type="textarea"
+          maxlength="50"
+          placeholder="请输入描述"
+          show-word-limit
+        />
+      </van-cell-group>
       <div class="images">
         <img v-for="(item,index) in imageUrls" :key="index" :src="item" alt srcset />
       </div>
       <div style="padding: 0 1rem;margin-top: 0.6rem">
-        <van-button class="sumbit" type="danger">修 改</van-button>
+        <van-button class="sumbit" type="danger" @click="modify">修 改</van-button>
         <van-button style="margin-top: 12px" class="sumbit" type="default" @click="revokeApply">撤销申请</van-button>
       </div>
       <van-action-sheet
@@ -36,6 +59,7 @@
 
 <script>
 import { Dialog } from "vant";
+import Qs from "qs";
 export default {
   components: {
     [Dialog.Component.name]: Dialog.Component
@@ -54,11 +78,15 @@ export default {
       message: "",
       content: "",
       imageUrls: [],
-      stayTime: ""
+      stayTime: "",
+      detail: "",
+      location: ""
     };
   },
   created() {
     this.content = JSON.parse(localStorage.getItem("currRepairProcess"));
+    this.detail = this.content.detail;
+    this.location = this.content.location;
     // var obj = JSON.parse(
     //   JSON.parse(localStorage.getItem("currRepairProcess")).imageUrls
     // );
@@ -93,6 +121,7 @@ export default {
         message: "是否撤销申请"
       })
         .then(() => {
+          this.revoke();
           // on confirm
         })
         .catch(() => {
@@ -138,6 +167,71 @@ export default {
           break;
       }
       return parseInt((eTime.getTime() - sTime.getTime()) / parseInt(timeType));
+    },
+    async revoke() {
+      await this.$axios({
+        url: "admin/mobile/repairs/revocationRepairs",
+        method: "post",
+        headers: {
+          Authorization: sessionStorage.getItem("token")
+        },
+        data: Qs.stringify({
+          id: this.content.id
+        })
+      })
+        .then(result => {
+          if (result.data.respCode === "1000") {
+            this.outPage();
+            this.$toast({
+              message: "撤销成功",
+              position: "middle",
+              duration: 1500
+            });
+          } else {
+            this.$toast({
+              message: "撤销失败",
+              position: "middle",
+              duration: 1500
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    modify() {
+      this.$axios({
+        url: "admin/mobile/repairs/modifyRepair",
+        method: "post",
+        headers: {
+          Authorization: sessionStorage.getItem("token")
+        },
+        data: Qs.stringify({
+          id: this.content.id,
+          serviceDate: this.valueType,
+          location: this.location,
+          detail: this.detail
+        })
+      })
+        .then(result => {
+          if (result.data.respCode === "1000") {
+            this.outPage();
+            this.$toast({
+              message: "修改成功",
+              position: "middle",
+              duration: 1500
+            });
+          } else {
+            this.$toast({
+              message: "修改失败",
+              position: "middle",
+              duration: 1500
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };

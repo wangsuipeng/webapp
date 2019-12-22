@@ -9,51 +9,13 @@
       </mu-button>
     </mu-appbar>
     <div class="container-main">
-      <!-- <van-collapse v-model="activeNames">
-        <van-collapse-item title="我的申请" name="1">
-          <mu-list>
-            <mu-list-item
-              avatar
-              button
-              v-ripple
-              class="muse-list"
-              v-for="(item,index) in postContent"
-              :key="index"
-              @click="contentApplication(item,'1')"
-            >
-              <mu-list-item-title>{{item.repairsType}}</mu-list-item-title>
-              <mu-list-item-action>
-                <span>状态：{{item.status}}</span>
-              </mu-list-item-action>
-            </mu-list-item>
-          </mu-list>
-        </van-collapse-item>
-        <van-collapse-item title="我的处理" name="2">
-          <mu-list>
-            <mu-list-item
-              avatar
-              button
-              v-ripple
-              class="muse-list"
-              v-for="(item,index) in detailWorkflowData"
-              :key="index"
-              @click="workApply(item.id,'2')"
-            >
-              <mu-list-item-title>{{item.repairsType}}</mu-list-item-title>
-              <mu-list-item-action>
-                <span>状态：{{item.status}}</span>
-              </mu-list-item-action>
-            </mu-list-item>
-          </mu-list>
-        </van-collapse-item>
-      </van-collapse> -->
       <van-tabs v-model="active" sticky>
           <van-tab title="房屋报修">
             <div class="content-apply list-content">
               <div class="muse-list" v-for="(item,index) in postContent" :key="index"  @click="repairProcess(item)">
                 <div class="repair-title">
-                  <img src="../assets/images/325543.jpg" alt="">
-                  <span>爱奔跑的女孩</span>
+                  <img :src="item.userHeadImg" alt="">
+                  <span style="margin-left: 5px">{{item.nickName}}</span>
                 </div>
                 <div class="current-content">
                   <ul>
@@ -82,7 +44,7 @@
             <div class="content-apply list-content">
               <div class="muse-list" v-for="(item,index) in postContent" :key="index"  @click="repairProcess(item)">
                 <div class="repair-title">
-                  <img src="../assets/images/325543.jpg" alt="">
+                  <img :src="item.userHeadImg" alt="">
                   <span>爱奔跑的女孩</span>
                 </div>
                 <div class="current-content">
@@ -112,7 +74,7 @@
             <div class="content-apply list-content">
               <div class="muse-list" v-for="(item,index) in postContent" :key="index"  @click="repairProcess(item)">
                 <div class="repair-title">
-                  <img src="../assets/images/325543.jpg" alt="">
+                  <img :src="item.userHeadImg" alt="">
                   <span>爱奔跑的女孩</span>
                 </div>
                 <div class="current-content">
@@ -142,7 +104,7 @@
             <div class="content-apply list-content">
               <div class="muse-list" v-for="(item,index) in postContent" :key="index"  @click="repairProcess(item)">
                 <div class="repair-title">
-                  <img src="../assets/images/325543.jpg" alt="">
+                  <img :src="item.userHeadImg" alt="">
                   <span>爱奔跑的女孩</span>
                 </div>
                 <div class="current-content">

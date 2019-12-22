@@ -29,7 +29,7 @@
         />
       </van-cell-group>
       <div style="padding: 0 1rem;margin-top: 0.6rem">
-        <van-button class="sumbit" type="danger">提 交</van-button>
+        <van-button class="sumbit" type="danger" @click="submission">提 交</van-button>
       </div>
       <van-action-sheet
         v-model="show"
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import Qs from "qs";
 export default {
   data() {
     return {
@@ -64,7 +65,6 @@ export default {
     var obj = JSON.parse(
       JSON.parse(localStorage.getItem("familyDiscussion")).imageUrls
     );
-    console.log(this.content)
     for (var key in obj) {
       this.imageUrls.push(obj[key]);
     }
@@ -89,6 +89,39 @@ export default {
     selectValue(item) {
       this.show = false;
       this.valueType = item.name;
+    },
+    submission() {
+      this.$axios({
+        url: "admin/mobile/repairs/updateWorkerOpinion",
+        method: "post",
+        headers: {
+          Authorization: sessionStorage.getItem("token")
+        },
+        data: Qs.stringify({
+          id: this.content.id,
+          workerOpinion: this.message,
+          type: this.valueType,
+        })
+      })
+        .then(result => {
+          if (result.data.respCode === "1000") {
+            this.outPage();
+            this.$toast({
+              message: "提交成功",
+              position: "middle",
+              duration: 1500
+            });
+          } else {
+            this.$toast({
+              message: "提交失败",
+              position: "middle",
+              duration: 1500
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     nowTimeStr() {
       var date = new Date();
